@@ -247,9 +247,73 @@ button{cursor:pointer}
 .gd .door{border:1px solid #6b2a24;padding:16px;max-width:440px;background:#1a0f0e}
 .gd .door b{color:#e07a6e}
 
+/* 第二、三章的网站 */
+.soc{background:#eef1f5;color:#26303a}
+.soc-head{background:linear-gradient(120deg,#5b8fd9,#8bb4ef);color:#fff;padding:26px 22px}
+.soc-head.warm{background:linear-gradient(120deg,#d98a5b,#efb48b)}
+.soc-head.dim{background:linear-gradient(120deg,#5d6470,#8a93a0)}
+.soc-head h1{font-family:var(--f-display);margin:0;font-size:24px}
+.soc-head p{margin:4px 0 0;opacity:.88;font-size:13px}
+.soc-wrap{max-width:680px;margin:0 auto;padding:18px}
+.feed{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:12px;border:1px solid #dde3ea}
+.feed time{font-size:12px;color:#8a96a6;font-family:var(--f-mono)}
+.feed p{margin:6px 0 0}
+.cmt{font-size:13px;color:#555;border-top:1px dashed #e3e7ee;margin-top:10px;padding-top:8px;display:flex;flex-direction:column;gap:4px}
+.cmt b{color:#2b5fd9;font-weight:500}
+.sp{background:#070807;color:#bfb7ad;font-family:var(--f-display);padding:30px 22px;min-height:100%}
+.sp h1{font-size:22px;letter-spacing:.4em;color:#d9cfc2;margin:0 0 6px;font-weight:500}
+.sp .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:22px}
+.sp .card{border:1px solid #2a2622;padding:14px;background:#0d0e0c;line-height:1.75}
+.sp .card.done{border-color:#5a4a7a;opacity:.7}
+.sp .card b{font-size:17px;color:#e6dccd}
+.sp .card .st{font-family:var(--f-mono);font-size:11px;letter-spacing:.15em;color:#8a6a64}
+.sp .card.done .st{color:#b9a3e6}
+.sp a{color:#b9a3e6}
+.live{background:#15161c;color:#d8d8e2;min-height:100%}
+.live-top{display:flex;gap:14px;align-items:center;padding:14px 18px;border-bottom:1px solid #2a2b36;flex-wrap:wrap}
+.live-av{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#e6c9b0 0 30%,transparent 31%),#3a3c52;flex:none}
+.live-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;min-height:420px}
+@media (max-width:700px){.live-grid{grid-template-columns:minmax(0,1fr)}}
+.live-screen{background:#0b0b10;display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;color:#888;font-size:13px;min-height:240px;padding:20px;text-align:center}
+.live-chat{border-left:1px solid #2a2b36;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:13px;min-width:0}
+.live-chat .dm b{color:#8fa7ff;font-weight:500}
+.live-chat .dm.host b{color:#ffb86b}
+.live-chat .dm.me b{color:#9fe0a0}
+.live-chat form{display:flex;gap:6px;margin-top:auto;padding-top:8px}
+.live-chat input{flex:1;min-width:0;background:#22232e!important;color:#ddd!important;border:1px solid #333!important;max-width:none!important}
+.live-chat button{background:#5b6cff;color:#fff;border:none;border-radius:4px;padding:0 12px}
+.bar{background:#1c1410;color:#ead7c0;min-height:100%}
+.bar-wrap{max-width:640px;margin:0 auto;padding:30px 22px}
+.bar h1{font-family:var(--f-display);color:#f0b878;letter-spacing:.2em;margin:0}
+.bar table{width:100%;border-collapse:collapse;margin:16px 0}
+.bar td{border-bottom:1px solid #3a2a20;padding:8px 4px}
+.bar input{background:#2a1e17!important;color:#ead7c0!important;border:1px solid #5a4030!important}
+.bar button{background:#c47a3a;color:#fff;border:none;border-radius:4px;padding:7px 14px}
+.pet{background:#fffaf2;color:#3a3226;min-height:100%}
+.pet-head{background:#e8964a;color:#fff;padding:18px 22px;font-weight:700;font-size:18px}
+.pet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;max-width:780px;margin:18px auto;padding:0 16px}
+.pet-card{background:#fff;border:1px solid #f0dcc0;border-radius:10px;padding:12px;cursor:pointer;font-size:13px;line-height:1.6}
+.pet-card:hover{border-color:#e8964a}
+.cat{height:90px;border-radius:8px;margin-bottom:8px}
+.mail{background:#f4f5f7;color:#222;min-height:100%}
+.mail-top{background:#1f3a5f;color:#fff;padding:10px 18px;font-weight:700}
+.mail-grid{display:grid;grid-template-columns:160px minmax(0,1fr);min-height:420px}
+@media (max-width:640px){.mail-grid{grid-template-columns:minmax(0,1fr)}}
+.mail-nav{background:#e8ebf0;padding:12px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.mail-main{padding:16px 20px;min-width:0}
+.mrow{display:grid;grid-template-columns:110px minmax(0,1fr) 92px;gap:10px;padding:10px 6px;border-bottom:1px solid #e3e6eb;font-size:13.5px;cursor:pointer}
+@media (max-width:640px){.mrow{grid-template-columns:minmax(0,1fr)}}
+.mrow:hover{background:#fff}
+.mrow small{color:#888;font-family:var(--f-mono);font-size:12px}
+.mread h2{font-size:18px;margin:0 0 4px}
+.mread .h{font-size:12.5px;color:#777;margin-bottom:14px}
+.mread p{margin:0 0 10px;line-height:1.85}
+.lyric{font-family:var(--f-display);line-height:2.1;text-align:center;margin:18px 0;color:#3a3a4a}
+.playbtn{background:#2b2b3a;color:#fff;border:none;border-radius:999px;padding:8px 18px;font-size:13px}
+
 /* 灵异 */
 .notes li.ghostnote{border-left-color:var(--blood);color:#d9a097;font-style:italic;font-family:var(--f-display)}
-.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));width:min(350px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#f1f1ee;color:#222;border-radius:16px;padding:12px 12px 6px;box-shadow:0 12px 40px #000c;z-index:40;animation:in .3s forwards}
+.toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));width:min(350px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#f1f1ee;color:#222;border-radius:16px;padding:12px 12px 6px;box-shadow:0 12px 40px #000c;z-index:40;animation:in .3s forwards}
 .toast header{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;font-size:13px;margin-bottom:8px}
 .toast header small{font-weight:400;color:#888;font-size:11px;margin-left:6px}
 .toast .x{background:none;border:none;font-size:18px;line-height:1;color:#888;padding:0 4px}
@@ -293,6 +357,7 @@ button{cursor:pointer}
       <div class="btnrow" style="margin-top:14px">
         <button class="btn" id="bHint">给我一点提示</button>
         <button class="btn" id="bChat">重看阿桃的消息</button>
+        <button class="btn" id="bMusic" aria-pressed="true">♪ 音乐：开</button>
       </div>
       <p class="hintbox" id="hint">看不懂网页的时候，试试全选文字（Ctrl+A），或者点地址栏右边的 &lt;/&gt; 查看源代码。</p>
       <div class="btnrow"><button class="btn" id="bReset">重新开始</button></div>
@@ -314,6 +379,144 @@ const fresh = () => ({notes:[], flags:{}, seenIntro:false, doorFails:0});
 let S = fresh();
 try{ const r = localStorage.getItem(KEY); if(r) S = Object.assign(fresh(), JSON.parse(r)); }catch(e){}
 const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+
+/* ---------- 声音：全部用 Web Audio 实时合成，不需要音频文件 ---------- */
+const SND = (() => {
+  let ctx=null, master=null, verbIn=null, nbuf=null, cur=null, curName='';
+  let enabled = true;
+  try{ enabled = localStorage.getItem('jy-music')!=='off'; }catch(e){}
+  const mtof = m => 440*Math.pow(2,(m-69)/12);
+  const LULL = [76,79,81,79, 76,74,76,null, 69,72,71,69, 67,64,69,null, null,null,null,null];
+  function init(){
+    if(ctx){ if(ctx.state==='suspended') ctx.resume(); return; }
+    const AC = window.AudioContext||window.webkitAudioContext; if(!AC) return;
+    ctx = new AC();
+    master = ctx.createGain(); master.gain.value = enabled ? .55 : 0; master.connect(ctx.destination);
+    const conv = ctx.createConvolver(), len = ctx.sampleRate*3, ib = ctx.createBuffer(2,len,ctx.sampleRate);
+    for(let c=0;c<2;c++){ const d=ib.getChannelData(c); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3); }
+    conv.buffer = ib; verbIn = ctx.createGain(); verbIn.gain.value = .6; verbIn.connect(conv); conv.connect(master);
+    nbuf = ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate);
+    const nd = nbuf.getChannelData(0); for(let i=0;i<nd.length;i++) nd[i]=Math.random()*2-1;
+    if(curName){ const n = curName; curName=''; play(n); }
+  }
+  function note(dst,f,t,dur,type='sine',vol=.15,atk=.005){
+    const o=ctx.createOscillator(), g=ctx.createGain(); o.type=type; o.frequency.value=f;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+atk); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g); g.connect(dst); o.start(t); o.stop(t+dur+.05);
+  }
+  const box = (d,f,t,v=.1) => { note(d,f,t,1.6,'sine',v); note(d,f*4.01,t,.3,'sine',v*.25); note(d,f*2,t,.7,'triangle',v*.12); };
+  const piano = (d,f,t,v=.1) => { note(d,f,t,2.4,'triangle',v,.01); note(d,f*2,t,1,'sine',v*.3,.01); };
+  function noise(dst,type,freq,q,vol){
+    const s=ctx.createBufferSource(); s.buffer=nbuf; s.loop=true;
+    const f=ctx.createBiquadFilter(); f.type=type; f.frequency.value=freq; f.Q.value=q;
+    const g=ctx.createGain(); g.gain.value=vol; s.connect(f); f.connect(g); g.connect(dst); s.start();
+    return {node:s, f};
+  }
+  function drone(dst,f,type,vol,cut){
+    const o=ctx.createOscillator(); o.type=type; o.frequency.value=f;
+    const fl=ctx.createBiquadFilter(); fl.type='lowpass'; fl.frequency.value=cut;
+    const g=ctx.createGain(); g.gain.value=vol; o.connect(fl); fl.connect(g); g.connect(dst); o.start();
+    return {node:o};
+  }
+  function burst(dst,t,freq,dur,vol,type='bandpass'){
+    const s=ctx.createBufferSource(); s.buffer=nbuf;
+    const f=ctx.createBiquadFilter(); f.type=type; f.frequency.value=freq; f.Q.value=2;
+    const g=ctx.createGain(); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+dur*.3); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    s.connect(f); f.connect(g); g.connect(dst); s.start(t, Math.random()); s.stop(t+dur+.05);
+  }
+  function seq(step, fn){
+    let i=0, next=ctx.currentTime+.15;
+    const id = setInterval(()=>{ while(next < ctx.currentTime+.3){ fn(i++, next); next += step; } }, 60);
+    return () => clearInterval(id);
+  }
+  function lfo(param, rate, depth){
+    const o=ctx.createOscillator(), g=ctx.createGain(); o.frequency.value=rate; g.gain.value=depth; o.connect(g); g.connect(param); o.start();
+    return {node:o};
+  }
+  const R = a => a[Math.floor(Math.random()*a.length)];
+  const TH = {
+    room(o,w,k){ k(noise(o,'lowpass',380,.7,.05)); k(drone(o,50,'sine',.03,200));
+      k(seq(6,(i,t)=>{ if(Math.random()<.4) note(w,mtof(R([84,87,91])),t,3,'sine',.012,1); })); },
+    ad(o,w,k){ const creep = S.flags.diary;
+      const M=[72,76,79,76,77,81,79,null,76,79,84,83,81,77,79,null];
+      k(seq(.3,(i,t)=>{ let m=M[i%16]; if(m==null) return; if(creep && i%8===5) m+=6;
+        let f=mtof(m); if(creep) f*=Math.pow(2,(Math.random()*90-45)/1200);
+        box(o,f,t,.08); box(w,f,t,.035); if(i%4===0) note(o,mtof(m-24),t,1.1,'triangle',.045); }));
+      if(creep) k(noise(o,'bandpass',900,1,.012)); },
+    blog(o,w,k){ const C=[[65,69,72,76],[64,67,71,74],[62,65,69,72],[60,64,67,71]];
+      k(seq(4,(i,t)=>{ C[i%4].forEach(m=>{ note(o,mtof(m),t,4.6,'triangle',.028,1.2); note(w,mtof(m),t,4.6,'sine',.02,1.2); }); }));
+      k(seq(1,(i,t)=>{ if(Math.random()<.3) piano(w,mtof(R([76,79,81,84,86])),t,.04); })); },
+    lullaby(o,w,k){ k(seq(.62,(i,t)=>{ const m=LULL[i%LULL.length]; if(m!=null){ box(o,mtof(m),t,.06); box(w,mtof(m),t,.08); } }));
+      k(noise(o,'lowpass',600,.5,.02)); k(drone(w,mtof(45),'sine',.04,300)); },
+    sanpai(o,w,k){ k(seq(.95,(i,t)=>{ const m=LULL[i%LULL.length]; if(m!=null) box(w,mtof(m-12)*Math.pow(2,(Math.random()*60-30)/1200),t,.07); }));
+      const n=noise(o,'bandpass',500,1.2,.05); k(n); k(lfo(n.f.frequency,.06,280)); k(drone(o,mtof(33),'sine',.05,200)); },
+    rain(o,w,k){ k(noise(o,'highpass',1400,.5,.045)); k(noise(o,'bandpass',420,.6,.03));
+      k(seq(.12,(i,t)=>{ if(Math.random()<.25) note(o,1800+Math.random()*2600,t,.05,'sine',.02); }));
+      k(drone(w,mtof(45),'triangle',.025,500)); k(drone(w,mtof(52),'triangle',.02,500)); },
+    clock(o,w,k){ k(drone(o,73,'sawtooth',.035,170));
+      k(seq(1,(i,t)=>{ burst(o,t,i%2?3200:2400,.04,.09,'highpass'); }));
+      k(seq(8,(i,t)=>{ piano(w,mtof(R([57,60,64])),t,.03); })); },
+    ghost(o,w,k){ const n=noise(o,'bandpass',700,1.4,.06); k(n); k(lfo(n.f.frequency,.07,420));
+      k(drone(w,880,'sine',.006,4000)); k(drone(w,931,'sine',.006,4000));
+      k(seq(.5,(i,t)=>{ if(Math.random()<.09) burst(w,t,2400+Math.random()*1800,.5+Math.random(),.05);
+        if(Math.random()<.03) box(w,mtof(R(LULL.filter(Boolean))-12)*.985,t,.06); })); },
+    gardener(o,w,k){ k(drone(o,41,'sawtooth',.06,110)); k(drone(o,41.6,'sawtooth',.06,110)); k(noise(o,'lowpass',200,.5,.02));
+      k(seq(1.15,(i,t)=>{ note(o,55,t,.25,'sine',.35,.01); note(o,48,t+.22,.3,'sine',.25,.01); })); },
+    letter(o,w,k){ const M=[69,72,76,74,72,71,69,null,65,69,72,71,69,68,69,null];
+      k(seq(.85,(i,t)=>{ const m=M[i%16]; if(m!=null) piano(o,mtof(m),t,.07); if(i%4===0) note(w,mtof(R([45,41,48,40])),t,3.6,'sine',.04,.8); })); },
+    memory(o,w,k){ const C=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]];
+      k(seq(.34,(i,t)=>{ const c=C[Math.floor(i/8)%4]; const m=c[i%3]+(i%8>3?12:0); note(o,mtof(m),t,1.2,'triangle',.035); note(w,mtof(m),t,1.2,'sine',.03); })); },
+    mail(o,w,k){ k(drone(o,49,'sine',.06,200));
+      k(seq(1,(i,t)=>{ burst(o,t,3000,.03,.07,'highpass'); }));
+      k(seq(1.4,(i,t)=>{ note(o,52,t,.2,'sine',.2,.01); note(o,46,t+.2,.25,'sine',.15,.01); })); },
+  };
+  function play(name){
+    if(name===curName && cur) return;
+    curName = name;
+    if(!ctx || !enabled) return;
+    if(cur){ const old = cur; old.out.gain.setTargetAtTime(0, ctx.currentTime, .4); setTimeout(()=>stopSet(old), 2000); }
+    const out = ctx.createGain(), wet = ctx.createGain();
+    out.gain.value = 0; out.connect(master); wet.gain.value = 1; wet.connect(verbIn);
+    const dry = ctx.createGain(); dry.connect(out); const wsend = ctx.createGain(); wsend.connect(wet); wsend.connect(out);
+    const K = [];
+    (TH[name]||TH.room)(dry, wsend, x=>K.push(x));
+    out.gain.setTargetAtTime(1, ctx.currentTime, .6);
+    cur = {out, wet, K};
+  }
+  function stopSet(s){
+    s.K.forEach(x=>{ try{ typeof x==='function' ? x() : x.node.stop(); }catch(e){} });
+    try{ s.out.disconnect(); s.wet.disconnect(); }catch(e){}
+  }
+  function toggle(){
+    enabled = !enabled;
+    try{ localStorage.setItem('jy-music', enabled?'on':'off'); }catch(e){}
+    if(!ctx){ init(); return enabled; }
+    master.gain.setTargetAtTime(enabled ? .55 : 0, ctx.currentTime, .2);
+    if(enabled && !cur){ const n=curName; curName=''; play(n); }
+    if(!enabled && cur){ const old=cur; cur=null; setTimeout(()=>stopSet(old), 800); }
+    return enabled;
+  }
+  function sfx(name){
+    if(!ctx || !enabled) return; const t = ctx.currentTime+.02;
+    if(name==='buzz'){ [0,.22].forEach(d=>{ note(master,140,t+d,.16,'square',.06,.005); }); }
+    if(name==='glitch'){ burst(master,t,1600,.18,.12); note(master,60,t,.2,'sawtooth',.05); }
+    if(name==='unlock'){ piano(master,mtof(72),t,.12); piano(master,mtof(79),t+.15,.12); }
+    if(name==='door'){ note(master,40,t,1.8,'sine',.4,.02); burst(master,t,300,1.4,.15,'lowpass'); }
+    if(name==='done'){ [72,76,79,84].forEach((m,i)=>box(verbIn,mtof(m),t+i*.25,.1)); }
+  }
+  // 苏禾的歌：在背景音乐之上弹一遍
+  function song(M, step=.42){
+    if(!ctx) init(); if(!ctx) return 0;
+    if(cur) cur.out.gain.setTargetAtTime(.15, ctx.currentTime, .3);
+    const t0 = ctx.currentTime+.2;
+    M.forEach((m,i)=>{ if(m!=null){ piano(master,mtof(m),t0+i*step,.11); piano(verbIn,mtof(m),t0+i*step,.05); }
+      if(i%8===0) note(verbIn,mtof((m||62)-24),t0+i*step,step*8,'sine',.05,.5); });
+    const dur = M.length*step + 1.5;
+    setTimeout(()=>{ if(cur) cur.out.gain.setTargetAtTime(1, ctx.currentTime, .6); }, dur*1000);
+    return dur;
+  }
+  return {init, play, toggle, sfx, song, get on(){ return enabled; }};
+})();
 
 /* ---------- 线索 ---------- */
 const NOTES = {
@@ -342,8 +545,28 @@ const NOTES = {
   '~1':    '（这一条不是你写的）我们一共五个。',
   '~2':    '（这一条不是你写的）第三排。鸢尾下面。走路轻一点。',
   '~3':    '（这一条不是你写的）她妈妈每天晚上都对着温室的门念那个日子：九月二十一。',
+  ch1end:  '第一章结束：小满和周晴获救，第三排挖出了五个女孩。陈默逃走了。',
+  sanpai:  '“第三排”：一个只存在于夜里的网页。五个女孩各有一件没做完的事。',
+  he1:     '何苑的空间：2014 年 5 月 17 日，她去城郊领花，想给妈妈过生日（5 月 20 日）。妈妈一直以为她跟男人跑了。',
+  he2:     '何记早点：何苑妈妈开的店，招牌是韭菜盒子，每年 5 月 20 日停业一天。留言要验证“老顾客最常点什么”。',
+  heDone:  '【何苑】回家了。妈妈知道了，那天她是去给妈妈买生日礼物的。',
+  xu1:     '许安安的微博：她管弟弟许冬叫“冬瓜”。失踪那天，弟弟在打游戏，没去接她。',
+  xu2:     '许冬的直播间“冬子不熬夜”：他每天直播到天亮，怕姐姐回来的时候没人醒着。',
+  xuDone:  '【许安安】回家了。冬瓜终于肯关掉直播睡一觉了。',
+  su1:     '苏禾的音乐主页：私密作品《未完成》，要输入学号才能听。',
+  su2:     '千城音乐学院获奖名单：苏禾，学号 2016030817，和搭档林可组成“禾可”。',
+  su3:     '《未完成》缺最后一句。“可可，最后一句等你来填。”林可现在在夜晚酒馆驻唱。',
+  suDone:  '【苏禾】回家了。林可把那首歌唱完了。',
+  tang1:   '唐语的日记：她的猫叫年糕，三花，尾巴尖断了一截，左耳朵有个缺口。',
+  tangDone:'【唐语】回家了。年糕还活着，现在叫“等等”。',
+  song1:   '宋芷的空间：在福利院长大，十八岁搬出来。她领养了一株花，挂上了自己的名字。',
+  ch3:     '宋芷：“我要他亲口说出来。”陈默的邮箱 mail.qiancheng.net，密码是“那个时刻”。',
+  mail1:   '陈默的邮箱：植物园批准他凌晨 3:00 到 4:00 进入鸢尾区。沈静给他写了信。',
+  draft:   '陈默的草稿箱：一封写给沈姐、从来没发出去的信。',
 };
-const SECRETS = ['letter','chenmo','member'];
+const SECRETS = ['member','names','photo'];
+const GHOSTS = ['he','xu','su','tang'];
+const ghostCount = () => GHOSTS.filter(g=>S.flags['g_'+g]).length + (S.flags.g_song?1:0);
 function addNote(id){
   if(S.notes.includes(id)) return;
   S.notes.push(id); save(); renderNotes(id);
@@ -362,7 +585,9 @@ function renderNotes(freshId){
 const has = id => S.notes.includes(id);
 function stage(){
   const f = S.flags;
-  if(f.end) return 6;
+  if(f.end) return 8;
+  if(f.ch3) return 7;
+  if(f.ch2) return 6;
   if(f.gardener) return 5;
   if(has('srcjy') && has('news09')) return 4;
   if(f.diary) return 3;
@@ -370,27 +595,43 @@ function stage(){
   if(f.visitedJy || has('ghost')) return 1;
   return 0;
 }
-const STAGES = ['打开链接','调查广告','翻小满的博客','追查日记里的人','找到园丁入口','打开温室','结局'];
+const STAGES = ['打开链接','调查广告','翻小满的博客','追查日记里的人','找到园丁入口','打开温室','第三排','三点十二分','结局'];
+const GHOST_HINTS = {
+  he:  ['在“第三排”页面点何苑留下的地址，看她的空间。','她妈妈开了一家早点铺。去寻度搜“何记早点”。','留言板要验证老顾客：最常点的早餐，何苑在空间里夸过。'],
+  xu:  ['看许安安的微博。她管弟弟叫什么？','去寻度搜“许冬”或“冬子”，找到直播间。','发一条弹幕，用只有姐姐才会叫的那个外号。'],
+  su:  ['《未完成》要学号。去寻度搜“千城音乐学院”。','学号在 2017 年的获奖名单里。听完歌，看歌词最后提到了谁。','去寻度搜“林可”，在酒馆点那首歌的名字。'],
+  tang:['看唐语的日记，记下年糕的样子：花色、尾巴、耳朵。','去寻度搜“流浪动物”或“领养”。','三花、断尾、左耳缺口，三个特征都要对上。'],
+};
 const HINTS = [
   ['在地址栏输入 jingyuan-miaopu.com 并回车。','也可以在寻度里搜索“静园苗圃”。'],
   ['广告页上有一行看不见的字。试着全选页面文字（Ctrl+A）。','阿桃还提到了小满的博客：blog.xiaoman.me。'],
   ['日记上了锁。翻翻小满以前的文章，找“最喜欢的花”和“生日”。','鸢尾的拼音是 yuanwei，生日在右边的资料卡里。','博客里还提到一个网盘，提取码是外婆家的门牌号，藏在某张照片的说明里。这条线是可选的，但很重要。'],
   ['日记里出现了“周晴”。去寻度搜这个名字。','论坛里有一条被删掉的回复。被删的内容有时还留在源代码里（点 </>）。','回广告页看看它的源代码。','园长的女儿叫什么？搜一下“沈静”。'],
   ['你需要园长女儿的名字，旧新闻里有。','访问 jingyuan-miaopu.com/gardener，口令是她的中文名字。'],
-  ['“念念离开的日子”，旧新闻里写着日期。笔记里那条“不是你写的”也提到了。格式：月月日日。','开门之前，你看过外婆的信了吗？它在小满博客提到的网盘里。','写那篇旧新闻的记者是谁？搜搜他的名字。'],
-  ['想看另一个结局，可以点“重新开始”。真结局需要先找到外婆的信。'],
+  ['“念念离开的日子”，旧新闻里写着日期。笔记里那条“不是你写的”也提到了。格式：月月日日。','写那篇旧新闻的记者是谁？搜搜他的名字，后面会用到。','小满博客提到的网盘里有外婆的信，它对最后的结局很重要。'],
+  null, // 第三排：按未完成的心愿动态生成
+  ['陈默的邮箱在 mail.qiancheng.net，账号已经填好了。','密码是“那个时刻”：陈默在 2009 年的博客里写过他打电话的时间，四位数字。','把收件箱和草稿箱都读一遍，然后点“写信”，把能附上的东西都附上再发送。','还没看过外婆的信？它在小满博客提到的网盘里（提取码是外婆家门牌号）。'],
+  ['想看另一个结局，可以点“重新开始”。真结局需要外婆的信和陈默的草稿。'],
 ];
+function hintList(){
+  const s = stage();
+  if(s!==6) return HINTS[s];
+  const g = GHOSTS.find(x=>!S.flags['g_'+x]);
+  if(g) return GHOST_HINTS[g];
+  return ['四个姐姐都回家了。回到“第三排”页面，点宋芷的名字。'];
+}
 let hintIdx = 0, lastStage = -1;
 function renderStage(){
   const s = stage();
   if(s!==lastStage){ hintIdx = 0; lastStage = s; }
-  $('#stageLabel').textContent = STAGES[s];
+  $('#stageLabel').textContent = STAGES[s] + (s===6 ? ' ' + ghostCount() + '/5' : '');
   $('#progress').innerHTML = STAGES.map((_,i)=>`<i class="${i<=s?'on':''}"></i>`).join('');
   const n = SECRETS.filter(has).length;
   $('#secretLine').innerHTML = `隐藏线索 <b>${n} / ${SECRETS.length}</b>`;
 }
 $('#bHint').onclick = () => {
-  const list = HINTS[stage()];
+  const list = hintList();
+  if(hintIdx >= list.length) hintIdx = 0;
   $('#hint').textContent = '提示 ' + (hintIdx+1) + '/' + list.length + '：' + list[hintIdx];
   hintIdx = (hintIdx+1) % list.length;
 };
@@ -434,6 +675,20 @@ function searchResults(q){
   if(hit('灵异','鬼','唱歌','出租车','404','闹鬼','数数','半夜','静园','苗圃','槐树巷')) R.push(R_GHOST);
   if(hit('何苑','许安安','苏禾','唐语','宋芷','失踪人口','寻人','no.0','五个')) R.push(R_MISSING);
   if(hit('失踪','失联')) R.push(R_MISSING);
+  if(S.flags.ch2){
+    if(hit('何苑','苑苑')) R.push({t:'苑苑的小窝 — 千城空间',u:'qzone.qiancheng.net/heyuan',d:'最后更新：2014-05-17。“明天我偷偷去城郊领一盆花……”'});
+    if(hit('何记','早点','韭菜盒子','梧桐路','何姐','早餐')) R.push({t:'何记早点 · 梧桐路老店 — 千城美食',u:'hejizaodian.qiancheng.net',d:'招牌韭菜盒子，开了二十年。每年 5 月 20 日休息一天。'});
+    if(hit('许安安','安安')) R.push({t:'安安不加班 的微博 — 千城微博',u:'weibo.qiancheng.net/anan',d:'千城一院护士。最后一条：“这里好漂亮……就是有点冷。”'});
+    if(hit('许冬','冬子','冬瓜','直播','熬夜')) R.push({t:'冬子不熬夜 的直播间 — 千城直播',u:'live.qiancheng.net/xudong',d:'每天 22:00 到天亮。“万一她回来的时候，我还醒着呢。”'});
+    if(hit('苏禾','禾可','未完成')) R.push({t:'苏禾 · 音乐人主页 — 千城音乐',u:'music.qiancheng.net/suhe',d:'千城音乐学院作曲系。3 首作品，1 首私密。'});
+    if(hit('音乐学院','学号','获奖','比赛','qcyy')) R.push({t:'2017 年校园原创音乐大赛获奖名单 — 千城音乐学院',u:'qcyy.edu.cn/news/2017',d:'一等奖：《槐花落》 作曲 苏禾 · 演唱 林可……'});
+    if(hit('林可','可可','酒馆','驻唱','夜晚')) R.push({t:'夜晚酒馆 · 本周演出 — 千城生活',u:'bar.qiancheng.net',d:'周五驻唱：林可。可点歌，可留言。'});
+    if(hit('唐语')) R.push({t:'唐语的日记 — 千城小组',u:'xiaozu.qiancheng.net/tangyu',d:'“我和年糕的出租屋生活”……最后更新 2021-03-14。'});
+    if(hit('年糕','猫','流浪','领养','宠物','等等')) R.push({t:'千城流浪动物之家 · 已领养档案',u:'chongwu.qiancheng.net',d:'每一只被领走的小家伙，都在这里留了一张照片。'});
+    if(hit('宋芷','芷芷','福利院','阳光')) R.push({t:'芷 — 千城空间',u:'space.qiancheng.net/songzhi',d:'“世界上总得有一样东西写着我的名字。”'});
+    if(hit('第三排','sanpai')) R.push({t:'第三排',u:'sanpai.net',d:'（此网页没有提供描述）'});
+  }
+  if(S.flags.ch3 && hit('邮箱','mail','陈默','邮件')) R.unshift({t:'千城邮箱 — 登录',u:'mail.qiancheng.net',d:'千城人自己的邮箱。'});
   if(!R.length || !R[0].ad) R.unshift(R_AD);
   const seen = new Set();
   return R.filter(r=>{const key=r.u+r.t; if(seen.has(key)) return false; seen.add(key); return true;});
@@ -552,11 +807,11 @@ PAGES['jingyuan-miaopu.com/gardener'] = () => {
       <tr class="hot"><td>No.08</td><td>林小满</td><td>2026-10-16</td><td>发卡是真的。背面刻着“念”。<br>沈姐已经认出来了。不能让她们相认。</td><td>温室 B · 移栽 10-20</td></tr>
       <tr><td>No.09</td><td>?</td><td>—</td><td>正在浏览本页</td><td>预约中</td></tr>
     </tbody></table></div>
-  <div class="door">
+  ${S.flags.ch2 ? `<div class="door"><p><b>温室 B · 电子门禁</b><br>状态：已开启。<br><span style="color:#8a6a64">本网站已被千城市公安局查封。园丁账号最后一次登录：千城站附近。</span></p></div>` : `<div class="door">
     <p><b>温室 B · 电子门禁</b><br>四位数字。提示：念念离开的日子。<br><span style="color:#8a6a64">连续输错三次将锁定并通知园丁。剩余次数：${3 - S.doorFails}</span></p>
     <form data-form="door"><input type="text" id="d-code" name="code" inputmode="numeric" maxlength="4" style="width:100px;letter-spacing:.3em" aria-label="门禁密码">
     <button type="submit" style="margin-left:6px">开门</button><div class="err" id="d-err" style="color:#e07a6e"></div></form>
-  </div>
+  </div>`}
   <!-- 移栽前记得浇水。车票：10-20 06:40 千城站 -->
   <!-- 为什么每天早上，温室 B 的玻璃上都有五个手印？从里面印上去的。 -->
 </div>`};
@@ -795,6 +1050,325 @@ PAGES['chenmo.blog'] = () => {
 </div></div>`};
 };
 
+/* ================= 第二章 · 第三排 ================= */
+function ghostDone(g, name, msgs){
+  if(S.flags['g_'+g]) return;
+  S.flags['g_'+g] = true; save();
+  addNote(g+'Done'); SND.sfx('done');
+  phone('bye_'+g, name, msgs, true);
+  if(GHOSTS.every(x=>S.flags['g_'+x]))
+    phone('songcall','未知号码',['姐姐们一个一个都走了。','走之前她们都回头看了一眼第三排，又看了一眼我。','我是宋芷。No.06。那个一直给你发消息的号码，是我的。','轮到我了。回“第三排”，点我的名字。'], true);
+}
+
+PAGES['sanpai.net'] = () => {
+  addNote('sanpai');
+  const G = [
+    ['he','何苑','No.02 · 2014 · 21 岁','“我妈以为我跟人跑了，恨了我十二年。告诉她，那天我是去给她买生日礼物的。”','qzone.qiancheng.net/heyuan'],
+    ['xu','许安安','No.03 · 2016 · 23 岁','“我弟弟每天熬夜到天亮。叫他去睡觉。他听不进别人的话，只听我的。”','weibo.qiancheng.net/anan'],
+    ['su','苏禾','No.04 · 2018 · 20 岁','“我有一首歌没写完。最后一句，要可可来唱。”','music.qiancheng.net/suhe'],
+    ['tang','唐语','No.05 · 2021 · 22 岁','“我出门的时候，只给年糕留了两天的猫粮。它还活着吗？”','xiaozu.qiancheng.net/tangyu'],
+  ];
+  const four = GHOSTS.every(x=>S.flags['g_'+x]);
+  return { title:'第三排', haunt:'一 二 三 四 五', html:`
+<div class="pg sp">
+  <h1>第 三 排</h1>
+  <p style="margin:0;font-size:13px;color:#7a726a">这是我们借来的一个网页。天亮以后就不在了。</p>
+  <p style="font-size:14px;line-height:1.9;max-width:560px">你好。谢谢你找到念念。<br>我们在第三排下面待了很久，久到忘了自己是怎么来的，但没忘记还有一件事没做完。<br>警察挖开了土，我们就能走了。可是我们不想就这样走。</p>
+  <div class="grid">
+    ${G.map(([g,n,meta,wish,url])=>{ const d=S.flags['g_'+g]; return `<div class="card ${d?'done':''}">
+      <b>${n}</b> <span class="st">${d?'已回家':'未完成'}</span><br><span style="font-size:12px;color:#7a726a">${meta}</span>
+      <p style="margin:8px 0;font-size:13.5px">${wish}</p>
+      <a data-href="${url}">她留下的地址 →</a></div>`; }).join('')}
+    <div class="card ${S.flags.g_song?'done':''}">
+      <b>宋芷</b> <span class="st">${S.flags.g_song?'已回家':four?'轮到她了':'等待中'}</span><br><span style="font-size:12px;color:#7a726a">No.06 · 2024 · 19 岁</span>
+      <p style="margin:8px 0;font-size:13.5px">${four ? '“我没有家人要告别。我只有一件事要做。”' : '“等姐姐们都回家了，再说我的。”'}</p>
+      ${four ? '<a data-href="space.qiancheng.net/songzhi">她留下的地址 →</a>' : '<span style="color:#4a443e">……</span>'}</div>
+  </div>
+  <!-- 我们五个人，加起来只活了一百零五年。 -->
+</div>`};
+};
+
+/* ---- 何苑 ---- */
+PAGES['qzone.qiancheng.net/heyuan'] = () => { addNote('he1'); return { title:'苑苑的小窝 — 千城空间', html:`
+<div class="pg soc">
+  <div class="soc-head warm"><h1>苑苑的小窝</h1><p>何苑 · 千城师范大学 美术系 · 访客 3,127</p></div>
+  <div class="soc-wrap">
+    <div class="feed"><time>2014-05-17 22:10</time>
+      <p>刷到一个免费领养花的广告！！妈生日快到了（5.20），她天天念叨想在店门口摆一盆花，说看着心里亮堂。可她每天四点就起来和面，哪有空去买。</p>
+      <p>明天我偷偷去城郊领一盆，紫色的，给她一个大惊喜。先别告诉她～</p>
+      <div class="cmt">
+        <div><b>小鹿</b>：苑苑你人呢？？两天没来上课了，辅导员在找你</div>
+        <div><b>何记早点</b>：你要跟那个男的走就走，别回来了。</div>
+        <div><b>何记早点</b>：苑苑，豆包每天趴在门口等你。妈不骂你了。你回个话。</div>
+        <div><b>何记早点</b>：妈不怪你了。你过得好就行。豆包老了，走不动了，你回来看看它。</div>
+        <div><b>何记早点</b>：今年生日，妈又停业一天。在店门口坐了一整天。</div>
+        <div><b>何记早点</b>：豆包走了。走之前一直朝着门口。</div>
+      </div></div>
+    <div class="feed"><time>2014-04-02 23:41</time>
+      <p>妈今天又骂我，说我谈恋爱不务正业。我哪有谈恋爱！那是我们小组作业的同学！！他就是来店里吃了个早饭！！气死。</p>
+      <p>算了，她一个人把我拉扯大，操心惯了。</p></div>
+    <div class="feed"><time>2014-03-08 07:12</time>
+      <p>周末回家帮店里忙。我妈做的韭菜盒子天下第一，梧桐路的老顾客一大早排队就是冲这个来的。我从小吃到大，还没吃腻。</p>
+      <p>妈说等我毕业了，教我做。我说我要当画家。她说画家也得吃早饭。</p></div>
+    <div class="feed"><time>2013-12-24 18:30</time><p>带豆包去打疫苗，它咬了医生。妈说随我。</p></div>
+    <div class="feed"><time>2013-09-01 09:00</time><p>大三开学！今年要画一幅妈在店里包韭菜盒子的画，送她当生日礼物。……好像画不完，那就送花吧。</p></div>
+  </div>
+</div>`}; };
+
+PAGES['hejizaodian.qiancheng.net'] = () => { addNote('he2'); const d = S.flags.g_he; return { title:'何记早点 · 梧桐路老店', html:`
+<div class="pg soc">
+  <div class="soc-head warm"><h1>何记早点</h1><p>梧桐路 18 号 · 每天 5:00—10:00 · 每年 5 月 20 日休息</p></div>
+  <div class="soc-wrap">
+    <div class="feed"><b>本店招牌</b><p>韭菜盒子 ¥3　豆浆 ¥2　茶叶蛋 ¥1.5　小米粥 ¥3</p>
+      <p style="font-size:13px;color:#777">老板娘何姐：二十年老手艺。闺女以前天天来帮忙，现在……反正店还开着，她回来就能找到。</p></div>
+    <div class="feed"><b>留言板</b>
+      <div class="cmt">
+        <div><b>老街坊</b>：何姐的韭菜盒子吃了十几年了，好吃！</div>
+        <div><b>上班族小王</b>：每天早上的救命稻草</div>
+        <div><b>何姐（店主）</b>：谢谢大家。如果有人见过我闺女何苑，请一定告诉我。她不是坏孩子。</div>
+        ${d ? `<div><b>一位老顾客</b>：${esc(S.flags.heMsg||'何姐，苑苑那天是去给您买生日礼物的。')}</div>
+        <div><b>何姐（店主）</b>：你是谁？这件事只有苑苑知道。</div>
+        <div><b>何姐（店主）</b>：我去了千城大道 404 号。警察带我看了第三排。我蹲在那儿，跟她说了十二年来第一句软话。</div>
+        <div><b>何姐（店主）</b>：我给她带了一盒韭菜盒子。苑苑，你记错了，妈不要花。妈要你。</div>` : ''}
+      </div>
+      ${d ? '' : `<form data-form="heji" style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+        <label for="hj-q" style="font-size:13px;color:#666">老顾客验证：您最常点的是？</label>
+        <input type="text" id="hj-q" name="q" autocomplete="off">
+        <label for="hj-m" style="font-size:13px;color:#666">留言</label>
+        <input type="text" id="hj-m" name="m" placeholder="替何苑说点什么" style="max-width:none">
+        <div class="err" id="hj-err"></div>
+        <button class="sbtn" type="submit" style="background:#d98a5b;color:#fff;align-self:flex-start">留言</button></form>`}
+    </div>
+  </div>
+</div>`}; };
+
+/* ---- 许安安 ---- */
+PAGES['weibo.qiancheng.net/anan'] = () => { addNote('xu1'); return { title:'安安不加班 的微博', html:`
+<div class="pg soc">
+  <div class="soc-head"><h1>安安不加班</h1><p>许安安 · 千城一院 急诊科护士 · 关注 88 · 粉丝 412</p></div>
+  <div class="soc-wrap">
+    <div class="feed"><time>2016-04-09 18:47</time><p>这里好漂亮……全是紫色的。就是有点冷。园长阿姨人很好，给我倒了热茶。信号不太好，晚点回家。</p>
+      <div class="cmt"><div><b>冬子不熬夜</b>：姐你在哪？？我错了，我现在就去接你</div>
+      <div><b>冬子不熬夜</b>：姐，我把游戏卸了。</div>
+      <div><b>冬子不熬夜</b>：姐，今天直播到四点。你回来就能看见我还醒着。</div>
+      <div><b>冬子不熬夜</b>：姐，第十年了。我还醒着。</div></div></div>
+    <div class="feed"><time>2016-04-09 14:20</time><p>冬瓜说今天不来接我了，要打排位。哼！那我自己坐公交去城郊看花，领一盆放护士站。</p><p>冬瓜你等着，回来我就把你游戏账号卖了。</p></div>
+    <div class="feed"><time>2016-03-30 08:02</time><p>连上四个夜班。冬瓜半夜给我送了宵夜，虽然是泡面，原谅他了。他说姐你别太累，我说你别熬夜。他说好。他骗人。</p></div>
+    <div class="feed"><time>2016-02-08 00:10</time><p>过年。爸妈不在以后，就剩我和冬瓜两个人。他包的饺子像包子。我说你这辈子离了我怎么办。他说那就不离。</p></div>
+    <div class="feed"><time>2015-11-20 07:30</time><p>“冬瓜”这个外号是我五岁时候起的，因为他生下来又白又圆。全世界只有我能这么叫他，别人叫他会翻脸。</p></div>
+  </div>
+</div>`}; };
+
+PAGES['live.qiancheng.net/xudong'] = () => { addNote('xu2'); const d = S.flags.g_xu; return { title:'冬子不熬夜 的直播间', on(){ if(!d) liveTicker(); }, html:`
+<div class="pg live">
+  <div class="live-top"><div class="live-av"></div><div><b>冬子不熬夜</b><br><span style="font-size:12px;color:#888">${d?'已下播 · 最后一条动态：“我去看我姐了。”':'直播中 · 03:12 · 在线 1'}</span></div></div>
+  <div class="live-grid">
+    <div class="live-screen">${d ? '<div style="font-size:15px;color:#ccc">主播已下播</div><div>“姐，我睡了。晚安。”</div>' :
+      '<div style="font-size:15px;color:#ccc">【不打游戏，就陪你们聊天】</div><div>画面里是一个很年轻的男人，黑眼圈很重，桌上摆着一张合照。<br>照片里的女孩穿着护士服，在笑。</div><div style="color:#666;font-size:12px">置顶：我姐 2016 年 4 月 9 日去城郊看花，再也没回来。那天我在打游戏，没去接她。<br>我每天直播到天亮。万一她回来的时候，我还醒着呢。</div>'}</div>
+    <div class="live-chat" id="chat">
+      <div class="dm"><b>夜猫子</b>：冬子哥又通宵啊</div>
+      <div class="dm"><b>路人甲</b>：哥你去睡吧，身体要紧</div>
+      <div class="dm host"><b>冬子</b>：不睡。睡了万一她回来没人开门</div>
+      <div class="dm"><b>老粉</b>：十年了……</div>
+      ${d ? `<div class="dm me"><b>你</b>：${esc(S.flags.xuMsg||'冬瓜')}</div><div class="dm host"><b>冬子</b>：……</div><div class="dm host"><b>冬子</b>：今天下播了。大家晚安。</div>` : ''}
+      ${d ? '' : `<form data-form="danmu"><input type="text" id="dm-in" name="m" placeholder="发个弹幕" autocomplete="off" aria-label="弹幕"><button type="submit">发送</button></form>`}
+    </div>
+  </div>
+</div>`}; };
+function liveTicker(){
+  const lines = [['夜猫子','三点多了'],['新来的','这主播怎么不打游戏'],['老粉','新来的看置顶'],['冬子','（喝了口水，没说话）'],['路人甲','哥，你姐肯定希望你好好睡觉']];
+  let i = 0; clearInterval(liveTicker.t);
+  liveTicker.t = setInterval(()=>{
+    const chat = $('#chat'); const form = chat && chat.querySelector('form');
+    if(!form || cur.u!=='live.qiancheng.net/xudong'){ clearInterval(liveTicker.t); return; }
+    const [n,m] = lines[i++ % lines.length];
+    const el = document.createElement('div'); el.className = 'dm' + (n==='冬子'?' host':''); el.innerHTML = `<b>${n}</b>：${m}`;
+    chat.insertBefore(el, form);
+  }, 4200);
+}
+
+/* ---- 苏禾 ---- */
+const SONGS = {
+  huai: [67,69,72,74,72,69,67,null,64,67,69,67,64,62,64,null,67,69,72,76,74,72,69,null,67,64,62,64,67,null,null,null],
+  wanan:[72,71,69,67,69,null,64,null,65,67,69,72,71,null,null,null,72,74,76,74,72,71,69,null,67,69,71,72,null,null,null,null],
+  wei:  [62,65,69,67,65,64,62,null,60,62,65,64,62,57,null,null,62,65,69,72,70,69,67,null,65,67,69,null,null,null,null,null],
+};
+PAGES['music.qiancheng.net/suhe'] = () => { addNote('su1'); return { title:'苏禾 · 音乐人主页', html:`
+<div class="pg soc">
+  <div class="soc-head dim"><h1>苏禾</h1><p>千城音乐学院 作曲系 2016 级 · “写歌的人，唱不好歌”</p></div>
+  <div class="soc-wrap">
+    <div class="feed"><b>《槐花落》</b> <span style="font-size:12px;color:#888">作曲：苏禾　演唱：林可</span><p><button class="playbtn" data-song="huai">▶ 播放</button></p><p style="font-size:13px;color:#666">2017 校园原创音乐大赛一等奖。可可唱的。我只负责写，她负责让别人哭。</p></div>
+    <div class="feed"><b>《晚安千城》</b> <span style="font-size:12px;color:#888">作曲：苏禾</span><p><button class="playbtn" data-song="wanan">▶ 播放</button></p></div>
+    <div class="feed"><b>《未完成》</b> <span style="font-size:12px;color:#888">🔒 私密作品</span>
+      ${S.flags.suOpen ? `<p><button class="playbtn" data-song="wei">▶ 播放</button></p>
+      <div class="lyric">你说紫色的花会等人<br>等到春天变成灰<br>我在第三排数着日子<br>一，二，三，四，五<br>……<br><span style="color:#aaa">（最后一句还没想好）</span></div>
+      <p style="font-size:13px;color:#666">备注：可可，最后一句等你来填。我去城郊领一盆花回来当灵感，晚上就回宿舍。你要是先写出来了，周五在酒馆唱给我听。</p>`
+      : `<p style="font-size:13px;color:#666">仅作者本人可听。请输入学号验证。</p>
+      <form data-form="suhe"><input type="text" id="su-id" name="id" inputmode="numeric" autocomplete="off" aria-label="学号" style="max-width:200px">
+      <button class="sbtn" type="submit" style="background:#5d6470;color:#fff;margin-left:6px">验证</button><div class="err" id="su-err"></div></form>`}
+    </div>
+    <div class="feed"><time>2018-09-14 16:05</time><p>今天一个人去城郊。可可不肯陪我，说周五要排练。没事，我领一盆紫色的花回来，放在琴旁边。</p>
+      <div class="cmt"><div><b>林可</b>：禾禾，你在哪</div><div><b>林可</b>：我写出最后一句了，你回来听好不好</div><div><b>林可</b>：我每个周五都在酒馆唱，唱到你回来为止</div></div></div>
+  </div>
+</div>`}; };
+PAGES['qcyy.edu.cn/news/2017'] = () => { addNote('su2'); return { title:'2017 年校园原创音乐大赛获奖名单 — 千城音乐学院', html:`
+<div class="pg news">
+  <div class="news-top"><b style="color:#2b4a7a">千城音乐学院</b><small>校园新闻 · 2017 年 12 月 18 日</small></div>
+  <article class="news-art">
+    <h1>2017 年校园原创音乐大赛获奖名单公布</h1>
+    <p>本届大赛共收到原创作品 86 件。经评审，获奖名单如下：</p>
+    <div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;font-size:14px;min-width:440px">
+      <tr style="background:#f2f4f8"><td style="padding:6px">奖项</td><td>作品</td><td>作者</td><td>学号</td></tr>
+      <tr><td style="padding:6px">一等奖</td><td>《槐花落》</td><td>苏禾（作曲）/ 林可（演唱）</td><td>2016030817 / 2016030822</td></tr>
+      <tr><td style="padding:6px">二等奖</td><td>《北站》</td><td>周明远</td><td>2015020311</td></tr>
+      <tr><td style="padding:6px">三等奖</td><td>《雨季》</td><td>王一然</td><td>2016010506</td></tr>
+    </table></div>
+    <p>评委点评：《槐花落》的旋律像一首摇篮曲，有一种说不清的、等待的感觉。词曲二人组合“禾可”是本届最受欢迎的选手。</p>
+  </article>
+</div>`}; };
+PAGES['bar.qiancheng.net'] = () => { const d = S.flags.g_su; return { title:'夜晚酒馆 · 本周演出', html:`
+<div class="pg bar"><div class="bar-wrap">
+  <h1>夜 晚 酒 馆</h1>
+  <p style="color:#a88a70;font-size:13px">老城区 · 槐树巷口 · 营业到凌晨三点</p>
+  <table><tr><td>周三</td><td>民谣开放麦</td></tr><tr><td>周五</td><td>林可 驻唱（第 8 年）</td></tr><tr><td>周六</td><td>爵士三重奏</td></tr></table>
+  <p style="font-size:13.5px;line-height:1.9">关于林可：每周五晚上来，唱到最后一首，总会对着门口唱一首没有名字的歌。歌只有半首。唱完她会看一会儿门口，然后收琴走人。老顾客都知道，那首歌别点，点了她会哭。</p>
+  ${d ? `<p style="border-top:1px solid #3a2a20;padding-top:12px">【店长动态】昨晚林可唱了整首。最后一句是：<br><b style="color:#f0b878">“等你回家，我们再唱一遍。”</b><br>唱完她没有看门口。她说，禾禾已经听见了。</p>` :
+  `<form data-form="diange" style="border-top:1px solid #3a2a20;padding-top:14px"><label for="dg" style="font-size:13px;color:#a88a70">点歌（写下歌名）</label><br>
+    <input type="text" id="dg" name="s" autocomplete="off" style="margin:6px 0"><br><button type="submit">点歌</button><div class="err" id="dg-err" style="color:#f0b878"></div></form>`}
+</div></div>`}; };
+
+/* ---- 唐语 ---- */
+PAGES['xiaozu.qiancheng.net/tangyu'] = () => { addNote('tang1'); return { title:'唐语的日记 — 千城小组', html:`
+<div class="pg soc">
+  <div class="soc-head dim"><h1>我和年糕的出租屋生活</h1><p>唐语 · 千城小组「一个人住」· 成员 3.2 万</p></div>
+  <div class="soc-wrap">
+    <div class="feed"><time>2021-03-14 09:30</time><p>今天去城郊看花，听说那边有个苗圃免费送鸢尾。给年糕留了两天的猫粮和一大盆水，晚上就回来。</p><p>年糕今天格外黏人，一直扒我的鞋。傻猫，我又不是不回来。</p>
+      <div class="cmt"><div><b>楼下阿姨</b>：小唐，你家猫叫了三天了，你在家吗？</div><div><b>楼下阿姨</b>：物业开门了。猫还活着，瘦得皮包骨，送去流浪动物之家了。小唐你在哪？</div></div></div>
+    <div class="feed"><time>2021-02-02 21:15</time><p>介绍一下我家主子：年糕，三花，女孩子。尾巴尖断了一小截，左耳朵上有个小缺口，捡它的时候就是这样，在垃圾桶旁边冻得直抖。</p><p>现在胖得像个年糕。</p></div>
+    <div class="feed"><time>2021-01-10 18:40</time><p>年糕每天傍晚都趴在窗台上，看楼下的路口。我一出现在路口，它就跳下去跑到门口。邻居说我还没上楼，就听见猫在门后面叫了。</p></div>
+    <div class="feed"><time>2020-12-31 23:59</time><p>一个人跨年。不对，是一个人和一只猫。新年愿望：年糕长命百岁，我早点找到好工作。</p></div>
+  </div>
+</div>`}; };
+const CATS = [
+  ['橘猫','#e8a35a','#e8a35a','男孩，体型大，尾巴完整，两只耳朵都好好的。领养人说它特别能吃。'],
+  ['三花','#f4f0e8','#d48a3a','女孩，尾巴完整，右耳有缺口。很怕生。'],
+  ['三花','#f4f0e8','#3a2e2a','女孩，尾巴尖断了一截，右耳有缺口。2019 年从工地救出。'],
+  ['三花','#f4f0e8','#c47a3a','女孩，尾巴尖断了一截，左耳有一个小缺口。2021 年 3 月从出租屋救出，送来时饿了三天。'],
+  ['狸花','#9a8a70','#6a5a40','男孩，尾巴完整，左耳有缺口，是打架打的。'],
+  ['黑猫','#2a2a2a','#2a2a2a','女孩，尾巴尖断了一截，两只耳朵完好。眼睛是金色的。'],
+];
+PAGES['chongwu.qiancheng.net'] = () => ({ title:'千城流浪动物之家 · 已领养档案', html:`
+<div class="pg pet">
+  <div class="pet-head">千城流浪动物之家 · 已领养档案</div>
+  <p style="max-width:780px;margin:14px auto 0;padding:0 16px;font-size:13.5px">以下是近几年被领养的猫咪。点开可以看领养人的回访。</p>
+  <div class="pet-grid">${CATS.map((c,i)=>`<div class="pet-card" data-href="chongwu.qiancheng.net/c/${i+1}" role="link" tabindex="0">
+    <div class="cat" style="background:radial-gradient(circle at 30% 40%,${c[2]} 0 22%,transparent 23%),radial-gradient(circle at 70% 60%,${c[2]==='#2a2a2a'?'#2a2a2a':'#2a2420'} 0 16%,transparent 17%),${c[1]}"></div>
+    <b>No.${2017+i}-0${i+3}　${c[0]}</b><br>${c[3]}</div>`).join('')}</div>
+</div>`});
+CATS.forEach((c,i)=>{ PAGES['chongwu.qiancheng.net/c/'+(i+1)] = () => {
+  const right = i===3;
+  if(right) setTimeout(()=>ghostDone('tang','唐语',['是年糕。','它尾巴上那一截，是我捡它那天它自己咬掉的冻伤。左耳朵的缺口，是它第一次打针时候咬医生被弹的。','它换名字了？等等……好听。','它还在窗台上等。没关系，现在窗台旁边有人了。','我可以回家了。']), 600);
+  return { title: (right?'等等':c[0]) + ' · 领养回访', html:`
+<div class="pg pet"><div class="pet-head">领养回访</div>
+<div style="max-width:620px;margin:18px auto;padding:0 18px;line-height:1.9">
+  <div class="cat" style="height:160px;background:radial-gradient(circle at 30% 40%,${c[2]} 0 22%,transparent 23%),radial-gradient(circle at 70% 60%,#2a2420 0 16%,transparent 17%),${c[1]}"></div>
+  ${right ? `<h2 style="margin:6px 0">它现在叫“等等”</h2>
+  <p>2021 年 3 月 17 日，物业在一间出租屋里发现了它。猫粮碗和水盆都是空的，它趴在门口，听见开门声就站起来叫，看清来的不是主人，又趴了回去。</p>
+  <p>领养人是一位独居的退休语文老师。回访记录：</p>
+  <p style="background:#fff;border:1px solid #f0dcc0;border-radius:8px;padding:12px 14px">“它每天傍晚都坐在窗台上，看楼下的路口，一坐就是两个钟头。我给它起名叫等等。我知道它在等谁，我不跟它抢。我就坐在旁边陪它等。<br>它现在胖了，像个年糕。”</p>
+  <p style="color:#888;font-size:13px">回访日期：2026-10-21 03:12（系统时间异常）</p>`
+  : `<h2 style="margin:6px 0">${c[0]}</h2><p>${c[3]}</p><p style="color:#888">领养人说它过得很好。……但它不是年糕。再对照一下唐语日记里写的样子。</p>`}
+  <p><a data-href="chongwu.qiancheng.net">← 返回档案</a></p>
+</div></div>`}; }; });
+
+/* ---- 宋芷 ---- */
+PAGES['space.qiancheng.net/songzhi'] = () => {
+  addNote('song1');
+  const four = GHOSTS.every(x=>S.flags['g_'+x]);
+  return { title:'芷', haunt:'轮到我了', on(){
+      if(!four) return;
+      if(!S.flags.ch3){ S.flags.ch3 = true; S.flags.g_song = true; save(); addNote('ch3'); renderBookmarks(); renderStage(); }
+      phone('ch3open','宋芷',['你看完了。','我没有妈妈要道歉，没有弟弟要哄，没有歌要唱完，也没有猫要等。','我只有一件事。','陈默没有被抓到。他的车停在千城站，票没用，人不见了。','我要他亲口说出来。说给沈阿姨听，说给念念听，说给第三排的五个人听。','他的邮箱，密码是“那个时刻”。你知道是哪个时刻。'], true);
+    }, html:`
+<div class="pg soc">
+  <div class="soc-head dim"><h1>芷</h1><p>宋芷 · 19 岁 · 访客 41（其中 38 次来自同一个人）</p></div>
+  <div class="soc-wrap">
+    <div class="feed"><time>2024-04-10 21:02</time><p>刷到一个广告，说可以领养一盆花，用思念的人的名字挂牌。</p><p>我没有思念的人。那就挂我自己的名字吧。这样世界上就有一样东西，写着宋芷两个字了。</p>
+      <div class="cmt"><div><b>王老师</b>：芷芷，你去哪了？老师报警了，警察说成年人失联……老师不知道还能找谁。</div>
+      <div><b>王老师</b>：老师每个月都来看一次你的空间。</div>
+      <div><b>王老师</b>：今天福利院的小朋友问起你。我说芷芷姐姐去很远的地方种花了。</div>
+      <div><b>王老师</b>：芷芷，老师退休了。还是每个月都来。</div></div></div>
+    <div class="feed"><time>2024-03-01 12:00</time><p>十八岁，从阳光福利院搬出来了。王老师送了我一个发卡，紫色的，她说女孩子出门要戴点好看的。</p><p>租的房子很小，但是窗户朝南。</p></div>
+    <div class="feed"><time>2023-09-21 20:30</time><p>福利院的小朋友问我，爸爸妈妈去哪了。我说在很远的地方种花，等花开了就回来。</p><p>她信了。我也差点信了。</p></div>
+    <div class="feed"><time>2026-10-20 03:12</time><p style="color:#8a6a64;font-style:italic">${four ? '王老师，我有家了。第三排的姐姐们都是我的家人。等这件事做完，我就跟她们一起走。<br>替我谢谢那个一直在看日记的人。' : '……还不是时候。'}</p></div>
+  </div>
+</div>`};
+};
+
+/* ================= 第三章 · 三点十二分 ================= */
+const MAILS = [
+  ['（无发件人）','今晚','陈叔叔，第三排很冷',`<p>陈叔叔：</p><p>第三排很冷。你知道的，你每年春天都在那里浇水。</p><p>今晚三点十二分，你去植物园的鸢尾区。我们五个都在。念念也会去。</p><p>你在那里说过的话，要在那里说完。</p><p style="color:#999">（这封邮件没有发件地址。服务器记录显示，它是从“第三排”发出的。）</p>`],
+  ['沈静','10-21 02:00','小陈，温室里又有人数数',`<p>小陈：</p><p>昨晚我一个人回了园子。警察贴的封条还在。我坐在温室门口，又听见里面有人数数，一、二、三、四、五。</p><p>数完了，有个小姑娘的声音叫我：阿姨。</p><p>她说，阿姨，你等的人回来了，就在医院里。可你要先听一个人说一句真话。</p><p>小陈，是什么真话？你回来跟姐说。姐不怪你，姐就想知道。</p>`],
+  ['沈静','10-20 08:10','你回来跟姐说清楚',`<p>小陈：</p><p>警察说的那些，是真的吗？那些女孩子，你跟我说她们住几天就回家了。</p><p>你回来，当面跟姐说。姐不信。</p><p>你帮了姐十二年，姐一直把你当亲弟弟。</p>`],
+  ['千城植物园管理处','09-01','鸢尾区夜间养护志愿申请已通过',`<p>陈默先生：</p><p>您申请的“鸢尾区夜间养护志愿者”已审核通过。由于鸢尾区夜间需要定时补水，您可在每日凌晨 3:00—4:00 凭志愿者证入园。</p><p>感谢您多年来对植物园鸢尾区的关心。您每年捐赠的鸢尾种苗，长势都非常好。</p>`],
+  ['千城站','10-20 06:52','您的车票未乘车，已退票',`<p>尊敬的旅客：您购买的 10 月 20 日 06:40 千城站至南州站 G1012 次车票未乘车，已按规定办理退票。</p>`],
+];
+const DRAFT = `<p>沈姐：</p>
+<p>这封信我写了十七年，一直没敢发。</p>
+<p>2009 年 9 月 21 日下午 3 点 12 分，那通电话是我打的。我那时候刚进报社，想抢一个植物园鸢尾展的稿子，打了你的电话。你转身接我的电话，四十秒。我在电话里听见你说“念念别乱跑”，然后你就不说话了，然后你开始喊她的名字。</p>
+<p>我在报道里写了“未能核实”。我骗了所有人。</p>
+<p>后来我辞了职去帮你种花。我以为我在赎罪。你每次看见一个像念念的女孩子就会好几天，我就想，再找一个，再找一个，让你高兴几天。</p>
+<p>第一个女孩子要走，她说她要回家给妈妈过生日，她说这里不对劲，她要报警。报了警，就会有人查园子，查到我，查到那通电话。</p>
+<p>后来的事，我写不下去。</p>
+<p>沈姐，你从来没进过温室后面那一排。那些晚上，你在前面唱歌，我在后面浇水。</p>
+<p>念念找到了。她自己走回来的。她戴着那个发卡。我看见的第一眼就知道了。可我把她锁起来了，因为她认了你，你就会知道这一切。</p>
+<p>我不求你原谅。我只是不想再听见数数了。</p>
+<p style="text-align:right">陈默</p>`;
+PAGES['mail.qiancheng.net'] = () => {
+  if(!S.flags.mailIn) return { title:'千城邮箱 — 登录', html:`
+<div class="pg mail"><div class="mail-top">千城邮箱</div>
+<div class="jy-login" style="border-color:#d5dbe5">
+  <h2 style="margin:0 0 10px;font-size:18px">登录</h2>
+  <form data-form="mail">
+    <label style="font-size:13px;color:#666" for="ml-u">账号</label><input type="text" id="ml-u" name="u" value="chenmo@qiancheng.net" readonly style="max-width:none;background:#f3f4f6">
+    <label style="font-size:13px;color:#666;display:block;margin-top:10px" for="ml-p">密码</label><input type="password" id="ml-p" name="p" autocomplete="off" style="max-width:none">
+    <div style="font-size:12px;color:#999;margin-top:4px">密码提示：那个时刻</div>
+    <div class="err" id="ml-err"></div>
+    <button class="sbtn" type="submit" style="background:#1f3a5f;color:#fff">登录</button>
+  </form></div></div>`};
+  addNote('mail1');
+  return mailShell('收件箱', `${MAILS.map((m,i)=>`<div class="mrow" data-href="mail.qiancheng.net/m/${i+1}" role="link" tabindex="0"><span>${m[0]}</span><b style="font-weight:${i<2?700:400}">${m[2]}</b><small>${m[1]}</small></div>`).join('')}`);
+};
+function mailShell(title, body){
+  return { title:'千城邮箱 — ' + title, haunt: S.flags.draft ? '说出来' : '', html:`
+<div class="pg mail"><div class="mail-top">千城邮箱 · chenmo@qiancheng.net</div>
+<div class="mail-grid">
+  <div class="mail-nav"><a data-href="mail.qiancheng.net">收件箱（${MAILS.length}）</a><a data-href="mail.qiancheng.net/drafts">草稿箱（1）</a><a data-href="mail.qiancheng.net/compose"><b>写信</b></a></div>
+  <div class="mail-main">${body}</div>
+</div></div>`};
+}
+MAILS.forEach((m,i)=>{ PAGES['mail.qiancheng.net/m/'+(i+1)] = () => S.flags.mailIn ? mailShell(m[2], `<div class="mread"><h2>${m[2]}</h2><div class="h">发件人：${m[0]}　时间：${m[1]}</div>${m[3]}</div>`) : PAGES['mail.qiancheng.net'](); });
+PAGES['mail.qiancheng.net/drafts'] = () => S.flags.mailIn ? mailShell('草稿箱', `<div class="mrow" data-href="mail.qiancheng.net/drafts/1" role="link" tabindex="0"><span>给：沈静</span><b>沈姐</b><small>2009—2026</small></div>`) : PAGES['mail.qiancheng.net']();
+PAGES['mail.qiancheng.net/drafts/1'] = () => {
+  if(!S.flags.mailIn) return PAGES['mail.qiancheng.net']();
+  S.flags.draft = true; save(); addNote('draft');
+  return mailShell('沈姐', `<div class="mread"><h2>沈姐</h2><div class="h">草稿 · 未发送 · 最后修改 2026-10-21 03:11</div>${DRAFT}</div>`);
+};
+PAGES['mail.qiancheng.net/compose'] = () => {
+  if(!S.flags.mailIn) return PAGES['mail.qiancheng.net']();
+  const A = [['gd','园丁日志截图.png', true, '你在第一章看到的园丁后台'],['draft','给沈姐（草稿）', S.flags.draft, '陈默没发出去的那封信'],['letter','外婆的信.jpg', has('letter'), '小满网盘里的扫描件']];
+  return mailShell('写信', `<div class="mread"><h2>写信</h2>
+  <form data-form="compose" style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:13.5px">收件人：<b>沈静</b>；<b>千城市公安局</b></div>
+    <div style="font-size:13.5px">主题：<b>三点十二分</b></div>
+    <fieldset style="border:1px solid #d5dbe5;border-radius:6px;padding:10px 12px"><legend style="font-size:13px;color:#666">附件</legend>
+    ${A.map(([k,n,ok,d])=>`<label style="display:block;font-size:13.5px;margin:4px 0;color:${ok?'#222':'#aaa'}"><input type="checkbox" name="${k}" ${ok?'checked':'disabled'}> ${n}　<span style="font-size:12px;color:#999">${ok?d:'你还没有找到它'}</span></label>`).join('')}
+    </fieldset>
+    <p style="font-size:13px;color:#777;margin:0">发出之后就不能撤回了。现在是凌晨三点零五分。</p>
+    <button class="sbtn" type="submit" style="background:#1f3a5f;color:#fff;align-self:flex-start">发送</button>
+  </form></div>`);
+};
+
 /* ---------- 浏览器 ---------- */
 let hist = [], hi = -1, srcMode = false, cur = null;
 const vp = $('#vp');
@@ -814,7 +1388,24 @@ function go(url, push=true){
   if(!page){ u = 'xundu.com/s?q=' + url.trim(); page = resolve(u); }
   if(push){ hist = hist.slice(0,hi+1); hist.push(u); hi = hist.length-1; }
   cur = {u, page}; srcMode = false;
+  SND.play(themeFor(u));
   draw();
+}
+function themeFor(u){
+  if(u.startsWith('xundu.com')) return 'room';
+  if(u==='jingyuan-miaopu.com/member/welcome') return 'ghost';
+  if(u.startsWith('jingyuan-miaopu.com/gardener')) return 'gardener';
+  if(u.startsWith('jingyuan-miaopu.com')) return 'ad';
+  if(u==='blog.xiaoman.me/diary') return 'lullaby';
+  if(u.startsWith('blog.xiaoman.me')) return 'blog';
+  if(u.startsWith('pan.')) return 'letter';
+  if(u==='bbs.qiancheng.net/t/5203' || u==='news.qiancheng.net/missing') return 'ghost';
+  if(u.startsWith('bbs.')) return 'rain';
+  if(u.startsWith('news.') || u.startsWith('chenmo.')) return 'clock';
+  if(u==='sanpai.net' || u.startsWith('space.qiancheng.net/songzhi')) return 'sanpai';
+  if(u.startsWith('mail.')) return 'mail';
+  if(u.startsWith('chongwu.') || u.startsWith('bar.') || u.startsWith('hejizaodian.')) return 'blog';
+  return 'memory';
 }
 function draw(){
   const {u,page} = cur;
@@ -870,6 +1461,7 @@ function showPhone(){
   el.innerHTML = `<header><span>${esc(p.who)}<small>${p.unknown ? '号码不存在' : '刚刚'}</small></span><button class="x" aria-label="关闭">×</button></header>
     ${p.msgs.map((m,i)=>`<div class="msg" style="animation-delay:${i*.7}s">${esc(m)}</div>`).join('')}`;
   document.body.appendChild(el);
+  SND.sfx('buzz');
   if(p.unknown) glitch();
   el.querySelector('.x').onclick = () => {
     el.remove(); phoneQ.shift();
@@ -881,11 +1473,25 @@ function showPhone(){
 function renderBookmarks(){
   const list = [['寻度','xundu.com']];
   if(has('start')) list.push(['小满留下的链接','jingyuan-miaopu.com'],['小满的博客','blog.xiaoman.me']);
+  if(S.flags.ch2) list.push(['第三排','sanpai.net']);
+  if(S.flags.ch3) list.push(['陈默的邮箱','mail.qiancheng.net']);
   $('#bookmarks').innerHTML = list.map(([n,u])=>`<button class="bm" data-href="${u}">${n}</button>`).join('');
 }
 
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-href]');
+  if(a){ e.preventDefault(); go(a.dataset.href); return; }
+  const sb = e.target.closest('[data-song]');
+  if(sb && !sb.disabled){
+    const dur = SND.song(SONGS[sb.dataset.song]);
+    if(!SND.on || !dur){ sb.textContent = '（音乐已关闭，打开右侧的 ♪ 再听）'; return; }
+    sb.disabled = true; sb.textContent = '♪ 播放中……';
+    setTimeout(()=>{ sb.disabled = false; sb.textContent = sb.dataset.song==='wei' ? '▶ 再听一遍（最后一句是空的）' : '▶ 播放'; }, dur*1000);
+  }
+});
+document.addEventListener('keydown', e => {
+  if(e.key!=='Enter') return;
+  const a = e.target.closest && e.target.closest('div[data-href]');
   if(a){ e.preventDefault(); go(a.dataset.href); }
 });
 document.addEventListener('selectionchange', () => {
@@ -920,14 +1526,62 @@ vp.addEventListener('submit', e => {
     else err('#g-err', v==='shennian'||v==='niannian' ? '我说了，别用拼音。' : '不是她。');
     return;
   }
+  const field = n => ((f.elements[n]||{}).value||'').trim();
+  if(kind==='heji'){
+    if(norm(field('q')).includes('韭菜盒子')){
+      S.flags.heMsg = field('m') || '何姐，苑苑那天是去给您买生日礼物的。'; save();
+      ghostDone('he','何苑',['妈看到了。','她蹲在第三排跟我说话，说了好久。她以前从来不跟我说软话。','她说她不要花，她要我。','我知道。我一直都知道。','谢谢你。我可以回家了。']);
+      refresh();
+    } else err('#hj-err','验证失败。何苑在空间里夸过妈妈的哪样早点？');
+    return;
+  }
+  if(kind==='danmu'){
+    const m = field('m'); if(!m) return;
+    const chat = $('#chat'), form = chat.querySelector('form');
+    const add = (cls, n, t) => { const el = document.createElement('div'); el.className = 'dm ' + cls; el.innerHTML = `<b>${n}</b>：${esc(t)}`; chat.insertBefore(el, form); };
+    add('me','你',m); f.reset();
+    if(!m.includes('冬瓜')){ setTimeout(()=>add('','老粉','新来的？冬子哥不怎么回弹幕的'), 900); return; }
+    S.flags.xuMsg = m; save();
+    clearInterval(liveTicker.t); form.querySelector('button').disabled = true;
+    const seqL = [['host','冬子','……'],['host','冬子','谁叫的冬瓜？'],['','老粉','？？？'],['host','冬子','只有我姐这么叫我。别人叫我会翻脸的。'],['host','冬子','（他把脸埋进手里，很久没有抬头）'],['host','冬子','……我知道了。'],['host','冬子','今天下播了。我去千城大道 404 号。给她带一盒饺子，包得像包子的那种。'],['host','冬子','大家晚安。我要睡觉了。']];
+    seqL.forEach((x,i)=>setTimeout(()=>{ add(x[0],x[1],x[2]); if(i===seqL.length-1) ghostDone('xu','许安安',['他关掉直播了。','他睡着了。十年了，第一次在天黑的时候睡着。','冬瓜，姐不怪你。那天不怪你，哪天都不怪你。','谢谢你帮我叫他。我可以回家了。']); }, 1300*(i+1)));
+    return;
+  }
+  if(kind==='suhe'){
+    if(field('id').replace(/\D/g,'')==='2016030817'){ S.flags.suOpen = true; save(); addNote('su3'); SND.sfx('unlock'); refresh(); }
+    else err('#su-err','学号不正确。');
+    return;
+  }
+  if(kind==='diange'){
+    if(norm(field('s')).replace(/[《》]/g,'')==='未完成'){
+      ghostDone('su','苏禾',['可可唱完了。','最后一句是“等你回家，我们再唱一遍”。比我想的任何一句都好。','她唱的时候，我就坐在门口那张桌子上。她没看门口，可她知道我在。','谢谢你。我可以回家了。']);
+      refresh();
+    } else err('#dg-err','店长：这首歌林可说她不会唱。你想点的是哪首？');
+    return;
+  }
+  if(kind==='mail'){
+    if(field('p').replace(/\D/g,'')==='1512'){ S.flags.mailIn = true; save(); SND.sfx('unlock'); refresh(); }
+    else err('#ml-err','密码错误。提示：那个时刻。陈默在 2009 年的博客里写过。');
+    return;
+  }
+  if(kind==='compose'){
+    const full = f.elements.draft && f.elements.draft.checked && f.elements.letter && f.elements.letter.checked;
+    showFinale(full ? 'true' : 'normal');
+    return;
+  }
   if(kind==='door'){
-    if(val.replace(/\D/g,'')==='0921'){ showDoorChoice(); return; }
+    if(val.replace(/\D/g,'')==='0921'){ SND.sfx('door'); showCh1End(); return; }
     S.doorFails++; save(); glitch();
     if(S.doorFails>=3){ showEnding('bad'); return; }
     refresh(); err('#d-err','密码错误。温室里传来很轻的敲击声。');
   }
 });
-function glitch(){ vp.classList.remove('glitch'); void vp.offsetWidth; vp.classList.add('glitch'); }
+function glitch(){ vp.classList.remove('glitch'); void vp.offsetWidth; vp.classList.add('glitch'); SND.sfx('glitch'); }
+const musicBtn = $('#bMusic');
+const syncMusicBtn = () => { musicBtn.textContent = '♪ 音乐：' + (SND.on ? '开' : '关'); musicBtn.setAttribute('aria-pressed', SND.on); };
+musicBtn.onclick = () => { SND.toggle(); syncMusicBtn(); };
+syncMusicBtn();
+document.addEventListener('pointerdown', () => SND.init(), {once:false, passive:true});
 
 /* ---------- 开场 ---------- */
 const ov = $('#overlay');
@@ -957,23 +1611,52 @@ function showIntro(){
   };
 }
 
-/* ---------- 结局 ---------- */
-function showDoorChoice(){
-  const ok = has('letter');
-  ov.innerHTML = `<div class="ending" role="dialog" aria-label="抉择">
-    <div class="tag">温室 B · 门禁已解除</div>
-    <h1>门开了。接下来你要做什么？</h1>
-    <p>门禁显示“已开启”的那一刻，你电脑的扬声器里传出一段很轻的歌声。你没有打开任何声音。</p>
-    <p class="hl">“小鸢尾，开紫花，念念睡，妈妈在。”</p>
-    <p>屏幕右下角的时间跳成了 03:12。后台日志又多了一行：“园丁 已登录”。陈默也在线。你只有一次机会。</p>
-    <div class="choice">
-      <button id="c1">立刻报警<small>把园丁后台的截图和定位发给千城警方。</small></button>
-      <button id="c2" ${ok?'':'disabled'}>报警，同时把外婆的信转给沈静<small>${ok?'让一位等了十七年的母亲知道真相。':'你还缺少一样东西。'}</small></button>
-    </div>
+/* ---------- 章节与结局 ---------- */
+function overlayStory(o){
+  phoneQ.length = 0; document.querySelectorAll('.toast').forEach(t=>t.remove());
+  ov.innerHTML = `<div class="ending" role="dialog" aria-label="${o.title}">
+    <div class="tag ${o.cls||''}">${o.tag}</div>
+    <h1>${o.title}</h1>
+    ${o.body.map((p,i)=>`<p class="${o.hl===i||(o.hl==null&&i===o.body.length-1)?'hl':''}">${p}</p>`).join('')}
+    ${o.hint ? `<p style="font-size:12.5px;border-top:1px solid var(--shell-line);padding-top:12px">${o.hint}</p>` : ''}
+    <div class="btnrow">${o.buttons.map((b,i)=>`<button class="btn" id="ovb${i}">${b[0]}</button>`).join('')}</div>
   </div>`;
-  ov.hidden = false;
-  $('#c1').onclick = () => showEnding('normal');
-  $('#c2').onclick = () => { if(ok) showEnding('true'); };
+  ov.hidden = false; ov.scrollTop = 0;
+  o.buttons.forEach((b,i)=>{ $('#ovb'+i).onclick = b[1]; });
+}
+function showCh1End(){
+  SND.play('lullaby');
+  overlayStory({tag:'第一章 · 静园 · 完', title:'温室 B 的门开了', body:[
+    '门禁显示“已开启”的那一刻，你电脑的扬声器里传出一段很轻的歌声。你没有打开任何声音。',
+    '“小鸢尾，开紫花，念念睡，妈妈在。”',
+    '你把园丁后台的截图和定位发给了千城警方，也发给了阿桃。凌晨四点，警车开进了千城大道 404 号。',
+    '温室 B 里很冷，紫色的鸢尾一直开到天花板。林小满蜷在花架后面，嘴唇发紫，但还醒着。她抓着第一个冲进来的警察说：“先别管我，第三排。她们在第三排下面。”',
+    '温室 A 里，警方找到了周晴。她瘦得脱了形，一直重复一句话：“晚上有人给我盖被子，五个人，手都很凉。”',
+    '第三排的鸢尾被一株一株挖起来。每一株的根底下，都缠着一块写了名字的木牌。',
+    '沈静被带去问话。她什么都不知道，只是一直问：“念念呢？是不是念念回来了？”',
+    '陈默不见了。他的车停在千城站，06:40 的票没有用。',
+    '早上七点，阿桃发来消息：小满在医院醒了。她不停地说一句话——“她们还没走。她们说有话没说完，要找那个一直在看日记的人。”',
+    '你的手机亮了。未知号码：<b>“No.09，你愿意再帮我们一次吗？”</b>',
+  ], buttons:[['第二章 · 第三排', startCh2]]});
+}
+function startCh2(){
+  S.flags.ch2 = true; save(); addNote('ch1end'); renderBookmarks(); renderStage();
+  ov.hidden = true; go('sanpai.net');
+  phone('ch2open','未知号码',['谢谢你肯来。','我们五个，每个人都有一件事没做完。不做完，走不了。','你点我们的名字，就能看到我们留下的地址。','不用怕。我们不会害你。我们只是……太久没跟活人说话了。'], true);
+}
+function showFinale(kind){
+  S.flags.end = kind; save(); renderStage();
+  SND.play('ghost');
+  const T = kind==='true';
+  overlayStory({tag:'第三章 · 三点十二分', title:'千城植物园，鸢尾区', hl:4, body:[
+    '邮件发出去的时候，是凌晨三点零六分。',
+    '三点十分，两辆警车停在千城植物园门口。沈静坐在后排，手里攥着手机，屏幕上是你发去的邮件。',
+    '鸢尾区的灯坏了。手电筒照过去，陈默跪在花丛中间，浑身湿透，像刚从水里捞出来。他面前的泥地上，有五串小小的脚印，围成一个圈。',
+    '三点十二分。所有人都听见了数数声。一、二、三、四、五。',
+    '陈默抬起头，对着沈静，一个字一个字地说：“2009 年 9 月 21 日下午 3 点 12 分，那通电话，是我打的。”',
+    '他把后面的事也说了。何苑、许安安、苏禾、唐语、宋芷。每说一个名字，就有一株鸢尾，在没有风的夜里轻轻弯了一下。',
+    '说完以后，数数声停了。陈默的头发，在警察给他戴上手铐的那几分钟里，白了一半。',
+  ], buttons:[['继续', ()=>showEnding(kind)]]});
 }
 const ENDINGS = {
   bad: () => ({tag:'BAD END · 第九株', cls:'bad', title:'门禁锁死了', body:[
@@ -983,42 +1666,32 @@ const ENDINGS = {
     '数到六的时候，声音停在了你的耳朵边上。',
     '手机屏幕亮了，是一条来自你自己号码的短信，发送时间 03:12：<b>“你也喜欢紫色吗？”</b>',
   ], hint:'提示：念念离开的日子，写在 2009 年的旧新闻里，笔记里那条“不是你写的”也说过。', retry:true}),
-  normal: () => ({tag:'NORMAL END · 第三排', cls:'', title:'温室 B 的门开了', body:[
-    '凌晨四点，警车开进了千城大道 404 号。温室 B 里很冷，紫色的鸢尾一直开到天花板。林小满蜷在花架后面，嘴唇发紫，但还醒着。',
-    '她抓着第一个冲进来的警察，说的第一句话是：“先别管我，第三排。她们在第三排下面。”',
-    '温室 A 里，警方找到了周晴。她瘦得脱了形，一直重复一句话：“晚上有人给我盖被子，五个人，手都很凉。”',
-    '陈默在千城站被拦下，口袋里是早上 06:40 的车票。他一直在发抖，说这几天每天夜里床边都站着人。',
-    '第三排的鸢尾被一株一株挖起来。每一株的根底下，都缠着一块写了名字的木牌。',
-    '沈静被带走时没有挣扎，只是一直回头看那片被挖开的土：“你们小心一点，念念快回来了。”',
-    '那天夜里，你的手机又亮了一次。未知号码：“谢谢你。可是还有一个人没回家。”',
-  ], hint:'还有一个秘密没有被说出来。去小满博客提到的网盘里看看。'}),
+  normal: () => ({tag:'NORMAL END · 说出来', cls:'', title:'她们走了', body:[
+    '陈默被带走了。沈静一个人在鸢尾区站到天亮。',
+    has('letter') ? '你没有把陈默的那封信一起发出去。沈静听见了那句真话，却没有看见他写下的十七年。' : '你没有把外婆的信一起发出去。沈静知道了那通电话，却不知道她的念念，就躺在千城一院三楼的病房里。',
+    '天亮以前，你的手机最后亮了一次。未知号码：“谢谢你。我们走了。可是念念和阿姨，还隔着一封信。”',
+    '一个月后，小满出院了。她去静园门口站了一会儿，园子已经封了，铁门上挂着锁。门里面有个头发花白的女人在给花浇水。',
+    '两个人隔着铁门看了很久。谁都没有先开口。',
+  ], hint:'还差一点。外婆的信在小满博客提到的网盘里；陈默的信在他邮箱的草稿箱里。把它们都附上，再发一次。', retry:'compose'}),
   true: () => ({tag:'TRUE END · 鸢尾的花语', cls:'true', title:'念念回家了', body:[
-    '凌晨四点，警车开进了千城大道 404 号。温室 A 里找到了周晴，温室 B 里找到了林小满。两个人都活着。',
-    '小满说，被关的这几天，每天夜里都有五个女孩挨着她坐，给她唱歌，帮她数着天亮。警察问她那五个女孩去哪了，她指了指窗外的第三排鸢尾。',
-    '第三排的土被挖开了。五块木牌，五个名字：何苑、许安安、苏禾、唐语、宋芷。和派出所门口那张失踪人口公告上的一模一样。',
-    has('chenmo') ? '陈默在千城站被拦下。审讯室里他只交代了一件事就再也不说话：“2009 年 9 月 21 日下午 3 点 12 分，那通电话是我打的。”审讯室的玻璃上，有五个从里面印上去的手印。' : '陈默在千城站被拦下，口袋里是早上 06:40 的车票。他对警察说，所有事都是他一个人做的，跟沈姐无关。然后求警察别关灯。',
-    '你把外婆的信转给了沈静。她在派出所的长椅上读了很久，读到“念念乖，念念不乱跑”那一句，捂着嘴哭出了声。',
+    '沈静在植物园的长椅上读外婆的信。读到“念念乖，念念不乱跑”那一句，她捂着嘴哭出了声。那张长椅，就是十七年前外婆捡到念念的那一张。',
     '一周后，DNA 结果出来了。林小满，就是沈念。',
-    '五个女孩下葬那天，千城论坛的夜班老刘发了一条帖子：“昨晚拉了最后一趟。五个姑娘，干干净净的，没有泥。这回不去槐树巷了，说要回自己家。下车的时候都跟我说了谢谢。”',
-    '那天夜里你的手机亮了最后一次。未知号码：“谢谢你。我们可以回家了。替我们跟念念说，第三排不冷了。”你回拨过去，听筒里说：您拨打的号码是空号。那是宋芷失踪前用的号码。',
+    '医院里，小满第一次叫她“妈”。叫完两个人都没说话，沈静低头给她唱了那首歌。唱到一半，小满接上了：“念念睡，妈妈在。”',
+    '五个女孩下葬那天，来了很多人。何姐带了一盒韭菜盒子。许冬第一次没有黑眼圈。林可唱完了那首歌。退休的语文老师抱着一只叫等等的三花猫。王老师在宋芷的墓碑前放了一枚紫色的发卡。',
+    '那天夜里，千城论坛的夜班老刘发了一条帖子：“昨晚拉了最后一趟。五个姑娘，干干净净的，没有泥。这回不去槐树巷了，说要回自己家。下车的时候，都跟我说了谢谢。”',
+    '你的手机亮了最后一次。未知号码：“谢谢你。No.09……不对，你有名字的。我们都记住了。”你回拨过去，听筒里说：您拨打的号码是空号。',
     '三个月后，阿桃发来一张照片：千城植物园的鸢尾花区，一对母女蹲在花前。女儿头上别着一枚旧发卡。照片角落的花丛里，好像还站着五个模糊的人影，正朝她们挥手。',
-  ], hint: SECRETS.filter(has).length<3 ? `你找到了 ${SECRETS.filter(has).length}/3 条隐藏线索。还有没看到的故事。` : '你找到了全部隐藏线索。谢谢你把她们都带回家。'}),
+  ], hint: SECRETS.filter(has).length<3 ? `你找到了 ${SECRETS.filter(has).length}/3 条隐藏线索。还有没看到的故事。` : '你找到了全部隐藏线索。谢谢你，把她们都带回了家。'}),
 };
 function showEnding(kind){
   const e = ENDINGS[kind]();
-  phoneQ.length = 0; document.querySelectorAll('.toast').forEach(t=>t.remove());
-  if(kind!=='bad'){ S.flags.end = kind; save(); renderStage(); }
-  ov.innerHTML = `<div class="ending" role="dialog" aria-label="结局">
-    <div class="tag ${e.cls}">${e.tag}</div>
-    <h1>${e.title}</h1>
-    ${e.body.map((p,i)=>`<p class="${i===e.body.length-1?'hl':''}">${p}</p>`).join('')}
-    <p style="font-size:12.5px;border-top:1px solid var(--shell-line);padding-top:12px">${e.hint}</p>
-    <div class="btnrow">${e.retry?'<button class="btn" id="eRetry">读档重来</button>':'<button class="btn" id="eClose">回到电脑</button>'}<button class="btn" id="eReset">从头开始</button></div>
-  </div>`;
-  ov.hidden = false;
-  if(e.retry) $('#eRetry').onclick = () => { S.doorFails = 0; save(); ov.hidden = true; refresh(); };
-  else $('#eClose').onclick = () => { ov.hidden = true; };
-  $('#eReset').onclick = reset;
+  if(kind==='true') SND.play('lullaby');
+  const btns = [];
+  if(e.retry===true) btns.push(['读档重来', ()=>{ S.doorFails = 0; save(); ov.hidden = true; refresh(); }]);
+  else if(e.retry==='compose') btns.push(['回去重新发送', ()=>{ delete S.flags.end; save(); renderStage(); ov.hidden = true; go('mail.qiancheng.net/compose'); }]);
+  else btns.push(['回到电脑', ()=>{ ov.hidden = true; }]);
+  btns.push(['从头开始', reset]);
+  overlayStory({tag:e.tag, cls:e.cls, title:e.title, body:e.body, hint:e.hint, buttons:btns});
 }
 function reset(){
   S = fresh(); save();
