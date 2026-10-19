@@ -311,6 +311,15 @@ button{cursor:pointer}
 .lyric{font-family:var(--f-display);line-height:2.1;text-align:center;margin:18px 0;color:#3a3a4a}
 .playbtn{background:#2b2b3a;color:#fff;border:none;border-radius:999px;padding:8px 18px;font-size:13px}
 
+/* 正在输入 */
+.msg.typing{display:inline-flex;gap:4px;align-items:center;padding:12px 14px;width:auto;opacity:1;transform:none;animation:none}
+.msg.typing i{width:6px;height:6px;border-radius:50%;background:#999;display:block;animation:dot 1.2s infinite}
+.msg.typing i:nth-child(2){animation-delay:.2s}.msg.typing i:nth-child(3){animation-delay:.4s}
+.msg.typing.dark{background:#2a1a19}.msg.typing.dark i{background:#9a6a64}
+@keyframes dot{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.phone .tip,.toast .tip{font-size:11px;color:#999;text-align:center;padding:4px 0 6px;min-height:1em}
+.toast.unknown .tip{color:#6a4a44}
+
 /* 灵异 */
 .notes li.ghostnote{border-left-color:var(--blood);color:#d9a097;font-style:italic;font-family:var(--f-display)}
 .toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));width:min(350px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#f1f1ee;color:#222;border-radius:16px;padding:12px 12px 6px;box-shadow:0 12px 40px #000c;z-index:40;animation:in .3s forwards}
@@ -502,6 +511,7 @@ const SND = (() => {
     if(name==='glitch'){ burst(master,t,1600,.18,.12); note(master,60,t,.2,'sawtooth',.05); }
     if(name==='unlock'){ piano(master,mtof(72),t,.12); piano(master,mtof(79),t+.15,.12); }
     if(name==='door'){ note(master,40,t,1.8,'sine',.4,.02); burst(master,t,300,1.4,.15,'lowpass'); }
+    if(name==='tick'){ note(master,1320,t,.08,'sine',.05); note(master,1760,t+.06,.1,'sine',.04); }
     if(name==='done'){ [72,76,79,84].forEach((m,i)=>box(verbIn,mtof(m),t+i*.25,.1)); }
   }
   // 苏禾的歌：在背景音乐之上弹一遍
@@ -1451,22 +1461,60 @@ function phone(id, who, msgs, unknown=false, after){
   if(S.flags['ph_'+id] || S.flags.end) return;
   S.flags['ph_'+id] = true; save();
   phoneQ.push({who, msgs, unknown, after});
-  if(phoneQ.length===1) setTimeout(showPhone, 1400);
+  if(phoneQ.length===1) setTimeout(showPhone, 3500 + Math.random()*2500);
+}
+/* 像真人一样一条一条打字：先显示“正在输入”，按字数停一会儿再出消息。点一下可快进。 */
+function typeChat(box, before, items, opts={}){
+  let i = 0, timer = null, done = false;
+  const typing = document.createElement('div');
+  typing.className = 'msg typing' + (opts.dark ? ' dark' : ''); typing.innerHTML = '<i></i><i></i><i></i>';
+  const put = it => { const el = document.createElement('div'); el.className = 'msg ' + (it.cls||''); el.style.animation = 'none'; el.style.opacity = 1; el.style.transform = 'none'; el.innerHTML = it.html; box.insertBefore(el, before); };
+  const scroll = () => { (opts.scroller||box).scrollTop = 1e6; };
+  const finish = () => { if(done) return; done = true; clearTimeout(timer); typing.remove(); if(opts.onStatus) opts.onStatus(false); if(opts.onDone) opts.onDone(); };
+  const wait = it => {
+    if(it.cls==='sys') return 500;
+    const len = it.html.replace(/<[^>]+>/g,'').length;
+    return Math.min(4600, (it.cls==='me' ? 700 : 1000) + len*(opts.slow ? 95 : 70));
+  };
+  function step(){
+    if(done) return;
+    if(i >= items.length){ finish(); return; }
+    const it = items[i];
+    const showTyping = it.cls!=='sys' && it.cls!=='me';
+    if(showTyping){ box.insertBefore(typing, before); if(opts.onStatus) opts.onStatus(true); }
+    scroll();
+    timer = setTimeout(()=>{
+      typing.remove(); if(opts.onStatus) opts.onStatus(false);
+      put(it); i++; scroll();
+      if(showTyping && opts.onMsg) opts.onMsg();
+      timer = setTimeout(step, 350 + Math.random()*500);
+    }, wait(it));
+  }
+  step();
+  return { skip(){ if(done) return; clearTimeout(timer); typing.remove(); while(i < items.length) put(items[i++]); scroll(); finish(); }, get done(){ return done; } };
 }
 function showPhone(){
   const p = phoneQ[0]; if(!p) return;
   const el = document.createElement('div');
   el.className = 'toast' + (p.unknown ? ' unknown' : '');
   el.setAttribute('role','dialog'); el.setAttribute('aria-label', p.who + ' 的消息');
-  el.innerHTML = `<header><span>${esc(p.who)}<small>${p.unknown ? '号码不存在' : '刚刚'}</small></span><button class="x" aria-label="关闭">×</button></header>
-    ${p.msgs.map((m,i)=>`<div class="msg" style="animation-delay:${i*.7}s">${esc(m)}</div>`).join('')}`;
+  const idle = p.unknown ? '号码不存在' : '刚刚';
+  el.innerHTML = `<header><span>${esc(p.who)}<small>${idle}</small></span><button class="x" aria-label="关闭">×</button></header><div class="tip">点一下对话框可以快进</div>`;
   document.body.appendChild(el);
   SND.sfx('buzz');
   if(p.unknown) glitch();
+  const status = el.querySelector('header small'), tip = el.querySelector('.tip');
+  const chat = typeChat(el, tip, p.msgs.map(m=>({html:esc(m)})), {
+    slow: p.unknown, dark: p.unknown, scroller: el,
+    onStatus: on => { status.textContent = on ? (p.unknown ? '……' : '对方正在输入…') : idle; },
+    onMsg: () => SND.sfx('tick'),
+    onDone: () => { tip.textContent = '点 × 关闭'; },
+  });
+  el.addEventListener('click', e => { if(!e.target.closest('.x')) chat.skip(); });
   el.querySelector('.x').onclick = () => {
-    el.remove(); phoneQ.shift();
+    chat.skip(); el.remove(); phoneQ.shift();
     if(p.after) p.after();
-    if(phoneQ.length) setTimeout(showPhone, 900);
+    if(phoneQ.length) setTimeout(showPhone, 2500);
   };
 }
 
@@ -1601,11 +1649,23 @@ function showIntro(){
     ['阿桃','你电脑比我懂。她的博客是 <code>blog.xiaoman.me</code>，帮我看看好吗？我真的很怕。'],
     ['me','好，我现在就查。'],
   ];
-  ov.innerHTML = `<div class="phone" role="dialog" aria-label="阿桃的消息"><header>阿桃<small>在线</small></header>
-    ${msgs.map((m,i)=>`<div class="msg ${m[0]==='me'?'me':m[0]==='sys'?'sys':''}" style="animation-delay:${i*.4}s">${m[1]}</div>`).join('')}
-    <button class="go" id="goStart">打开电脑，开始调查</button></div>`;
+  const replay = S.seenIntro;
+  ov.innerHTML = `<div class="phone" role="dialog" aria-label="阿桃的消息"><header>阿桃<small id="introStatus">在线</small></header>
+    <div class="tip" id="introTip">${replay ? '' : '点一下对话框可以快进'}</div>
+    <button class="go" id="goStart" ${replay ? '' : 'hidden'}>${replay ? '回到电脑' : '打开电脑，开始调查'}</button></div>`;
   ov.hidden = false;
+  const ph = ov.querySelector('.phone'), tip = $('#introTip');
+  const items = msgs.map(m=>({cls: m[0]==='me'?'me':m[0]==='sys'?'sys':'', html:m[1]}));
+  const chat = typeChat(ph, tip, items, {
+    scroller: ph,
+    onStatus: on => { $('#introStatus').textContent = on ? '对方正在输入…' : '在线'; },
+    onMsg: () => SND.sfx('tick'),
+    onDone: () => { tip.textContent = ''; $('#goStart').hidden = false; ph.scrollTop = 1e6; },
+  });
+  if(replay) chat.skip();
+  ph.addEventListener('click', e => { if(!e.target.closest('#goStart')) chat.skip(); });
   $('#goStart').onclick = () => {
+    if(replay){ ov.hidden = true; return; }
     ov.hidden = true; S.seenIntro = true; save(); addNote('start'); renderBookmarks();
     $('#addr').focus();
   };
