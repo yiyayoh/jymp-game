@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>静园苗圃</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 布局：一台被“借来”的旧电脑 —— 深色浏览器外壳 + 各网站各自的视觉 + 右侧调查笔记 */
+:root{
+  color-scheme: dark;
+  --shell:#1b1d1c; --shell-2:#262927; --shell-line:#353a37;
+  --ink:#e6e4dc; --ink-dim:#9a9d97;
+  --moss:#7d9b6a; --iris:#8b6fc4; --blood:#b8433a;
+  --f-display:"Noto Serif SC","Songti SC","SimSun",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--shell);color:var(--ink);font-family:var(--f-body);font-size:14px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px;box-sizing:border-box}
+*{box-sizing:border-box}
+button,input{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--iris);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px;height:100%;max-width:1280px;margin:0 auto}
+@media (max-width:900px){.app{grid-template-columns:minmax(0,1fr);height:auto}}
+
+/* 浏览器 */
+.browser{display:flex;flex-direction:column;min-width:0;border:1px solid var(--shell-line);border-radius:10px;overflow:hidden;background:var(--shell-2);min-height:560px}
+.tabbar{display:flex;align-items:center;gap:8px;padding:8px 10px 0}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:#3d423f;display:block}
+.tab{background:var(--shell);padding:7px 14px;border-radius:8px 8px 0 0;font-size:12px;color:var(--ink);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toolbar{display:flex;gap:6px;align-items:center;padding:8px 10px;background:var(--shell);border-bottom:1px solid var(--shell-line)}
+.tb{background:transparent;border:1px solid transparent;color:var(--ink-dim);border-radius:6px;height:30px;min-width:30px;padding:0 8px;font-size:13px}
+.tb:hover{background:var(--shell-2);color:var(--ink)}
+.tb:disabled{opacity:.35;cursor:default}
+.addr{flex:1;min-width:0;display:flex}
+.addr input{flex:1;min-width:0;background:var(--shell-2);border:1px solid var(--shell-line);color:var(--ink);border-radius:15px;height:30px;padding:0 14px;font-family:var(--f-mono);font-size:12.5px}
+.viewport{flex:1;overflow:auto;background:#fff;color:#222;position:relative}
+.viewport.src{background:#151716;color:#cfd3cc}
+.srcview{font-family:var(--f-mono);font-size:12.5px;line-height:1.6;padding:16px 18px;white-space:pre-wrap;word-break:break-all;margin:0}
+.srcview .c{color:#9fd18a;background:#7d9b6a22}
+.bookmarks{display:flex;gap:4px;flex-wrap:wrap;padding:4px 10px 6px;background:var(--shell);border-bottom:1px solid var(--shell-line)}
+.bm{font-size:12px;color:var(--ink-dim);background:none;border:none;padding:3px 8px;border-radius:5px}
+.bm:hover{background:var(--shell-2);color:var(--ink)}
+
+/* 侧栏 */
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel{border:1px solid var(--shell-line);border-radius:10px;background:var(--shell-2);padding:14px}
+.panel h2{font-family:var(--f-display);font-size:15px;margin:0 0 10px;letter-spacing:.04em;display:flex;justify-content:space-between;align-items:baseline}
+.panel h2 small{font-family:var(--f-mono);font-size:11px;color:var(--ink-dim);font-weight:400}
+.notes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}
+.notes li{font-size:12.5px;line-height:1.55;padding-left:12px;border-left:2px solid var(--moss);color:var(--ink)}
+.notes li.secret{border-left-color:var(--iris)}
+.notes li.new{animation:flash 1.2s}
+@keyframes flash{from{background:#7d9b6a44}to{background:transparent}}
+.notes .empty{border:none;color:var(--ink-dim);padding:0}
+.hintbox{font-size:12.5px;line-height:1.6;color:var(--ink-dim);min-height:2em}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{background:var(--shell);border:1px solid var(--shell-line);color:var(--ink);border-radius:6px;padding:6px 12px;font-size:12.5px}
+.btn:hover{border-color:var(--moss)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.progress{display:flex;gap:4px;margin-top:4px}
+.progress i{flex:1;height:4px;border-radius:2px;background:var(--shell-line)}
+.progress i.on{background:var(--moss)}
+.secretline{font-size:12px;color:var(--ink-dim);margin-top:10px}
+.secretline b{color:var(--iris);font-weight:600}
+
+/* 开场 / 结局 遮罩 */
+.overlay{position:fixed;inset:0;background:#0d0e0dee;display:flex;align-items:center;justify-content:center;z-index:50;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.phone{width:100%;max-width:380px;background:#f1f1ee;color:#222;border-radius:22px;padding:18px 14px;box-shadow:0 20px 60px #000a;max-height:100%;overflow:auto}
+.phone header{text-align:center;font-weight:700;font-size:15px;padding-bottom:10px;border-bottom:1px solid #ddd;margin-bottom:12px}
+.phone header small{display:block;font-weight:400;color:#888;font-size:11px}
+.msg{max-width:82%;background:#fff;padding:9px 12px;border-radius:12px;margin:0 0 8px;line-height:1.55;font-size:13.5px;opacity:0;transform:translateY(6px);animation:in .35s forwards}
+.msg.me{background:#a5d68b;margin-left:auto}
+.msg.sys{background:none;color:#999;font-size:11.5px;text-align:center;max-width:100%}
+.msg code{font-family:var(--f-mono);font-size:12px;background:#0001;padding:1px 4px;border-radius:3px;word-break:break-all}
+@keyframes in{to{opacity:1;transform:none}}
+.phone .go{display:block;width:100%;margin-top:12px;background:#222;color:#fff;border:none;border-radius:10px;padding:11px;font-size:14px}
+.ending{max-width:600px;background:#111312;border:1px solid var(--shell-line);border-radius:12px;padding:28px 26px;line-height:1.9;max-height:100%;overflow:auto}
+.ending h1{font-family:var(--f-display);font-size:26px;margin:0 0 4px;color:var(--ink);text-wrap:balance}
+.ending .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--moss)}
+.ending .tag.bad{color:var(--blood)}
+.ending .tag.true{color:var(--iris)}
+.ending p{color:var(--ink-dim);margin:12px 0}
+.ending p.hl{color:var(--ink)}
+.choice{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.choice button{text-align:left;background:var(--shell-2);border:1px solid var(--shell-line);color:var(--ink);border-radius:8px;padding:12px 14px;line-height:1.5}
+.choice button:hover:not(:disabled){border-color:var(--iris)}
+.choice button small{display:block;color:var(--ink-dim);font-size:12px}
+.choice button:disabled{opacity:.45;cursor:not-allowed}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.msg{opacity:1;transform:none}}
+
+/* ====== 各网站样式 ====== */
+.pg{min-height:100%;font-size:14px;line-height:1.7}
+.pg a{color:#1a55c4;cursor:pointer;text-decoration:underline}
+.pg input[type=text],.pg input[type=password]{border:1px solid #bbb;border-radius:4px;padding:6px 10px;font-size:14px;min-width:0;width:100%;max-width:260px;background:#fff;color:#222}
+.pg .sbtn{border:none;border-radius:4px;padding:7px 16px;font-size:14px}
+.err{color:#c22;font-size:13px;min-height:1.4em;margin-top:6px}
+
+/* 寻度搜索 */
+.xd{padding:60px 20px;text-align:center;background:#fff}
+.xd-logo{font-family:var(--f-display);font-size:46px;font-weight:900;letter-spacing:.06em;color:#2b5fd9}
+.xd-logo span{color:#d93b2b}
+.xd form{display:flex;justify-content:center;margin:22px auto 10px;max-width:540px}
+.xd form input{flex:1;max-width:none!important;border:2px solid #2b5fd9!important;border-radius:8px 0 0 8px!important;height:42px}
+.xd form button{background:#2b5fd9;color:#fff;border:none;border-radius:0 8px 8px 0;padding:0 20px}
+.xd .hot{font-size:13px;color:#666;max-width:540px;margin:24px auto 0;text-align:left}
+.xd .hot ol{padding-left:20px;margin:6px 0}
+.xdr{padding:18px 24px;background:#fff;max-width:760px}
+.xdr form{display:flex;margin-bottom:18px;max-width:540px}
+.xdr form input{flex:1;max-width:none!important;border:2px solid #2b5fd9!important;border-radius:6px 0 0 6px!important}
+.xdr form button{background:#2b5fd9;color:#fff;border:none;border-radius:0 6px 6px 0;padding:0 16px}
+.res{margin:0 0 20px}
+.res .t{font-size:17px}
+.res .u{color:#1d7a32;font-size:12.5px;font-family:var(--f-mono)}
+.res .d{color:#444;font-size:13.5px}
+.res .ad{font-size:11px;border:1px solid #c88;color:#c55;padding:0 4px;border-radius:3px;margin-right:6px}
+.res.creep .t{color:#b8433a}
+
+/* 静园苗圃 广告站 */
+.jy{background:#eef3e6;color:#2f3a2a}
+.jy-hero{background:linear-gradient(160deg,#cfe0b8,#9fbe86 60%,#5f8250);padding:46px 24px 54px;text-align:center;position:relative;overflow:hidden}
+.jy-hero h1{font-family:var(--f-display);font-size:clamp(30px,6vw,52px);margin:0;color:#1f3318;letter-spacing:.12em}
+.jy-hero p{font-size:16px;margin:8px 0 0;color:#2c4423}
+.jy-hero .flower{margin:20px auto 0;width:120px;height:120px}
+.jy-sec{max-width:720px;margin:0 auto;padding:28px 22px}
+.jy-sec h2{font-family:var(--f-display);font-size:22px;color:#2a4420;margin:0 0 10px}
+.jy-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.jy-card{background:#fff;border-radius:10px;padding:14px;border:1px solid #d2dcc4}
+.jy-card b{font-family:var(--f-display);font-size:16px}
+.jy-card .price{color:#b8433a;font-weight:700}
+.jy-ghost{color:#eef3e6}
+.jy-ghost::selection{background:#b8433a;color:#fff}
+.jy-foot{background:#2a3825;color:#a9b89d;font-size:12px;padding:18px 22px;text-align:center;line-height:1.9}
+.jy-btn{background:#b8433a;color:#fff;border:none;border-radius:999px;padding:10px 26px;font-size:15px;margin-top:16px}
+.jy-pop{position:absolute;right:14px;top:14px;background:#fffbe9;border:2px dashed #b8433a;padding:8px 12px;font-size:12px;color:#b8433a;transform:rotate(3deg);max-width:170px;text-align:left}
+.jy-login{background:#fff;border-radius:12px;max-width:360px;margin:30px auto;padding:22px;border:1px solid #d2dcc4}
+.jy-login label{display:block;font-size:13px;margin:10px 0 4px;color:#4a5c40}
+
+/* 小满的博客 */
+.bl{background:#fbf4f6;color:#3b3138}
+.bl-head{padding:30px 24px 18px;text-align:center;border-bottom:1px dashed #e3c6d0}
+.bl-head h1{font-family:var(--f-display);font-size:28px;margin:0;color:#7a4a63}
+.bl-head p{margin:4px 0 0;color:#a07a8d;font-size:13px}
+.bl-wrap{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:22px;max-width:820px;margin:0 auto;padding:22px}
+@media (max-width:640px){.bl-wrap{grid-template-columns:minmax(0,1fr)}}
+.post{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:16px;border:1px solid #f0dbe3}
+.post h3{font-family:var(--f-display);margin:0 0 2px;font-size:18px;color:#5c3a4d}
+.post time{font-size:12px;color:#b090a0;font-family:var(--f-mono)}
+.post p{margin:10px 0 0}
+.post .cap{font-size:12px;color:#a07a8d;text-align:center;margin-top:6px}
+.bl-side .card{background:#fff;border-radius:10px;padding:14px;border:1px solid #f0dbe3;font-size:13px;margin-bottom:14px}
+.bl-side .avatar{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#f6d6c6 0 26%,transparent 27%),radial-gradient(circle at 50% 110%,#c99ab4 0 48%,transparent 49%),radial-gradient(ellipse 7px 4px at 64% 18%,#7a5bb8 70%,transparent 72%),#f5e6ec;margin-bottom:8px}
+.iris-pic{height:150px;border-radius:8px;margin-top:10px;background:
+  radial-gradient(ellipse 14px 30px at 30% 50%,#7a5bb8 60%,transparent 62%),
+  radial-gradient(ellipse 30px 13px at 30% 46%,#9b7fd6 60%,transparent 62%),
+  radial-gradient(ellipse 14px 30px at 64% 44%,#6b4ca8 60%,transparent 62%),
+  radial-gradient(ellipse 30px 13px at 64% 40%,#a389da 60%,transparent 62%),
+  linear-gradient(#0000 55%,#5f8250 55% 57%,#0000 57%),
+  linear-gradient(180deg,#dfe9d4,#b6cc9f)}
+.diary-lock{max-width:380px;margin:40px auto;background:#fff;border-radius:12px;padding:24px;border:1px solid #f0dbe3;text-align:center}
+.diary-lock .q{background:#fbf4f6;border-radius:6px;padding:8px;font-size:13px;margin:12px 0;color:#7a4a63}
+.diary{max-width:640px;margin:0 auto;padding:24px;background:repeating-linear-gradient(#fff 0 27px,#eadbe2 27px 28px);font-family:var(--f-display);line-height:28px;color:#3b3138}
+.diary h4{margin:28px 0 0;font-size:14px;color:#a0607e;font-family:var(--f-mono)}
+.diary p{margin:0}
+.diary .shake{color:#b8433a}
+
+/* 千城网盘 */
+.pan{background:#f3f6fa;color:#1f2a37;min-height:100%}
+.pan-top{background:#fff;border-bottom:1px solid #dde4ee;padding:12px 20px;font-weight:700;color:#2a6fdb;display:flex;gap:10px;align-items:baseline}
+.pan-top small{color:#8a96a6;font-weight:400;font-size:12px}
+.pan-box{max-width:420px;margin:40px auto;background:#fff;border:1px solid #dde4ee;border-radius:10px;padding:22px}
+.pan-list{max-width:640px;margin:24px auto;background:#fff;border:1px solid #dde4ee;border-radius:10px}
+.pan-list .row{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid #eef2f7;flex-wrap:wrap}
+.pan-list .row:last-child{border-bottom:none}
+.pan-list small{color:#8a96a6;font-family:var(--f-mono);font-size:12px}
+.letter{max-width:600px;margin:24px auto;background:#fdfaf1;border:1px solid #e7dfc6;padding:28px 30px;font-family:var(--f-display);line-height:2;color:#3a3226;box-shadow:0 2px 0 #e7dfc6,0 4px 0 #f3eddc}
+.letter p{margin:0 0 6px;text-indent:2em}
+.letter .sig{text-align:right;text-indent:0}
+.kid-photo{max-width:420px;height:260px;margin:24px auto 6px;border-radius:4px;border:10px solid #fff;box-shadow:0 2px 10px #0002;background:
+  radial-gradient(ellipse 5% 4% at 58% 24%,#7a5bb8 60%,transparent 62%),
+  radial-gradient(ellipse 3% 6% at 58% 24%,#9b7fd6 60%,transparent 62%),
+  radial-gradient(circle at 50% 36%,#f0d3be 0 13%,transparent 14%),
+  radial-gradient(ellipse 16% 22% at 50% 30%,#4a3426 0 98%,transparent 100%),
+  radial-gradient(ellipse 22% 34% at 50% 84%,#d98aa0 0 98%,transparent 100%),
+  linear-gradient(#d7cfc0,#b9ad98);filter:sepia(.35)}
+
+/* 千城论坛 */
+.bbs{background:#e9edf3;color:#222}
+.bbs-top{background:#30507e;color:#fff;padding:10px 18px;font-weight:700;display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.bbs-top small{font-weight:400;opacity:.75;font-size:12px}
+.bbs-thread{max-width:820px;margin:16px auto;padding:0 14px}
+.bbs-title{background:#fff;padding:12px 16px;font-size:17px;font-weight:700;border:1px solid #cdd5e1}
+.floor{display:grid;grid-template-columns:110px minmax(0,1fr);background:#fff;border:1px solid #cdd5e1;border-top:none}
+@media (max-width:560px){.floor{grid-template-columns:minmax(0,1fr)}.floor .who{border-right:none!important;border-bottom:1px solid #e3e8ef}}
+.floor .who{background:#f4f6fa;padding:12px;font-size:12px;color:#30507e;border-right:1px solid #e3e8ef}
+.floor .who b{display:block;font-size:13px}
+.floor .body{padding:12px 16px;min-width:0}
+.floor .meta{font-size:11.5px;color:#999;margin-top:8px}
+.floor .del{color:#aaa;font-style:italic}
+
+/* 千城新闻 */
+.news{background:#fff;color:#1d1d1d}
+.news-top{border-bottom:3px solid #b31b1b;padding:12px 22px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+.news-top b{font-family:var(--f-display);font-size:22px;color:#b31b1b;letter-spacing:.1em}
+.news-top small{color:#888;font-size:12px}
+.news-art{max-width:660px;margin:0 auto;padding:24px 22px}
+.news-art h1{font-family:var(--f-display);font-size:26px;line-height:1.35;margin:0 0 8px;text-wrap:balance}
+.news-art .by{font-size:12.5px;color:#888;margin-bottom:16px}
+.news-art p{text-indent:2em;margin:0 0 12px;font-size:15px}
+.news-photo{height:190px;border-radius:4px;background:
+  radial-gradient(ellipse 2.4% 3.4% at 54% 22%,#7a5bb8 60%,transparent 62%),
+  radial-gradient(circle at 50% 30%,#e8cbb4 0 9%,transparent 10%),
+  radial-gradient(ellipse 9% 13% at 50% 27%,#3e2b20 0 98%,transparent 100%),
+  radial-gradient(ellipse 14% 30% at 50% 74%,#d27a8c 0 98%,transparent 100%),
+  radial-gradient(ellipse 4% 11% at 20% 60%,#7a5bb8 60%,transparent 62%),
+  radial-gradient(ellipse 4% 11% at 82% 56%,#7a5bb8 60%,transparent 62%),
+  linear-gradient(#cfd6c4,#a7b597);filter:grayscale(.45) contrast(.9)}
+.news figcaption{font-size:12px;color:#777;margin:6px 0 16px;text-align:center}
+
+/* 陈默的博客 */
+.cm{background:#f2f2f0;color:#2b2b2b}
+.cm-wrap{max-width:620px;margin:0 auto;padding:36px 22px}
+.cm h1{font-family:var(--f-display);font-weight:500;font-size:24px;margin:0;letter-spacing:.3em;color:#444}
+.cm .sub{color:#999;font-size:12px;margin:4px 0 30px}
+.cm article{border-top:1px solid #ddd;padding:18px 0}
+.cm time{font-family:var(--f-mono);font-size:12px;color:#999}
+.cm article p{margin:6px 0 0;font-family:var(--f-display);line-height:1.95}
+
+/* 园丁后台 */
+.gd{background:#0f1210;color:#b9c9ad;font-family:var(--f-mono);font-size:13px;padding:24px 22px;min-height:100%}
+.gd h1{font-size:15px;color:#d6e6c6;letter-spacing:.2em;margin:0 0 18px;font-weight:600}
+.gd .login{max-width:340px}
+.gd input{background:#000!important;color:#b9c9ad!important;border:1px solid #3c4a35!important;font-family:var(--f-mono)!important}
+.gd button{background:#2d3a27;color:#d6e6c6;border:1px solid #4b5e40;border-radius:4px;padding:6px 14px;font-family:var(--f-mono)}
+.gd table{border-collapse:collapse;width:100%;min-width:560px}
+.gd .tw{overflow-x:auto;margin:10px 0 20px}
+.gd th,.gd td{border-bottom:1px solid #263022;padding:7px 8px;text-align:left;font-weight:400;vertical-align:top}
+.gd th{color:#7d9b6a;font-size:11.5px;letter-spacing:.1em}
+.gd tr.hot td{color:#e07a6e}
+.gd .log{border-left:2px solid #3c4a35;padding-left:12px;color:#93a487;line-height:1.8;margin:0 0 20px}
+.gd .door{border:1px solid #6b2a24;padding:16px;max-width:440px;background:#1a0f0e}
+.gd .door b{color:#e07a6e}
+
+.glitch{animation:gl .25s steps(2) 3}
+@keyframes gl{0%{filter:none;transform:none}50%{filter:invert(1) hue-rotate(90deg);transform:translateX(3px)}100%{filter:none}}
+</style>
+
+<div class="app">
+  <section class="browser" aria-label="浏览器">
+    <div class="tabbar"><div class="dots"><i></i><i></i><i></i></div><div class="tab" id="tabTitle">新标签页</div></div>
+    <div class="toolbar">
+      <button class="tb" id="bBack" title="后退" aria-label="后退">←</button>
+      <button class="tb" id="bFwd" title="前进" aria-label="前进">→</button>
+      <button class="tb" id="bReload" title="刷新" aria-label="刷新">↻</button>
+      <form class="addr" id="addrForm"><input id="addr" type="text" spellcheck="false" autocomplete="off" aria-label="地址栏"></form>
+      <button class="tb" id="bSrc" title="查看网页源代码">&lt;/&gt;</button>
+    </div>
+    <div class="bookmarks" id="bookmarks"></div>
+    <div class="viewport" id="vp"></div>
+  </section>
+
+  <aside class="side">
+    <div class="panel">
+      <h2>调查笔记 <small id="noteCount">0 条</small></h2>
+      <ul class="notes" id="notes"></ul>
+    </div>
+    <div class="panel">
+      <h2>当前目标 <small id="stageLabel"></small></h2>
+      <div class="progress" id="progress"></div>
+      <div class="secretline" id="secretLine"></div>
+      <div class="btnrow" style="margin-top:14px">
+        <button class="btn" id="bHint">给我一点提示</button>
+        <button class="btn" id="bChat">重看阿桃的消息</button>
+      </div>
+      <p class="hintbox" id="hint">看不懂网页的时候，试试全选文字（Ctrl+A），或者点地址栏右边的 &lt;/&gt; 查看源代码。</p>
+      <div class="btnrow"><button class="btn" id="bReset">重新开始</button></div>
+    </div>
+  </aside>
+</div>
+
+<div class="overlay" id="overlay" hidden></div>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const norm = s => String(s||'').trim().toLowerCase().replace(/\s+/g,'');
+
+/* ---------- 存档 ---------- */
+const KEY = 'jingyuan-save-v2';
+const fresh = () => ({notes:[], flags:{}, seenIntro:false, doorFails:0});
+let S = fresh();
+try{ const r = localStorage.getItem(KEY); if(r) S = Object.assign(fresh(), JSON.parse(r)); }catch(e){}
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+
+/* ---------- 线索 ---------- */
+const NOTES = {
+  start:   '小满失踪三天。最后发给阿桃一个链接：jingyuan-miaopu.com，说“我找到我的秘密花园了”。',
+  blog:    '小满的博客：blog.xiaoman.me。生日 6 月 13 日，从小由外婆带大，常戴一枚紫色鸢尾发卡。',
+  iris:    '小满最喜欢的花是鸢尾。',
+  pan:     '博客提到外婆留下一封信，扫描件在网盘 pan.qiancheng.net/s/xiaoman，提取码是外婆家的门牌号。',
+  diaryq:  '日记密码提示：最爱的花（拼音）+ 生日（四位数字）。',
+  diary:   '日记：园长沈阿姨盯着小满的发卡哭了。“陈叔叔”拍了发卡，给了会员编号 JY-0613-08。第七块木牌写着“周晴”。小满被锁在温室 B。',
+  overheard:'日记最后：陈叔叔在门外打电话，“不能让她们认。认了，就会查到其他人。”',
+  bbs:     '论坛：周晴 2025 年 11 月去了静园后失联。有一条回复被删了。',
+  deleted: '被删的回复（源代码里）：园长叫沈静，女儿十几年前丢了。“真正管事的是那个姓陈的。”',
+  ghost:   '广告页里藏着白色的字：“园丁不从正门进。”',
+  srcjy:   '广告页源代码注释：后台在 /gardener，口令 = 园长女儿的名字。',
+  news09:  '2009 年旧闻：女童沈念（小名念念），5 岁，9 月 21 日在植物园鸢尾花区走失，头上别着鸢尾发卡。母亲沈静。记者：陈默。',
+  member:  '会员页：“林小满，您的花已扎根。” 下一位会员……是我？',
+  gardener:'园丁后台由陈默管理，沈静不知道这一页。No.07 周晴在温室 A，No.08 林小满在温室 B，明天“移栽”。',
+  doorq:   '温室 B 门禁：四位数字，提示是“念念离开的日子”。',
+  letter:  '【外婆的信】2009 年 9 月 21 日傍晚，外婆在植物园后门捡到了一个女孩，发卡背面刻着“念”字。外婆没有报警。小满就是沈念。',
+  photo:   '【小时候.jpg】2009 年冬，刚到外婆家的小满，头上别着鸢尾发卡，和旧新闻照片里的一模一样。',
+  chenmo:  '【陈默的博客】2009 年 9 月 21 日 15:12，让沈静转身的那通电话，是记者陈默打的。',
+};
+const SECRETS = ['letter','chenmo','member'];
+function addNote(id){
+  if(S.notes.includes(id)) return;
+  S.notes.push(id); save(); renderNotes(id);
+}
+function renderNotes(freshId){
+  const ul = $('#notes');
+  ul.innerHTML = S.notes.length
+    ? S.notes.map(id=>`<li class="${id===freshId?'new ':''}${['letter','photo','chenmo'].includes(id)?'secret':''}">${esc(NOTES[id])}</li>`).join('')
+    : '<li class="empty">还没有线索。先打开小满留下的链接看看。</li>';
+  $('#noteCount').textContent = S.notes.length + ' 条';
+  if(freshId) ul.scrollTop = ul.scrollHeight;
+  renderStage();
+}
+
+/* ---------- 目标与提示 ---------- */
+const has = id => S.notes.includes(id);
+function stage(){
+  const f = S.flags;
+  if(f.end) return 6;
+  if(f.gardener) return 5;
+  if(has('srcjy') && has('news09')) return 4;
+  if(f.diary) return 3;
+  if(has('blog')) return 2;
+  if(f.visitedJy || has('ghost')) return 1;
+  return 0;
+}
+const STAGES = ['打开链接','调查广告','翻小满的博客','追查日记里的人','找到园丁入口','打开温室','结局'];
+const HINTS = [
+  ['在地址栏输入 jingyuan-miaopu.com 并回车。','也可以在寻度里搜索“静园苗圃”。'],
+  ['广告页上有一行看不见的字。试着全选页面文字（Ctrl+A）。','阿桃还提到了小满的博客：blog.xiaoman.me。'],
+  ['日记上了锁。翻翻小满以前的文章，找“最喜欢的花”和“生日”。','鸢尾的拼音是 yuanwei，生日在右边的资料卡里。','博客里还提到一个网盘，提取码是外婆家的门牌号，藏在某张照片的说明里。这条线是可选的，但很重要。'],
+  ['日记里出现了“周晴”。去寻度搜这个名字。','论坛里有一条被删掉的回复。被删的内容有时还留在源代码里（点 </>）。','回广告页看看它的源代码。','园长的女儿叫什么？搜一下“沈静”。'],
+  ['你需要园长女儿的名字，旧新闻里有。','访问 jingyuan-miaopu.com/gardener，口令是她的中文名字。'],
+  ['“念念离开的日子”，旧新闻里写着日期。格式：月月日日。','开门之前，你看过外婆的信了吗？它在小满博客提到的网盘里。','写那篇旧新闻的记者是谁？搜搜他的名字。'],
+  ['想看另一个结局，可以点“重新开始”。真结局需要先找到外婆的信。'],
+];
+let hintIdx = 0, lastStage = -1;
+function renderStage(){
+  const s = stage();
+  if(s!==lastStage){ hintIdx = 0; lastStage = s; }
+  $('#stageLabel').textContent = STAGES[s];
+  $('#progress').innerHTML = STAGES.map((_,i)=>`<i class="${i<=s?'on':''}"></i>`).join('');
+  const n = SECRETS.filter(has).length;
+  $('#secretLine').innerHTML = `隐藏线索 <b>${n} / ${SECRETS.length}</b>`;
+}
+$('#bHint').onclick = () => {
+  const list = HINTS[stage()];
+  $('#hint').textContent = '提示 ' + (hintIdx+1) + '/' + list.length + '：' + list[hintIdx];
+  hintIdx = (hintIdx+1) % list.length;
+};
+
+/* ---------- 页面 ---------- */
+const FLOWER_SVG = `<svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="#8b6fc4"><ellipse cx="60" cy="38" rx="12" ry="26"/><ellipse cx="38" cy="58" rx="24" ry="11" transform="rotate(25 38 58)"/><ellipse cx="82" cy="58" rx="24" ry="11" transform="rotate(-25 82 58)"/></g><circle cx="60" cy="56" r="6" fill="#f2d16b"/><path d="M60 64 V118" stroke="#3f5e33" stroke-width="4"/><path d="M60 96 q-20 -6 -26 -26 q18 4 26 22z" fill="#5f8250"/></svg>`;
+const PAGES = {};
+
+PAGES['xundu.com'] = () => ({ title:'寻度一下，你就知道', html:`
+<div class="pg xd">
+  <div class="xd-logo">寻<span>度</span></div>
+  <form data-form="search"><input type="text" name="q" id="q-home" placeholder="输入关键词" aria-label="搜索"><button type="submit">寻一下</button></form>
+  <div class="hot"><b>千城热搜</b><ol>
+    <li>城郊新开苗圃 免费领养花苗</li><li>千城地铁 5 号线再次延期</li><li>植物园鸢尾花区今年不开放</li><li>本周天气：阴转小雨</li></ol></div>
+</div>
+<!-- xundu 首页 v3.2 -->`});
+
+const R_AD = {ad:true,t:'静园苗圃 — 种下思念，永不凋零',u:'jingyuan-miaopu.com',d:'城郊私家苗圃，免费领养一株属于你的花。限时名额，仅剩 1 位。'};
+const R_BBS = {t:'【求助】我女朋友去了城郊一个苗圃后就联系不上了 — 千城论坛',u:'bbs.qiancheng.net/t/4471',d:'她叫周晴，24 岁，2025 年 11 月 3 日之后失联……'};
+const R_BLOG = {t:'小满的秘密花园 — 一个人也要好好生活',u:'blog.xiaoman.me',d:'林小满的个人博客。最近更新：我找到我的秘密花园了。'};
+const R_NEWS = {t:'五岁女童植物园走失 母亲：我会一直种花等她回家 — 千城新闻',u:'news.qiancheng.net/2009/0921',d:'2009 年 9 月 21 日下午，五岁女童沈念在千城植物园鸢尾花区走失……'};
+const R_CM = {t:'沉默的人 — 陈默的个人博客',u:'chenmo.blog',d:'前千城晚报记者。偶尔写点东西，大多数时候不写。'};
+const R_CM2 = {t:'千城晚报 2009 年度好新闻奖名单 — 千城新闻',u:'chenmo.blog',d:'……社会类：《五岁女童植物园走失》作者 陈默（已离职）……'};
+
+function searchResults(q){
+  const k = norm(q), R = [];
+  const hit = (...w) => w.some(x=>k.includes(x));
+  if(hit('静园','苗圃','广告','jingyuan','花园','秘密花园','领养')){ R.push(R_AD, R_BBS); }
+  if(hit('小满','林小满','xiaoman','阿桃')) R.push(R_BLOG);
+  if(hit('周晴','晴天不下雨')) R.push(R_BBS);
+  if(hit('沈静','沈念','念念','女童','走失','植物园','沈阿姨','园长')) R.push(R_NEWS);
+  if(hit('失踪','失联')) R.push(R_BBS, R_NEWS);
+  if(hit('陈默','陈叔叔','记者','园丁','千城晚报','沉默')) R.push(R_CM, R_CM2);
+  if(hit('网盘','pan')) R.push({t:'千城网盘 — 安全存储你的回忆',u:'pan.qiancheng.net',d:'分享链接需要提取码。'});
+  if(hit('槐树巷')) R.push({t:'槐树巷 — 千城地名',u:'xundu.com/s?q=槐树巷',d:'千城老城区小巷，多为老式平房，2025 年列入拆迁计划。'});
+  if(hit('鸢尾','yuanwei','iris')) R.push({t:'鸢尾 — 千城百科',u:'xundu.com/s?q=鸢尾',d:'鸢尾，多年生草本，花紫色。花语：长久的思念、等待你的归来。'});
+  if(hit('发卡')) R.push(R_NEWS);
+  if(!R.length || !R[0].ad) R.unshift(R_AD);
+  const seen = new Set();
+  return R.filter(r=>{const key=r.u+r.t; if(seen.has(key)) return false; seen.add(key); return true;});
+}
+function searchPage(q){
+  const rs = searchResults(q);
+  const creep = S.flags.gardener ? `<div class="res creep"><span class="ad">广告</span><a class="t" data-href="jingyuan-miaopu.com/member">我们看见你在找她了。</a><div class="u">jingyuan-miaopu.com</div><div class="d">No.09，欢迎预约。</div></div>` : '';
+  return { title: q + ' - 寻度搜索', html:`
+<div class="pg xdr">
+  <form data-form="search"><input type="text" name="q" id="q-res" value="${esc(q)}" aria-label="搜索"><button type="submit">寻一下</button></form>
+  <div style="color:#888;font-size:12.5px;margin-bottom:14px">寻度为您找到相关结果约 ${rs.length*137+12} 个</div>
+  ${creep}
+  ${rs.map(r=>`<div class="res">${r.ad?'<span class="ad">广告</span>':''}<a class="t" data-href="${esc(r.u)}">${esc(r.t)}</a><div class="u">${esc(r.u)}</div><div class="d">${esc(r.d)}</div></div>`).join('')}
+</div>`};
+}
+
+PAGES['jingyuan-miaopu.com'] = () => {
+  S.flags.visitedJy = true; save(); renderStage();
+  const watched = S.flags.gardener;
+  return { title:'静园苗圃 — 种下思念，永不凋零', on(){ if(watched) setTimeout(glitch, 500); }, html:`
+<div class="pg jy">
+  <!-- 静园苗圃 官网 · 前台页面 · 沈姐只看这一页 -->
+  <div class="jy-hero">
+    <div class="jy-pop">${watched ? '我们看见你了。<br>No.09' : '限时！免费领养<br>仅剩 <b>1</b> 个名额'}</div>
+    <h1>静 园 苗 圃</h1>
+    <p>种下思念，永不凋零。</p>
+    <div class="flower">${FLOWER_SVG}</div>
+    <button class="jy-btn" data-href="jingyuan-miaopu.com/member">会员入园</button>
+  </div>
+  <div class="jy-sec">
+    <h2>我们相信，每一份思念都应该有根</h2>
+    <p>你是否也有一个，再也见不到的人？在静园，你可以领养一株花，以 TA 的名字为它挂牌。我们的园丁会日夜照料，让它扎根、生长，永远不会离开你。</p>
+    <p>特别欢迎：20 至 25 岁、喜欢紫色花朵、独自生活的女性朋友。</p>
+    <p>城郊千城大道 404 号，地铁 5 号线（建设中）终点站步行 20 分钟。</p>
+  </div>
+  <div class="jy-sec">
+    <h2>本季可领养</h2>
+    <div class="jy-cards">
+      <div class="jy-card"><b>勿忘我</b><br>花语：不要忘记我<br><span class="price">免费</span></div>
+      <div class="jy-card"><b>鸢尾</b><br>花语：等待你的归来<br><span class="price">免费 · 仅剩 1 株</span></div>
+      <div class="jy-card"><b>彼岸花</b><br>花语：相互思念，永不相见<br><span class="price">已领完</span></div>
+    </div>
+  </div>
+  <div class="jy-sec">
+    <h2>园长寄语</h2>
+    <p>“我在这里种了十几年花。每一株，都是在等一个人回来。她最喜欢紫色。” —— 园长 沈女士</p>
+    <p class="jy-ghost">园丁不从正门进。</p>
+  </div>
+  <div class="jy-foot">© 2010–2026 静园苗圃 · 网站维护：园丁 · 客服电话 0571-0921-0000（暂停服务）<br>本站所有花株均已实名登记</div>
+  <!-- TODO 上线前删掉!!! 园丁后台 /gardener ，口令=沈姐女儿的名字 -->
+</div>`};
+};
+
+PAGES['jingyuan-miaopu.com/member'] = () => ({ title:'会员入园 — 静园苗圃', html:`
+<div class="pg jy">
+  <div class="jy-login">
+    <h2 style="font-family:var(--f-display);margin:0 0 4px;color:#2a4420">会员入园</h2>
+    <p style="font-size:13px;color:#6b7b60;margin:0">请输入园丁发给您的会员编号</p>
+    <form data-form="member">
+      <label for="m-id">会员编号</label><input type="text" id="m-id" name="id" placeholder="JY-XXXX-XX">
+      <div class="err" id="m-err"></div>
+      <button class="jy-btn" type="submit" style="margin-top:6px">入园</button>
+    </form>
+  </div>
+  <!-- 编号规则：JY-生日-序号 -->
+</div>`});
+
+PAGES['jingyuan-miaopu.com/member/welcome'] = () => {
+  addNote('member');
+  return { title:'欢迎回来，林小满', on(){ glitch(); }, html:`
+<div class="pg jy" style="background:#1f2a1b;color:#cfe0b8;padding:40px 24px;text-align:center">
+  <h1 style="font-family:var(--f-display);font-size:28px;letter-spacing:.1em;margin:0">林小满，欢迎回来。</h1>
+  <p>您的花已扎根。<br>No.08 · 鸢尾 · 温室 B</p>
+  <p>您领养的花株名牌：<b style="color:#d6b8ff">沈念</b></p>
+  <p style="margin-top:40px;color:#e07a6e">下一位会员：正在查看此页面的你。</p>
+  <p style="font-size:12px;color:#6b7b60;margin-top:40px">如需探望，请联系园丁。</p>
+</div>`};
+};
+
+PAGES['jingyuan-miaopu.com/gardener'] = () => {
+  if(!S.flags.gardener) return { title:'401 — 园丁入口', html:`
+<div class="pg gd">
+  <h1>// GARDENER ONLY</h1>
+  <div class="login">
+    <p>口令：她的名字。</p>
+    <form data-form="gardener"><input type="password" id="g-pw" name="pw" aria-label="口令" autocomplete="off" style="max-width:200px">
+    <button type="submit" style="margin-left:6px">进入</button><div class="err" id="g-err" style="color:#e07a6e"></div></form>
+  </div>
+  <!-- 别用拼音 -->
+</div>`};
+  addNote('gardener'); addNote('doorq');
+  return { title:'园丁日志', html:`
+<div class="pg gd">
+  <h1>// 园丁日志 · 仅陈默可见</h1>
+  <div class="log">
+    沈姐只看前台，她不知道这一页。<br>
+    她以为那些女孩是来“陪念念”的，住几天就回家了。<br>
+    我不能让她知道真相，就像我不能让她知道 2009 年那通电话。
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>编号</th><th>名牌</th><th>入园</th><th>备注</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr><td>No.01</td><td>沈念</td><td>2009-09-21</td><td>沈姐亲手种的第一株</td><td>等待归来</td></tr>
+      <tr><td>No.02–06</td><td>（名牌已拔除）</td><td>2014–2024</td><td>不是念念。沈姐哭了很久。</td><td>已送走</td></tr>
+      <tr><td>No.07</td><td>周晴</td><td>2025-11-03</td><td>看到了这一页。不能放。</td><td>温室 A</td></tr>
+      <tr class="hot"><td>No.08</td><td>林小满</td><td>2026-10-16</td><td>发卡是真的。背面刻着“念”。<br>沈姐已经认出来了。不能让她们相认。</td><td>温室 B · 移栽 10-20</td></tr>
+      <tr><td>No.09</td><td>?</td><td>—</td><td>正在浏览本页</td><td>预约中</td></tr>
+    </tbody></table></div>
+  <div class="door">
+    <p><b>温室 B · 电子门禁</b><br>四位数字。提示：念念离开的日子。<br><span style="color:#8a6a64">连续输错三次将锁定并通知园丁。剩余次数：${3 - S.doorFails}</span></p>
+    <form data-form="door"><input type="text" id="d-code" name="code" inputmode="numeric" maxlength="4" style="width:100px;letter-spacing:.3em" aria-label="门禁密码">
+    <button type="submit" style="margin-left:6px">开门</button><div class="err" id="d-err" style="color:#e07a6e"></div></form>
+  </div>
+  <!-- 移栽前记得浇水。车票：10-20 06:40 千城站 -->
+</div>`};
+};
+
+PAGES['blog.xiaoman.me'] = () => {
+  addNote('blog');
+  return { title:'小满的秘密花园', html:`
+<div class="pg bl">
+  <div class="bl-head"><h1>小满的秘密花园</h1><p>一个人也要好好生活 ☁</p></div>
+  <div class="bl-wrap">
+    <main>
+      <article class="post"><h3>我找到我的秘密花园了</h3><time>2026-10-15</time>
+        <p>今天刷到一个很奇怪的广告，说可以“种下思念”。配图是一大片紫色的鸢尾，和外婆家门口的一模一样。我盯着看了好久，心里有个很怪的感觉，好像很久很久以前见过那个地方。</p>
+        <p>明天去看看。具体的写在<a data-href="blog.xiaoman.me/diary">日记</a>里，日记是上锁的，不给你们看 :)</p></article>
+      <article class="post"><h3>关于日记密码</h3><time>2026-09-02</time>
+        <p>新日记本的密码还是老规矩：我最爱的花，加上我的生日。谁也猜不到（应该吧）。</p></article>
+      <article class="post"><h3>外婆家的花</h3><time>2026-05-20</time>
+        <p>槐树巷要拆了，我回去拍了最后一张照片。外婆家门口那片鸢尾还在开，紫色的，像一群停着的蝴蝶。我到现在还是最喜欢它。外婆说鸢尾的意思是“等你回来”。</p>
+        <div class="iris-pic" role="img" aria-label="一丛紫色鸢尾"></div>
+        <div class="cap">槐树巷 117 号，门牌已经锈了</div></article>
+      <article class="post"><h3>外婆的信</h3><time>2026-01-08</time>
+        <p>外婆走前留给我一封信，说等我过了 22 岁生日再拆。我昨晚拆了，哭了一整夜。</p>
+        <p>我扫描存进了网盘：<a data-href="pan.qiancheng.net/s/xiaoman">pan.qiancheng.net/s/xiaoman</a>，提取码是外婆家的门牌号。我还没准备好告诉任何人，连阿桃也没说。</p></article>
+      <article class="post"><h3>外婆走了</h3><time>2025-12-11</time>
+        <p>外婆走了。家里只剩我一个了。她总说我是她“秋天捡回来的宝贝”，我一直以为是玩笑。我五岁以前的事一点都不记得，只记得紫色的花，还有一个女人在唱歌。</p></article>
+    </main>
+    <aside class="bl-side">
+      <div class="card"><div class="avatar"></div><b>林小满</b><br>22 岁 · 千城<br>生日：6 月 13 日<br>喜欢：花、猫、下雨天<br>总戴着一枚旧旧的紫色鸢尾发卡</div>
+      <div class="card"><b>归档</b><br><a data-href="blog.xiaoman.me/diary">日记（已加密）</a></div>
+    </aside>
+  </div>
+  <!-- theme: sakura-lite -->
+</div>`, on(){ addNote('iris'); addNote('pan'); } };
+};
+
+PAGES['blog.xiaoman.me/diary'] = () => {
+  addNote('diaryq');
+  if(!S.flags.diary) return { title:'加密日记 — 小满的秘密花园', html:`
+<div class="pg bl">
+  <div class="diary-lock">
+    <h3 style="font-family:var(--f-display);color:#7a4a63;margin:0">这是小满的私人日记</h3>
+    <div class="q">密码提示：最爱的花（拼音）+ 生日（四位数字）</div>
+    <form data-form="diary"><input type="password" id="dy-pw" name="pw" aria-label="日记密码" autocomplete="off" style="max-width:none">
+    <div class="err" id="dy-err"></div>
+    <button class="sbtn" type="submit" style="background:#c98aa8;color:#fff;margin-top:6px">打开日记</button></form>
+  </div>
+</div>`};
+  addNote('diary'); addNote('overheard');
+  return { title:'日记 — 小满的秘密花园', html:`
+<div class="pg bl">
+  <div class="diary">
+    <h4>10 月 16 日 · 晴</h4>
+    <p>静园好远，下了公交又走了二十分钟。园子比照片里大，全是紫色的花。园长沈阿姨给我倒茶，看见我头上的发卡，手一抖，茶全洒了。</p>
+    <p>她问我发卡哪来的。我说从小就戴着。她没说话，转身进了屋，我听见她在里面哭。</p>
+    <p>园丁陈叔叔过来，借我的发卡拍了张照片，翻过来又拍了背面。然后给了我会员编号 JY-0613-08，说 08 是我的序号。</p>
+    <h4>10 月 16 日 · 晚</h4>
+    <p>每株花前都插着一块小木牌。我数了，一共七块，好几块的名字被拔掉了，只剩一个洞。第七块写着“周晴”。</p>
+    <p>这个名字我在千城论坛上见过……是不是那个失踪的女孩？</p>
+    <h4>10 月 17 日</h4>
+    <p>沈阿姨今天一直拉着我的手，叫我“念念”。她唱了一首歌，我不知道为什么就哭了。我好像听过。</p>
+    <p>我想告诉她外婆的信。陈叔叔把我拉开，说沈阿姨心脏不好，受不了刺激，让我今晚先住温室 B。</p>
+    <h4>10 月 17 日 · 深夜</h4>
+    <p class="shake">门锁上了。手机只有一格信号。</p>
+    <p class="shake">我听见陈叔叔在门外打电话：“不能让她们认。认了，警察就会来，就会查到前面那几个。”</p>
+    <p class="shake">阿桃，如果你看到这里——</p>
+  </div>
+</div>`};
+};
+
+PAGES['pan.qiancheng.net'] = () => ({ title:'千城网盘', html:`
+<div class="pg pan"><div class="pan-top">千城网盘 <small>安全存储你的回忆</small></div>
+<div class="pan-box">请通过分享链接访问文件。</div></div>`});
+
+PAGES['pan.qiancheng.net/s/xiaoman'] = () => {
+  if(!S.flags.pan) return { title:'输入提取码 — 千城网盘', html:`
+<div class="pg pan"><div class="pan-top">千城网盘 <small>分享自 林小满</small></div>
+<div class="pan-box">
+  <b>林小满 给你分享了 2 个文件</b>
+  <p style="font-size:13px;color:#8a96a6;margin:6px 0 12px">请输入提取码（三位数字）</p>
+  <form data-form="pan"><input type="text" id="p-code" name="code" inputmode="numeric" maxlength="3" aria-label="提取码" style="max-width:140px">
+  <button class="sbtn" type="submit" style="background:#2a6fdb;color:#fff;margin-left:6px">提取</button><div class="err" id="p-err"></div></form>
+</div></div>`};
+  return { title:'外婆 — 千城网盘', html:`
+<div class="pg pan"><div class="pan-top">千城网盘 <small>分享自 林小满 · 文件夹“外婆”</small></div>
+<div class="pan-list">
+  <div class="row"><a data-href="pan.qiancheng.net/s/xiaoman/letter">外婆的信.jpg</a><small>2026-01-08 · 1.2 MB</small></div>
+  <div class="row"><a data-href="pan.qiancheng.net/s/xiaoman/photo">小时候.jpg</a><small>2026-01-08 · 380 KB</small></div>
+</div></div>`};
+};
+PAGES['pan.qiancheng.net/s/xiaoman/letter'] = () => {
+  if(!S.flags.pan) return PAGES['pan.qiancheng.net/s/xiaoman']();
+  addNote('letter');
+  return { title:'外婆的信.jpg — 千城网盘', html:`
+<div class="pg pan"><div class="pan-top"><a data-href="pan.qiancheng.net/s/xiaoman">← 返回</a> <small>外婆的信.jpg</small></div>
+<div class="letter">
+  <p style="text-indent:0">小满：</p>
+  <p>外婆对不起你。这件事我藏了十六年，到死也没敢当面说。</p>
+  <p>2009 年 9 月 21 日傍晚，我在植物园后门的长椅上看见你。你穿着粉裙子，头上别一枚紫色的鸢尾发卡，哭着说要找妈妈，可你说不出妈妈叫什么，只会说“念念乖，念念不乱跑”。</p>
+  <p>那年夏天，我的小孙女刚刚走了。我抱着你，你不哭了。我想，就养几天，几天就送你去派出所。</p>
+  <p>第三天我在报纸上看见了寻人启事。我把那张报纸烧了。</p>
+  <p>后来我托人给你上了户口，叫你小满，生日写的是我去派出所那天。你的发卡我没扔，它背面刻着一个“念”字。你一直戴着它，我每次看到都睡不着。</p>
+  <p>你的妈妈一定还在找你。去找她吧。替外婆跟她说一声对不起。</p>
+  <p class="sig">外婆　2025 年冬</p>
+</div></div>`};
+};
+PAGES['pan.qiancheng.net/s/xiaoman/photo'] = () => {
+  if(!S.flags.pan) return PAGES['pan.qiancheng.net/s/xiaoman']();
+  addNote('photo');
+  return { title:'小时候.jpg — 千城网盘', html:`
+<div class="pg pan"><div class="pan-top"><a data-href="pan.qiancheng.net/s/xiaoman">← 返回</a> <small>小时候.jpg</small></div>
+<div class="kid-photo" role="img" aria-label="一个扎辫子、穿粉裙子、头上别着紫色鸢尾发卡的小女孩"></div>
+<p style="text-align:center;font-size:12.5px;color:#8a96a6;margin:0 0 30px">2009 年冬，刚到外婆家。</p></div>`};
+};
+
+PAGES['bbs.qiancheng.net/t/4471'] = () => {
+  addNote('bbs');
+  return { title:'【求助】我女朋友去了城郊一个苗圃后就联系不上了 — 千城论坛', html:`
+<div class="pg bbs">
+  <div class="bbs-top">千城论坛 <small>本地生活 › 求助</small></div>
+  <div class="bbs-thread">
+    <div class="bbs-title">【求助】我女朋友去了城郊一个苗圃后就联系不上了</div>
+    <div class="floor"><div class="who"><b>晴天不下雨</b>楼主</div><div class="body">
+      她叫周晴，24 岁。11 月 3 日说收到一个广告，可以免费领养一盆花，就去了城郊一个叫“静园”的苗圃。之后电话就打不通了。报了警，警察去看过，说那里只有一个种花的阿姨和一个帮工，没发现异常。有谁知道那个苗圃的情况吗？
+      <div class="meta">2025-11-09 22:14</div></div></div>
+    <div class="floor"><div class="who"><b>千城老司机</b>2 楼</div><div class="body">我也收到过那个广告，紫色的花，还写着“特别欢迎独自生活的女性”。这谁敢去？<div class="meta">2025-11-09 23:01</div></div></div>
+    <div class="floor"><div class="who"><b>匿名用户</b>3 楼</div><div class="body"><span class="del">该回复已被管理员删除。</span>
+      <!-- 原回复：别去了。园长叫沈静，她女儿 2009 年在植物园丢了，人一直不太清醒。但真正管事的不是她，是那个姓陈的帮工，以前当过记者。这几年去过那里的女孩，我知道的就不止一个。 -->
+      <div class="meta">2025-11-10 02:47</div></div></div>
+    <div class="floor"><div class="who"><b>晴天不下雨</b>楼主</div><div class="body">3 楼你说的是什么？？能私信我吗？<div class="meta">2025-11-10 08:30</div></div></div>
+    <div class="floor"><div class="who"><b>园艺爱好者</b>5 楼</div><div class="body">楼主别着急。那个苗圃园长我见过，人挺和气的，说她女儿特别喜欢鸢尾，所以种了一园子。<div class="meta">2025-11-12 14:05</div></div></div>
+    <div class="floor"><div class="who"><b>晴天不下雨</b>楼主</div><div class="body">我又去了一次。帮工不让我进温室，说里面在打药。我隔着玻璃好像看见了晴晴的外套。<div class="meta">2025-12-02 19:40</div></div></div>
+    <div class="floor"><div class="who"><b>晴天不下雨</b>楼主</div><div class="body">还是没有消息。<div class="meta">2026-03-21 01:12</div></div></div>
+  </div>
+</div>`};
+};
+
+PAGES['news.qiancheng.net/2009/0921'] = () => {
+  addNote('news09');
+  return { title:'五岁女童植物园走失 — 千城新闻', html:`
+<div class="pg news">
+  <div class="news-top"><b>千城新闻</b><small>社会 · 2009 年 9 月 23 日</small></div>
+  <article class="news-art">
+    <h1>五岁女童植物园走失　母亲：我会一直种花等她回家</h1>
+    <div class="by">本报记者　<a data-href="xundu.com/s?q=陈默">陈默</a></div>
+    <figure style="margin:0"><div class="news-photo" role="img" aria-label="一个穿粉色裙子、头别紫色发卡的小女孩站在花丛前"></div><figcaption>沈念走失当天在鸢尾花区留下的最后一张照片，头上别着她最喜欢的鸢尾发卡（家属供图）</figcaption></figure>
+    <p>2009 年 9 月 21 日下午，五岁女童沈念随母亲沈静在千城植物园游玩时走失。据沈静回忆，女儿当时在鸢尾花区蹲着看花，她转身接了一个电话，前后不到一分钟，回头时孩子已经不见了。</p>
+    <p>警方连续搜寻两天，暂无结果。沈念身穿粉色连衣裙，扎两个辫子，小名“念念”，头戴一枚紫色鸢尾发卡，发卡背面刻有“念”字。</p>
+    <p>“她最喜欢紫色的花。”沈静说，她打算在城郊租一块地，种满鸢尾，“这样念念回来的时候，一眼就能找到家。”</p>
+    <p>如有线索，请联系千城警方。</p>
+  </article>
+  <!-- 编辑备注：沈静提到的那通电话是谁打的？记者称“未能核实”。 -->
+</div>`};
+};
+
+PAGES['chenmo.blog'] = () => {
+  addNote('chenmo');
+  return { title:'沉默的人', html:`
+<div class="pg cm"><div class="cm-wrap">
+  <h1>沉默的人</h1>
+  <div class="sub">陈默 · 前千城晚报记者 · 2009 — </div>
+  <article><time>2026-10-18</time><p>如果她们相认，沈姐会原谅我吗？不会的。她会知道那通电话，也会知道 No.02 到 No.07。</p><p>明天早上的车票已经买好了。</p></article>
+  <article><time>2026-10-16</time><p>第八个。这次发卡是真的。我翻过来看了，背面刻着“念”。</p><p>十七年。她居然自己走回来了。</p></article>
+  <article><time>2020-06-01</time><p>网站上线了。沈姐说，要让全城都知道念念喜欢紫色。我在投放设置里多加了几个条件：年龄、独居、喜欢紫色的花。</p><p>每来一个女孩，沈姐就能高兴几天。我只能为她做这些了。</p></article>
+  <article><time>2014-03-01</time><p>辞职了。去城郊帮沈姐种花。报社的人说我疯了。</p></article>
+  <article><time>2009-09-25</time><p>9 月 21 日下午 3 点 12 分，我给沈静打了一个采访电话，问她植物园鸢尾展的事。</p><p>她转身接我电话的那四十秒里，她的女儿不见了。</p><p>没有人知道是我打的。我在报道里写了“未能核实”。</p></article>
+</div></div>`};
+};
+
+/* ---------- 浏览器 ---------- */
+let hist = [], hi = -1, srcMode = false, cur = null;
+const vp = $('#vp');
+const canon = u => String(u||'').trim().replace(/^view-source:/i,'').replace(/^https?:\/\//i,'').replace(/^www\./i,'').replace(/\/+$/,'');
+function safeDecode(s){ try{ return decodeURIComponent(s); }catch(e){ return s; } }
+
+function resolve(u){
+  if(u.startsWith('xundu.com/s?q=')) return searchPage(safeDecode(u.slice(14)));
+  const key = Object.keys(PAGES).find(k=>k===u.toLowerCase());
+  if(key) return PAGES[key]();
+  if(!u.includes('.')) return null;
+  return { title:'无法访问此网站', html:`<div class="pg" style="padding:40px 28px;color:#444"><h2 style="margin:0 0 8px">无法访问此网站</h2><p>找不到 <b>${esc(u)}</b> 的服务器。</p><p style="color:#888;font-size:13px">检查地址是否拼写正确，或者用 <a data-href="xundu.com">寻度</a> 搜一下。</p></div>` };
+}
+function go(url, push=true){
+  let u = canon(url);
+  let page = resolve(u);
+  if(!page){ u = 'xundu.com/s?q=' + url.trim(); page = resolve(u); }
+  if(push){ hist = hist.slice(0,hi+1); hist.push(u); hi = hist.length-1; }
+  cur = {u, page}; srcMode = false;
+  draw();
+}
+function draw(){
+  const {u,page} = cur;
+  $('#addr').value = (srcMode ? 'view-source:' : '') + 'https://' + u;
+  $('#tabTitle').textContent = srcMode ? 'view-source:' + u : page.title;
+  vp.classList.toggle('src', srcMode);
+  if(srcMode){
+    vp.innerHTML = '<pre class="srcview">' + esc(page.html.trim()).replace(/(&lt;!--[\s\S]*?--&gt;)/g,'<span class="c">$1</span>') + '</pre>';
+  } else {
+    vp.innerHTML = page.html;
+    if(page.on) page.on();
+  }
+  vp.scrollTop = 0;
+  $('#bBack').disabled = hi<=0; $('#bFwd').disabled = hi>=hist.length-1;
+  $('#bSrc').style.color = srcMode ? 'var(--moss)' : '';
+}
+const refresh = () => go(cur.u, false);
+
+$('#addrForm').onsubmit = e => { e.preventDefault(); const v = $('#addr').value; if(canon(v)) go(v); };
+$('#bBack').onclick = () => { if(hi>0){ hi--; go(hist[hi], false); } };
+$('#bFwd').onclick = () => { if(hi<hist.length-1){ hi++; go(hist[hi], false); } };
+$('#bReload').onclick = refresh;
+$('#bSrc').onclick = () => {
+  srcMode = !srcMode; draw();
+  if(srcMode){
+    if(cur.u==='jingyuan-miaopu.com'){ addNote('srcjy'); addNote('ghost'); }
+    if(cur.u==='bbs.qiancheng.net/t/4471') addNote('deleted');
+  }
+};
+
+function renderBookmarks(){
+  const list = [['寻度','xundu.com']];
+  if(has('start')) list.push(['小满留下的链接','jingyuan-miaopu.com'],['小满的博客','blog.xiaoman.me']);
+  $('#bookmarks').innerHTML = list.map(([n,u])=>`<button class="bm" data-href="${u}">${n}</button>`).join('');
+}
+
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-href]');
+  if(a){ e.preventDefault(); go(a.dataset.href); }
+});
+document.addEventListener('selectionchange', () => {
+  if(String(window.getSelection()||'').includes('园丁不从正门进')) addNote('ghost');
+});
+vp.addEventListener('submit', e => {
+  const f = e.target, kind = f.dataset.form; if(!kind) return;
+  e.preventDefault();
+  const val = (f.querySelector('input')||{}).value || '';
+  const err = (id, t) => { const el = $(id); if(el) el.textContent = t; };
+  if(kind==='search'){ if(val.trim()) go('xundu.com/s?q=' + val.trim()); return; }
+  if(kind==='diary'){
+    if(norm(val)==='yuanwei0613'){ S.flags.diary = true; save(); refresh(); }
+    else err('#dy-err','密码不对。最爱的花的拼音 + 生日四位，比如 abc0101。');
+    return;
+  }
+  if(kind==='pan'){
+    if(val.replace(/\D/g,'')==='117'){ S.flags.pan = true; save(); refresh(); }
+    else err('#p-err','提取码错误。');
+    return;
+  }
+  if(kind==='member'){
+    if(norm(val).replace(/[-—_]/g,'')==='jy061308') go('jingyuan-miaopu.com/member/welcome');
+    else err('#m-err','查无此会员。');
+    return;
+  }
+  if(kind==='gardener'){
+    const v = norm(val);
+    if(v==='沈念'||v==='念念'){ S.flags.gardener = true; save(); glitch(); refresh(); }
+    else err('#g-err', v==='shennian'||v==='niannian' ? '我说了，别用拼音。' : '不是她。');
+    return;
+  }
+  if(kind==='door'){
+    if(val.replace(/\D/g,'')==='0921'){ showDoorChoice(); return; }
+    S.doorFails++; save(); glitch();
+    if(S.doorFails>=3){ showEnding('bad'); return; }
+    refresh(); err('#d-err','密码错误。温室里传来很轻的敲击声。');
+  }
+});
+function glitch(){ vp.classList.remove('glitch'); void vp.offsetWidth; vp.classList.add('glitch'); }
+
+/* ---------- 开场 ---------- */
+const ov = $('#overlay');
+function showIntro(){
+  const msgs = [
+    ['sys','10 月 19 日 23:47'],
+    ['阿桃','你在吗'],
+    ['阿桃','小满已经三天没回我消息了，电话也关机。'],
+    ['阿桃','她最后发给我的是一个链接：<code>jingyuan-miaopu.com</code>'],
+    ['阿桃','还说了一句“我找到我的秘密花园了”，后面跟了一个紫色的花。'],
+    ['阿桃','我去报警，警察说成年人失联要等等，让我先联系她家里人。'],
+    ['阿桃','可她外婆去年冬天走了，她在千城一个亲人都没有。'],
+    ['阿桃','你电脑比我懂。她的博客是 <code>blog.xiaoman.me</code>，帮我看看好吗？我真的很怕。'],
+    ['me','好，我现在就查。'],
+  ];
+  ov.innerHTML = `<div class="phone" role="dialog" aria-label="阿桃的消息"><header>阿桃<small>在线</small></header>
+    ${msgs.map((m,i)=>`<div class="msg ${m[0]==='me'?'me':m[0]==='sys'?'sys':''}" style="animation-delay:${i*.4}s">${m[1]}</div>`).join('')}
+    <button class="go" id="goStart">打开电脑，开始调查</button></div>`;
+  ov.hidden = false;
+  $('#goStart').onclick = () => {
+    ov.hidden = true; S.seenIntro = true; save(); addNote('start'); renderBookmarks();
+    $('#addr').focus();
+  };
+}
+
+/* ---------- 结局 ---------- */
+function showDoorChoice(){
+  const ok = has('letter');
+  ov.innerHTML = `<div class="ending" role="dialog" aria-label="抉择">
+    <div class="tag">温室 B · 门禁已解除</div>
+    <h1>门开了。接下来你要做什么？</h1>
+    <p>后台日志刷新了一行：“园丁 已登录”。陈默也在线。你只有一次机会。</p>
+    <div class="choice">
+      <button id="c1">立刻报警<small>把园丁后台的截图和定位发给千城警方。</small></button>
+      <button id="c2" ${ok?'':'disabled'}>报警，同时把外婆的信转给沈静<small>${ok?'让一位等了十七年的母亲知道真相。':'你还缺少一样东西。'}</small></button>
+    </div>
+  </div>`;
+  ov.hidden = false;
+  $('#c1').onclick = () => showEnding('normal');
+  $('#c2').onclick = () => { if(ok) showEnding('true'); };
+}
+const ENDINGS = {
+  bad: () => ({tag:'BAD END · 第九株', cls:'bad', title:'门禁锁死了', body:[
+    '屏幕闪了一下，浏览器自己打开了一个新标签页：静园苗圃 · 会员入园。',
+    '会员编号一栏已经填好了：JY-????-09。',
+    '下面一行小字：“已通知园丁。请在原地等候，我们会来接你。”',
+    '手机震了一下，是一条陌生号码的短信：<b>“你也喜欢紫色吗？”</b>',
+  ], hint:'提示：念念离开的日子，写在 2009 年的旧新闻里。', retry:true}),
+  normal: () => ({tag:'NORMAL END · 等你回来', cls:'', title:'温室 B 的门开了', body:[
+    '凌晨四点，警车开进了千城大道 404 号。温室 B 里很暖和，紫色的鸢尾一直开到天花板。林小满蜷在花架后面，嘴唇干裂，但还醒着。',
+    '温室 A 里，警方找到了周晴。她瘦得脱了形，一直重复一句话：“他说看到那一页的人都不能走。”',
+    '陈默在千城站被拦下，口袋里是早上 06:40 的车票。园子里的土被翻了很多天。',
+    '沈静被带走时没有挣扎，只是一直回头看那片花：“你们小心一点，念念快回来了。”',
+    '小满醒来后的第一句话是：“沈阿姨呢？我还有话没跟她说。”',
+  ], hint:'好像还有一个秘密没有被说出来。去小满博客提到的网盘里看看。'}),
+  true: () => ({tag:'TRUE END · 鸢尾的花语', cls:'true', title:'念念回家了', body:[
+    '凌晨四点，警车开进了千城大道 404 号。温室 A 里找到了周晴，温室 B 里找到了林小满。两个人都活着。',
+    has('chenmo') ? '陈默在千城站被拦下。审讯室里他只交代了一件事就再也不说话：“2009 年 9 月 21 日下午 3 点 12 分，那通电话是我打的。”' : '陈默在千城站被拦下，口袋里是早上 06:40 的车票。他对警察说，所有事都是他一个人做的，跟沈姐无关。',
+    '你把外婆的信转给了沈静。她在派出所的长椅上读了很久，读到“念念乖，念念不乱跑”那一句，捂着嘴哭出了声。',
+    '一周后，DNA 结果出来了。林小满，就是沈念。',
+    '沈静没有被起诉，她对园丁后台的事一无所知。静园苗圃关了，那片鸢尾被移栽到了千城植物园。',
+    '三个月后，阿桃发来一张照片：植物园的鸢尾花区，一对母女蹲在花前。女儿头上别着一枚旧发卡。',
+    '配的文字是——“她说，外婆的那句对不起，她替外婆说过了。”',
+  ], hint: SECRETS.filter(has).length<3 ? `你找到了 ${SECRETS.filter(has).length}/3 条隐藏线索。还有没看到的故事。` : '你找到了全部隐藏线索。谢谢你把她找回来。'}),
+};
+function showEnding(kind){
+  const e = ENDINGS[kind]();
+  if(kind!=='bad'){ S.flags.end = kind; save(); renderStage(); }
+  ov.innerHTML = `<div class="ending" role="dialog" aria-label="结局">
+    <div class="tag ${e.cls}">${e.tag}</div>
+    <h1>${e.title}</h1>
+    ${e.body.map((p,i)=>`<p class="${i===e.body.length-1?'hl':''}">${p}</p>`).join('')}
+    <p style="font-size:12.5px;border-top:1px solid var(--shell-line);padding-top:12px">${e.hint}</p>
+    <div class="btnrow">${e.retry?'<button class="btn" id="eRetry">读档重来</button>':'<button class="btn" id="eClose">回到电脑</button>'}<button class="btn" id="eReset">从头开始</button></div>
+  </div>`;
+  ov.hidden = false;
+  if(e.retry) $('#eRetry').onclick = () => { S.doorFails = 0; save(); ov.hidden = true; refresh(); };
+  else $('#eClose').onclick = () => { ov.hidden = true; };
+  $('#eReset').onclick = reset;
+}
+function reset(){
+  S = fresh(); save();
+  hist = []; hi = -1; renderNotes(); renderBookmarks(); go('xundu.com'); showIntro();
+  $('#hint').textContent = '看不懂网页的时候，试试全选文字（Ctrl+A），或者点地址栏右边的 </> 查看源代码。';
+}
+$('#bChat').onclick = showIntro;
+$('#bReset').onclick = reset;
+
+/* ---------- 启动 ---------- */
+renderNotes(); renderBookmarks();
+go('xundu.com');
+if(!S.seenIntro) showIntro();
+})();
+</script>
+
+</html>
