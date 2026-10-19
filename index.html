@@ -247,6 +247,22 @@ button{cursor:pointer}
 .gd .door{border:1px solid #6b2a24;padding:16px;max-width:440px;background:#1a0f0e}
 .gd .door b{color:#e07a6e}
 
+/* 灵异 */
+.notes li.ghostnote{border-left-color:var(--blood);color:#d9a097;font-style:italic;font-family:var(--f-display)}
+.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));width:min(350px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#f1f1ee;color:#222;border-radius:16px;padding:12px 12px 6px;box-shadow:0 12px 40px #000c;z-index:40;animation:in .3s forwards}
+.toast header{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;font-size:13px;margin-bottom:8px}
+.toast header small{font-weight:400;color:#888;font-size:11px;margin-left:6px}
+.toast .x{background:none;border:none;font-size:18px;line-height:1;color:#888;padding:0 4px}
+.toast .msg{max-width:92%}
+.toast.unknown{background:#170f0f;color:#e8d6d3;border:1px solid #4a2420}
+.toast.unknown header small,.toast.unknown .x{color:#9a6a64}
+.toast.unknown .msg{background:#2a1a19;color:#e8d6d3}
+.gd-ghost{color:#0f1210}
+.gd-ghost::selection{background:#6b2a24;color:#ffd9d3}
+.wet{color:#4a6a8a;font-style:italic}
+.flicker{animation:fk 3.2s infinite}
+@keyframes fk{0%,92%,100%{opacity:1}93%{opacity:.2}95%{opacity:1}96%{opacity:.4}}
+
 .glitch{animation:gl .25s steps(2) 3}
 @keyframes gl{0%{filter:none;transform:none}50%{filter:invert(1) hue-rotate(90deg);transform:translateX(3px)}100%{filter:none}}
 </style>
@@ -319,6 +335,13 @@ const NOTES = {
   letter:  '【外婆的信】2009 年 9 月 21 日傍晚，外婆在植物园后门捡到了一个女孩，发卡背面刻着“念”字。外婆没有报警。小满就是沈念。',
   photo:   '【小时候.jpg】2009 年冬，刚到外婆家的小满，头上别着鸢尾发卡，和旧新闻照片里的一模一样。',
   chenmo:  '【陈默的博客】2009 年 9 月 21 日 15:12，让沈静转身的那通电话，是记者陈默打的。',
+  spirit:  '灵异帖：深夜的出租车司机在千城大道 404 号载过一个浑身是泥的女孩，下车时人不见了，座位上只留下湿泥和一片鸢尾花瓣。',
+  missing: '失踪人口公告：2014 到 2024 年，五个女孩先后失踪，最后都出现在城郊：何苑、许安安、苏禾、唐语、宋芷。',
+  no6:     '论坛 4471 号帖今天凌晨 02:47 多了一条回复，发帖人 ID 叫“No.06”，注册时间显示为 2024 年。',
+  names:   '园丁后台里藏着五个名字：何苑、许安安、苏禾、唐语、宋芷。后面跟着一句：“她们没走。”',
+  '~1':    '（这一条不是你写的）我们一共五个。',
+  '~2':    '（这一条不是你写的）第三排。鸢尾下面。走路轻一点。',
+  '~3':    '（这一条不是你写的）她妈妈每天晚上都对着温室的门念那个日子：九月二十一。',
 };
 const SECRETS = ['letter','chenmo','member'];
 function addNote(id){
@@ -328,7 +351,7 @@ function addNote(id){
 function renderNotes(freshId){
   const ul = $('#notes');
   ul.innerHTML = S.notes.length
-    ? S.notes.map(id=>`<li class="${id===freshId?'new ':''}${['letter','photo','chenmo'].includes(id)?'secret':''}">${esc(NOTES[id])}</li>`).join('')
+    ? S.notes.map(id=>`<li class="${id===freshId?'new ':''}${['letter','photo','chenmo'].includes(id)?'secret':''}${id.startsWith('~')?'ghostnote':''}">${esc(NOTES[id])}</li>`).join('')
     : '<li class="empty">还没有线索。先打开小满留下的链接看看。</li>';
   $('#noteCount').textContent = S.notes.length + ' 条';
   if(freshId) ul.scrollTop = ul.scrollHeight;
@@ -354,7 +377,7 @@ const HINTS = [
   ['日记上了锁。翻翻小满以前的文章，找“最喜欢的花”和“生日”。','鸢尾的拼音是 yuanwei，生日在右边的资料卡里。','博客里还提到一个网盘，提取码是外婆家的门牌号，藏在某张照片的说明里。这条线是可选的，但很重要。'],
   ['日记里出现了“周晴”。去寻度搜这个名字。','论坛里有一条被删掉的回复。被删的内容有时还留在源代码里（点 </>）。','回广告页看看它的源代码。','园长的女儿叫什么？搜一下“沈静”。'],
   ['你需要园长女儿的名字，旧新闻里有。','访问 jingyuan-miaopu.com/gardener，口令是她的中文名字。'],
-  ['“念念离开的日子”，旧新闻里写着日期。格式：月月日日。','开门之前，你看过外婆的信了吗？它在小满博客提到的网盘里。','写那篇旧新闻的记者是谁？搜搜他的名字。'],
+  ['“念念离开的日子”，旧新闻里写着日期。笔记里那条“不是你写的”也提到了。格式：月月日日。','开门之前，你看过外婆的信了吗？它在小满博客提到的网盘里。','写那篇旧新闻的记者是谁？搜搜他的名字。'],
   ['想看另一个结局，可以点“重新开始”。真结局需要先找到外婆的信。'],
 ];
 let hintIdx = 0, lastStage = -1;
@@ -392,6 +415,9 @@ const R_NEWS = {t:'五岁女童植物园走失 母亲：我会一直种花等她
 const R_CM = {t:'沉默的人 — 陈默的个人博客',u:'chenmo.blog',d:'前千城晚报记者。偶尔写点东西，大多数时候不写。'};
 const R_CM2 = {t:'千城晚报 2009 年度好新闻奖名单 — 千城新闻',u:'chenmo.blog',d:'……社会类：《五岁女童植物园走失》作者 陈默（已离职）……'};
 
+const R_GHOST = {t:'【灵异】千城大道 404 号，半夜有女孩在唱歌 — 千城论坛',u:'bbs.qiancheng.net/t/5203',d:'跑夜班的师傅都知道，城郊那个苗圃门口，凌晨别停车……'};
+const R_MISSING = {t:'千城市公安局 · 未结失踪人口公告（2014—2024） — 千城新闻',u:'news.qiancheng.net/missing',d:'何苑、许安安、苏禾、唐语、宋芷……如有线索请联系警方。'};
+
 function searchResults(q){
   const k = norm(q), R = [];
   const hit = (...w) => w.some(x=>k.includes(x));
@@ -405,6 +431,9 @@ function searchResults(q){
   if(hit('槐树巷')) R.push({t:'槐树巷 — 千城地名',u:'xundu.com/s?q=槐树巷',d:'千城老城区小巷，多为老式平房，2025 年列入拆迁计划。'});
   if(hit('鸢尾','yuanwei','iris')) R.push({t:'鸢尾 — 千城百科',u:'xundu.com/s?q=鸢尾',d:'鸢尾，多年生草本，花紫色。花语：长久的思念、等待你的归来。'});
   if(hit('发卡')) R.push(R_NEWS);
+  if(hit('灵异','鬼','唱歌','出租车','404','闹鬼','数数','半夜','静园','苗圃','槐树巷')) R.push(R_GHOST);
+  if(hit('何苑','许安安','苏禾','唐语','宋芷','失踪人口','寻人','no.0','五个')) R.push(R_MISSING);
+  if(hit('失踪','失联')) R.push(R_MISSING);
   if(!R.length || !R[0].ad) R.unshift(R_AD);
   const seen = new Set();
   return R.filter(r=>{const key=r.u+r.t; if(seen.has(key)) return false; seen.add(key); return true;});
@@ -424,13 +453,17 @@ function searchPage(q){
 PAGES['jingyuan-miaopu.com'] = () => {
   S.flags.visitedJy = true; save(); renderStage();
   const watched = S.flags.gardener;
-  return { title:'静园苗圃 — 种下思念，永不凋零', on(){ if(watched) setTimeout(glitch, 500); }, html:`
+  const seen = S.flags.diary;
+  return { title:'静园苗圃 — 种下思念，永不凋零', haunt: seen ? '她们在花下面' : '', on(){
+      if(watched) setTimeout(glitch, 500);
+      phone('jy1','阿桃',['我刚才也点开了那个广告。','右上角写着“仅剩 1 个名额”。我刷新了一下，变成了“仅剩 1 个名额 · 已为你保留”。','我没在上面填过任何东西啊？','……算了，可能是我太紧张了。你继续查。']);
+    }, html:`
 <div class="pg jy">
   <!-- 静园苗圃 官网 · 前台页面 · 沈姐只看这一页 -->
   <div class="jy-hero">
-    <div class="jy-pop">${watched ? '我们看见你了。<br>No.09' : '限时！免费领养<br>仅剩 <b>1</b> 个名额'}</div>
+    <div class="jy-pop">${watched ? '我们看见你了。<br>No.09' : seen ? '仅剩 <b>1</b> 个名额<br>已为你保留' : '限时！免费领养<br>仅剩 <b>1</b> 个名额'}</div>
     <h1>静 园 苗 圃</h1>
-    <p>种下思念，永不凋零。</p>
+    <p class="${seen?'flicker':''}">${seen ? '种下她们，永不离开。' : '种下思念，永不凋零。'}</p>
     <div class="flower">${FLOWER_SVG}</div>
     <button class="jy-btn" data-href="jingyuan-miaopu.com/member">会员入园</button>
   </div>
@@ -496,19 +529,25 @@ PAGES['jingyuan-miaopu.com/gardener'] = () => {
   <!-- 别用拼音 -->
 </div>`};
   addNote('gardener'); addNote('doorq');
-  return { title:'园丁日志', html:`
+  return { title:'园丁日志', haunt:'她们没走', on(){
+      phone('gd1','未知号码',['你好，No.09。','别怕。我们不是他。','我们是 No.02 到 No.06。名牌被他拔了，可名字还在，你把那一行选中就能看见。','他每年春天都在第三排浇水，浇得特别勤。所以那一排的鸢尾，开得比哪里都好。','她妈妈每天晚上都蹲在温室门口，对着门念一个日子。','九月二十一。九月二十一。九月二十一。','快一点。小满已经不怎么说话了。'], true, ()=>{ addNote('~2'); addNote('~3'); });
+    }, html:`
 <div class="pg gd">
   <h1>// 园丁日志 · 仅陈默可见</h1>
   <div class="log">
     沈姐只看前台，她不知道这一页。<br>
     她以为那些女孩是来“陪念念”的，住几天就回家了。<br>
-    我不能让她知道真相，就像我不能让她知道 2009 年那通电话。
+    我不能让她知道真相，就像我不能让她知道 2009 年那通电话。<br>
+    <br>
+    最近浇水的时候，总觉得有人在后面数数。一、二、三、四、五。<br>
+    我回头，只有花。花全都朝着我这边。
   </div>
   <div class="tw"><table>
     <thead><tr><th>编号</th><th>名牌</th><th>入园</th><th>备注</th><th>状态</th></tr></thead>
     <tbody>
       <tr><td>No.01</td><td>沈念</td><td>2009-09-21</td><td>沈姐亲手种的第一株</td><td>等待归来</td></tr>
-      <tr><td>No.02–06</td><td>（名牌已拔除）</td><td>2014–2024</td><td>不是念念。沈姐哭了很久。</td><td>已送走</td></tr>
+      <tr><td>No.02–06</td><td>（名牌已拔除）<br><span class="gd-ghost">何苑 许安安 苏禾 唐语 宋芷</span></td><td>2014–2024</td><td>不是念念。沈姐哭了很久。<br>第三排。</td><td>已送走</td></tr>
+      <!-- 何苑 许安安 苏禾 唐语 宋芷　她们没走　她们没走　她们没走 -->
       <tr><td>No.07</td><td>周晴</td><td>2025-11-03</td><td>看到了这一页。不能放。</td><td>温室 A</td></tr>
       <tr class="hot"><td>No.08</td><td>林小满</td><td>2026-10-16</td><td>发卡是真的。背面刻着“念”。<br>沈姐已经认出来了。不能让她们相认。</td><td>温室 B · 移栽 10-20</td></tr>
       <tr><td>No.09</td><td>?</td><td>—</td><td>正在浏览本页</td><td>预约中</td></tr>
@@ -519,6 +558,7 @@ PAGES['jingyuan-miaopu.com/gardener'] = () => {
     <button type="submit" style="margin-left:6px">开门</button><div class="err" id="d-err" style="color:#e07a6e"></div></form>
   </div>
   <!-- 移栽前记得浇水。车票：10-20 06:40 千城站 -->
+  <!-- 为什么每天早上，温室 B 的玻璃上都有五个手印？从里面印上去的。 -->
 </div>`};
 };
 
@@ -529,6 +569,9 @@ PAGES['blog.xiaoman.me'] = () => {
   <div class="bl-head"><h1>小满的秘密花园</h1><p>一个人也要好好生活 ☁</p></div>
   <div class="bl-wrap">
     <main>
+      ${S.flags.diary ? `<article class="post" style="border-color:#c9a3a3"><h3 class="flicker">。</h3><time>2026-10-20 03:12</time>
+        <p class="wet">花底下很冷。她们说习惯了就不冷了。</p>
+        <p class="wet">阿桃，别让他们把我种下去。</p></article>` : ''}
       <article class="post"><h3>我找到我的秘密花园了</h3><time>2026-10-15</time>
         <p>今天刷到一个很奇怪的广告，说可以“种下思念”。配图是一大片紫色的鸢尾，和外婆家门口的一模一样。我盯着看了好久，心里有个很怪的感觉，好像很久很久以前见过那个地方。</p>
         <p>明天去看看。具体的写在<a data-href="blog.xiaoman.me/diary">日记</a>里，日记是上锁的，不给你们看 :)</p></article>
@@ -550,7 +593,9 @@ PAGES['blog.xiaoman.me'] = () => {
     </aside>
   </div>
   <!-- theme: sakura-lite -->
-</div>`, on(){ addNote('iris'); addNote('pan'); } };
+</div>`, haunt: S.flags.diary ? '花底下很冷' : '', on(){ addNote('iris'); addNote('pan');
+    phone('blog1','阿桃',['我刚才趴在桌上睡着了一下，梦到小满。','她站在一大片紫色的花里，背对着我，一直在数数。','一、二、三……数到八，就不数了。','然后她回头看我，脸上全是泥。','我醒过来，手机屏幕亮着，停在她的博客上。我没有打开过它。']);
+  } };
 };
 
 PAGES['blog.xiaoman.me/diary'] = () => {
@@ -566,7 +611,12 @@ PAGES['blog.xiaoman.me/diary'] = () => {
   </div>
 </div>`};
   addNote('diary'); addNote('overheard');
-  return { title:'日记 — 小满的秘密花园', html:`
+  return { title:'日记 — 小满的秘密花园', haunt:'一 二 三 四 五', on(){
+      phone('diary1','小满',['（03:12）别来。','（03:12）她们不让我睡，一直在我耳朵边上数数。','（03:12）不是坏人。她们说她们也在等人来接，等了好多年。','（03:12）阿桃说你在帮我。告诉她我还活着。','（03:12）还活着。'], false, ()=>{
+        addNote('~1');
+        phone('diary2','阿桃',['小满刚刚也给我发消息了！！','可她手机是关机的，我一直打，一直是关机。','你看她消息上的时间。','三点十二分。','现在才十二点多啊。']);
+      });
+    }, html:`
 <div class="pg bl">
   <div class="diary">
     <h4>10 月 16 日 · 晴</h4>
@@ -582,6 +632,19 @@ PAGES['blog.xiaoman.me/diary'] = () => {
     <h4>10 月 17 日 · 深夜</h4>
     <p class="shake">门锁上了。手机只有一格信号。</p>
     <p class="shake">我听见陈叔叔在门外打电话：“不能让她们认。认了，警察就会来，就会查到前面那几个。”</p>
+    <h4>10 月 18 日 · 凌晨</h4>
+    <p>温室里有人。</p>
+    <p>不是陈叔叔。我关了手机的灯，就听见花架后面有人在小声数数：一、二、三、四、五。数完了，又从一开始。</p>
+    <p>我问是谁。数数停了。过了很久，一个女孩的声音说：“你是第八个吗？”</p>
+    <h4>10 月 18 日 · 白天</h4>
+    <p>沈阿姨隔着玻璃给我唱歌。就是我记得的那首。“小鸢尾，开紫花，念念睡，妈妈在。”</p>
+    <p>我贴着玻璃哭，她也哭。陈叔叔把她拉走了。</p>
+    <p>玻璃上有五个手印，是从里面印的。比我的手小一点。我没有碰过那块玻璃。</p>
+    <h4>10 月 18 日 · 夜</h4>
+    <p class="shake">她们出来了。五个，穿着不同年份的衣服，裙摆上全是泥。她们不吓人，就是很冷。她们挨着我坐，说这样我就不怕了。</p>
+    <p class="shake">最小的那个叫宋芷，她说她在这里待了两年。她说第三排的鸢尾为什么开得那么好，因为底下有人。</p>
+    <p class="shake">她们说，明天陈默会来“移栽”我。她们说，会有人来的，一直有人在看这本日记。</p>
+    <p class="shake">是你吗？</p>
     <p class="shake">阿桃，如果你看到这里——</p>
   </div>
 </div>`};
@@ -650,7 +713,51 @@ PAGES['bbs.qiancheng.net/t/4471'] = () => {
     <div class="floor"><div class="who"><b>园艺爱好者</b>5 楼</div><div class="body">楼主别着急。那个苗圃园长我见过，人挺和气的，说她女儿特别喜欢鸢尾，所以种了一园子。<div class="meta">2025-11-12 14:05</div></div></div>
     <div class="floor"><div class="who"><b>晴天不下雨</b>楼主</div><div class="body">我又去了一次。帮工不让我进温室，说里面在打药。我隔着玻璃好像看见了晴晴的外套。<div class="meta">2025-12-02 19:40</div></div></div>
     <div class="floor"><div class="who"><b>晴天不下雨</b>楼主</div><div class="body">还是没有消息。<div class="meta">2026-03-21 01:12</div></div></div>
+    <div class="floor"><div class="who"><b>晴天不下雨</b>楼主</div><div class="body">我最近每天晚上都梦到她。她站在一块玻璃后面，手贴着玻璃，嘴一直在动。我看口型，好像是“第三排”。<div class="meta">2026-08-30 03:40</div></div></div>
+    <div class="floor" style="background:#fbf3f2"><div class="who" style="color:#9a3a32"><b>No.06</b>注册于 2024-04-11<br>发帖 1</div><div class="body" style="color:#7a2a24">
+      今晚她就要被移栽了。<br>不要走正门，走后台。口令是那个孩子的名字。<br>我们会给你开门的。
+      <div class="meta">2026-10-19 02:47 · 来自 千城大道 404 号</div></div></div>
+    <div class="floor"><div class="who"><b>千城老司机</b>9 楼</div><div class="body">楼上什么情况？？这个号注册两年了，就发了这一条。还有这 IP 地址……<br>相关帖子：<a data-href="bbs.qiancheng.net/t/5203">【灵异】千城大道 404 号，半夜有女孩在唱歌</a><div class="meta">2026-10-19 07:15</div></div></div>
   </div>
+</div>`, on(){ addNote('no6'); } };
+};
+
+PAGES['bbs.qiancheng.net/t/5203'] = () => {
+  addNote('spirit');
+  return { title:'【灵异】千城大道 404 号，半夜有女孩在唱歌 — 千城论坛', haunt:'小鸢尾 开紫花', html:`
+<div class="pg bbs">
+  <div class="bbs-top">千城论坛 <small>灵异怪谈 › 本地见闻</small></div>
+  <div class="bbs-thread">
+    <div class="bbs-title">【灵异】千城大道 404 号，半夜有女孩在唱歌</div>
+    <div class="floor"><div class="who"><b>夜班老刘</b>楼主</div><div class="body">
+      跑了十年夜班出租，说件真事。去年冬天凌晨三点多，我在城郊千城大道那边空车回城，路边一个苗圃门口站着个女孩，招手。上车说去槐树巷。
+      <br><br>一路上她不说话，我从后视镜看，她头发是湿的，裙子上全是泥，怀里抱着一把紫色的花。车里冷得我把暖气开到了最大。
+      <br><br>到槐树巷口我回头收钱，后座没人。座位上一滩湿泥，泥里有一片紫色的花瓣。门锁着，一直锁着。
+      <div class="meta">2025-01-14 23:20</div></div></div>
+    <div class="floor"><div class="who"><b>跑滴滴的</b>2 楼</div><div class="body">我也拉过！！也是去槐树巷！说是去找一个“小妹妹”，问她哪个小妹妹，她说“戴发卡的那个”。<div class="meta">2025-01-15 00:41</div></div></div>
+    <div class="floor"><div class="who"><b>住城郊的</b>3 楼</div><div class="body">我家就在那附近。半夜经常能听见苗圃里有女孩唱歌，调子很老，“小鸢尾，开紫花”什么的。有时候是一个人唱，有时候是好几个人一起唱。<div class="meta">2025-01-15 09:02</div></div></div>
+    <div class="floor"><div class="who"><b>住城郊的</b>3 楼</div><div class="body">补充一下，唱完还会数数。一到五。每次都是数到五。<div class="meta">2025-01-15 09:05</div></div></div>
+    <div class="floor"><div class="who"><b>无神论者</b>5 楼</div><div class="body">编得挺好。那苗圃就一个阿姨一个帮工，哪来的好几个女孩。<div class="meta">2025-01-16 13:30</div></div></div>
+    <div class="floor"><div class="who"><b>夜班老刘</b>楼主</div><div class="body">我后来去派出所门口看了一眼那块失踪人口公告栏。<br>那个女孩在上面。<br><a data-href="news.qiancheng.net/missing">千城市公安局 · 未结失踪人口公告</a><div class="meta">2025-02-02 02:02</div></div></div>
+    <div class="floor"><div class="who"><b>跑滴滴的</b>7 楼</div><div class="body">昨晚又拉到一个。这次她多说了一句：“我们五个等了好多年，等第八个来了，就能回家了。”<br>我问她第六个、第七个呢。她说：“第七个还活着。第八个也还活着。你们快去救她们。”<div class="meta">2026-10-18 04:10</div></div></div>
+  </div>
+</div>`};
+};
+
+PAGES['news.qiancheng.net/missing'] = () => {
+  addNote('missing');
+  const P = [['何苑','女，21 岁','2014 年 5 月','城郊千城大道，自称“去领养一盆花”'],['许安安','女，23 岁','2016 年 4 月','城郊公交终点站'],['苏禾','女，20 岁','2018 年 9 月','城郊，最后通话提到“紫色的花”'],['唐语','女，22 岁','2021 年 3 月','城郊千城大道附近'],['宋芷','女，19 岁','2024 年 4 月','城郊，失踪当天发朋友圈：“好多鸢尾”']];
+  return { title:'未结失踪人口公告 — 千城新闻', haunt:'我们在这里', html:`
+<div class="pg news">
+  <div class="news-top"><b>千城新闻</b><small>公告 · 千城市公安局</small></div>
+  <article class="news-art">
+    <h1>未结失踪人口公告（2014—2024）</h1>
+    <div class="by">以下人员至今下落不明。如有线索，请拨打千城市公安局电话。</div>
+    ${P.map(p=>`<div style="border-top:1px solid #ddd;padding:12px 0;display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px">
+      <div style="width:64px;height:80px;background:linear-gradient(#bbb,#999);filter:grayscale(1);border-radius:2px"></div>
+      <div><b style="font-size:16px">${p[0]}</b>　<span style="color:#888;font-size:13px">${p[1]}</span><br><span style="font-size:13.5px">失踪时间：${p[2]}<br>最后出现：${p[3]}</span></div></div>`).join('')}
+    <p style="text-indent:0;color:#999;font-size:12.5px;border-top:1px solid #ddd;padding-top:12px">注：以上五人的照片在系统中均已损坏，无法显示。技术人员表示，照片文件打开后只有一片紫色。</p>
+  </article>
 </div>`};
 };
 
@@ -678,8 +785,10 @@ PAGES['chenmo.blog'] = () => {
 <div class="pg cm"><div class="cm-wrap">
   <h1>沉默的人</h1>
   <div class="sub">陈默 · 前千城晚报记者 · 2009 — </div>
+  <article><time>2026-10-19 03:12</time><p>她们站在我床边。</p><p>五个人，排成一排，湿的。最小的那个说：“陈叔叔，第三排很冷。”</p><p>我把灯打开，地板上是五串泥脚印，从门口一直走到床边，没有走回去的。</p></article>
   <article><time>2026-10-18</time><p>如果她们相认，沈姐会原谅我吗？不会的。她会知道那通电话，也会知道 No.02 到 No.07。</p><p>明天早上的车票已经买好了。</p></article>
   <article><time>2026-10-16</time><p>第八个。这次发卡是真的。我翻过来看了，背面刻着“念”。</p><p>十七年。她居然自己走回来了。</p></article>
+  <article><time>2024-05-02</time><p>沈姐说，最近晚上总听见温室里有人数数，一到五。她问我是不是念念回来了。</p><p>我说是风。</p><p>我也听见了。</p></article>
   <article><time>2020-06-01</time><p>网站上线了。沈姐说，要让全城都知道念念喜欢紫色。我在投放设置里多加了几个条件：年龄、独居、喜欢紫色的花。</p><p>每来一个女孩，沈姐就能高兴几天。我只能为她做这些了。</p></article>
   <article><time>2014-03-01</time><p>辞职了。去城郊帮沈姐种花。报社的人说我疯了。</p></article>
   <article><time>2009-09-25</time><p>9 月 21 日下午 3 点 12 分，我给沈静打了一个采访电话，问她植物园鸢尾展的事。</p><p>她转身接我电话的那四十秒里，她的女儿不见了。</p><p>没有人知道是我打的。我在报道里写了“未能核实”。</p></article>
@@ -717,6 +826,14 @@ function draw(){
   } else {
     vp.innerHTML = page.html;
     if(page.on) page.on();
+    if(page.haunt){
+      clearTimeout(draw.t);
+      draw.t = setTimeout(()=>{
+        const tab = $('#tabTitle'); if(cur.page!==page || srcMode) return;
+        tab.textContent = page.haunt; tab.style.color = '#e07a6e';
+        setTimeout(()=>{ if(cur.page===page){ tab.textContent = page.title; tab.style.color = ''; } }, 1100);
+      }, 2600 + Math.random()*2500);
+    }
   }
   vp.scrollTop = 0;
   $('#bBack').disabled = hi<=0; $('#bFwd').disabled = hi>=hist.length-1;
@@ -733,8 +850,33 @@ $('#bSrc').onclick = () => {
   if(srcMode){
     if(cur.u==='jingyuan-miaopu.com'){ addNote('srcjy'); addNote('ghost'); }
     if(cur.u==='bbs.qiancheng.net/t/4471') addNote('deleted');
+    if(cur.u==='jingyuan-miaopu.com/gardener' && S.flags.gardener) addNote('names');
   }
 };
+
+/* 手机消息：每条只弹一次 */
+const phoneQ = [];
+function phone(id, who, msgs, unknown=false, after){
+  if(S.flags['ph_'+id] || S.flags.end) return;
+  S.flags['ph_'+id] = true; save();
+  phoneQ.push({who, msgs, unknown, after});
+  if(phoneQ.length===1) setTimeout(showPhone, 1400);
+}
+function showPhone(){
+  const p = phoneQ[0]; if(!p) return;
+  const el = document.createElement('div');
+  el.className = 'toast' + (p.unknown ? ' unknown' : '');
+  el.setAttribute('role','dialog'); el.setAttribute('aria-label', p.who + ' 的消息');
+  el.innerHTML = `<header><span>${esc(p.who)}<small>${p.unknown ? '号码不存在' : '刚刚'}</small></span><button class="x" aria-label="关闭">×</button></header>
+    ${p.msgs.map((m,i)=>`<div class="msg" style="animation-delay:${i*.7}s">${esc(m)}</div>`).join('')}`;
+  document.body.appendChild(el);
+  if(p.unknown) glitch();
+  el.querySelector('.x').onclick = () => {
+    el.remove(); phoneQ.shift();
+    if(p.after) p.after();
+    if(phoneQ.length) setTimeout(showPhone, 900);
+  };
+}
 
 function renderBookmarks(){
   const list = [['寻度','xundu.com']];
@@ -747,7 +889,9 @@ document.addEventListener('click', e => {
   if(a){ e.preventDefault(); go(a.dataset.href); }
 });
 document.addEventListener('selectionchange', () => {
-  if(String(window.getSelection()||'').includes('园丁不从正门进')) addNote('ghost');
+  const sel = String(window.getSelection()||'');
+  if(sel.includes('园丁不从正门进')) addNote('ghost');
+  if(sel.includes('许安安')) addNote('names');
 });
 vp.addEventListener('submit', e => {
   const f = e.target, kind = f.dataset.form; if(!kind) return;
@@ -794,6 +938,10 @@ function showIntro(){
     ['阿桃','小满已经三天没回我消息了，电话也关机。'],
     ['阿桃','她最后发给我的是一个链接：<code>jingyuan-miaopu.com</code>'],
     ['阿桃','还说了一句“我找到我的秘密花园了”，后面跟了一个紫色的花。'],
+    ['阿桃','三天前半夜她还发过一条语音，我转成文字了：'],
+    ['阿桃','“阿桃……这里的花晚上会唱歌……你听……”'],
+    ['阿桃','语音最后有一段杂音。我戴耳机听了好几遍，里面有好几个女孩在小声数数。一、二、三、四、五。'],
+    ['阿桃','可她说那里只有她一个人。'],
     ['阿桃','我去报警，警察说成年人失联要等等，让我先联系她家里人。'],
     ['阿桃','可她外婆去年冬天走了，她在千城一个亲人都没有。'],
     ['阿桃','你电脑比我懂。她的博客是 <code>blog.xiaoman.me</code>，帮我看看好吗？我真的很怕。'],
@@ -815,7 +963,9 @@ function showDoorChoice(){
   ov.innerHTML = `<div class="ending" role="dialog" aria-label="抉择">
     <div class="tag">温室 B · 门禁已解除</div>
     <h1>门开了。接下来你要做什么？</h1>
-    <p>后台日志刷新了一行：“园丁 已登录”。陈默也在线。你只有一次机会。</p>
+    <p>门禁显示“已开启”的那一刻，你电脑的扬声器里传出一段很轻的歌声。你没有打开任何声音。</p>
+    <p class="hl">“小鸢尾，开紫花，念念睡，妈妈在。”</p>
+    <p>屏幕右下角的时间跳成了 03:12。后台日志又多了一行：“园丁 已登录”。陈默也在线。你只有一次机会。</p>
     <div class="choice">
       <button id="c1">立刻报警<small>把园丁后台的截图和定位发给千城警方。</small></button>
       <button id="c2" ${ok?'':'disabled'}>报警，同时把外婆的信转给沈静<small>${ok?'让一位等了十七年的母亲知道真相。':'你还缺少一样东西。'}</small></button>
@@ -827,30 +977,36 @@ function showDoorChoice(){
 }
 const ENDINGS = {
   bad: () => ({tag:'BAD END · 第九株', cls:'bad', title:'门禁锁死了', body:[
-    '屏幕闪了一下，浏览器自己打开了一个新标签页：静园苗圃 · 会员入园。',
-    '会员编号一栏已经填好了：JY-????-09。',
-    '下面一行小字：“已通知园丁。请在原地等候，我们会来接你。”',
-    '手机震了一下，是一条陌生号码的短信：<b>“你也喜欢紫色吗？”</b>',
-  ], hint:'提示：念念离开的日子，写在 2009 年的旧新闻里。', retry:true}),
-  normal: () => ({tag:'NORMAL END · 等你回来', cls:'', title:'温室 B 的门开了', body:[
-    '凌晨四点，警车开进了千城大道 404 号。温室 B 里很暖和，紫色的鸢尾一直开到天花板。林小满蜷在花架后面，嘴唇干裂，但还醒着。',
-    '温室 A 里，警方找到了周晴。她瘦得脱了形，一直重复一句话：“他说看到那一页的人都不能走。”',
-    '陈默在千城站被拦下，口袋里是早上 06:40 的车票。园子里的土被翻了很多天。',
-    '沈静被带走时没有挣扎，只是一直回头看那片花：“你们小心一点，念念快回来了。”',
-    '小满醒来后的第一句话是：“沈阿姨呢？我还有话没跟她说。”',
-  ], hint:'好像还有一个秘密没有被说出来。去小满博客提到的网盘里看看。'}),
+    '屏幕黑了一秒。再亮起来的时候，浏览器自己打开了一个新标签页：静园苗圃 · 会员入园。',
+    '会员编号一栏已经填好了：JY-????-09。下面一行小字：“已通知园丁。请在原地等候，我们会来接你。”',
+    '你听见身后有人在数数。一、二、三、四、五。',
+    '数到六的时候，声音停在了你的耳朵边上。',
+    '手机屏幕亮了，是一条来自你自己号码的短信，发送时间 03:12：<b>“你也喜欢紫色吗？”</b>',
+  ], hint:'提示：念念离开的日子，写在 2009 年的旧新闻里，笔记里那条“不是你写的”也说过。', retry:true}),
+  normal: () => ({tag:'NORMAL END · 第三排', cls:'', title:'温室 B 的门开了', body:[
+    '凌晨四点，警车开进了千城大道 404 号。温室 B 里很冷，紫色的鸢尾一直开到天花板。林小满蜷在花架后面，嘴唇发紫，但还醒着。',
+    '她抓着第一个冲进来的警察，说的第一句话是：“先别管我，第三排。她们在第三排下面。”',
+    '温室 A 里，警方找到了周晴。她瘦得脱了形，一直重复一句话：“晚上有人给我盖被子，五个人，手都很凉。”',
+    '陈默在千城站被拦下，口袋里是早上 06:40 的车票。他一直在发抖，说这几天每天夜里床边都站着人。',
+    '第三排的鸢尾被一株一株挖起来。每一株的根底下，都缠着一块写了名字的木牌。',
+    '沈静被带走时没有挣扎，只是一直回头看那片被挖开的土：“你们小心一点，念念快回来了。”',
+    '那天夜里，你的手机又亮了一次。未知号码：“谢谢你。可是还有一个人没回家。”',
+  ], hint:'还有一个秘密没有被说出来。去小满博客提到的网盘里看看。'}),
   true: () => ({tag:'TRUE END · 鸢尾的花语', cls:'true', title:'念念回家了', body:[
     '凌晨四点，警车开进了千城大道 404 号。温室 A 里找到了周晴，温室 B 里找到了林小满。两个人都活着。',
-    has('chenmo') ? '陈默在千城站被拦下。审讯室里他只交代了一件事就再也不说话：“2009 年 9 月 21 日下午 3 点 12 分，那通电话是我打的。”' : '陈默在千城站被拦下，口袋里是早上 06:40 的车票。他对警察说，所有事都是他一个人做的，跟沈姐无关。',
+    '小满说，被关的这几天，每天夜里都有五个女孩挨着她坐，给她唱歌，帮她数着天亮。警察问她那五个女孩去哪了，她指了指窗外的第三排鸢尾。',
+    '第三排的土被挖开了。五块木牌，五个名字：何苑、许安安、苏禾、唐语、宋芷。和派出所门口那张失踪人口公告上的一模一样。',
+    has('chenmo') ? '陈默在千城站被拦下。审讯室里他只交代了一件事就再也不说话：“2009 年 9 月 21 日下午 3 点 12 分，那通电话是我打的。”审讯室的玻璃上，有五个从里面印上去的手印。' : '陈默在千城站被拦下，口袋里是早上 06:40 的车票。他对警察说，所有事都是他一个人做的，跟沈姐无关。然后求警察别关灯。',
     '你把外婆的信转给了沈静。她在派出所的长椅上读了很久，读到“念念乖，念念不乱跑”那一句，捂着嘴哭出了声。',
     '一周后，DNA 结果出来了。林小满，就是沈念。',
-    '沈静没有被起诉，她对园丁后台的事一无所知。静园苗圃关了，那片鸢尾被移栽到了千城植物园。',
-    '三个月后，阿桃发来一张照片：植物园的鸢尾花区，一对母女蹲在花前。女儿头上别着一枚旧发卡。',
-    '配的文字是——“她说，外婆的那句对不起，她替外婆说过了。”',
-  ], hint: SECRETS.filter(has).length<3 ? `你找到了 ${SECRETS.filter(has).length}/3 条隐藏线索。还有没看到的故事。` : '你找到了全部隐藏线索。谢谢你把她找回来。'}),
+    '五个女孩下葬那天，千城论坛的夜班老刘发了一条帖子：“昨晚拉了最后一趟。五个姑娘，干干净净的，没有泥。这回不去槐树巷了，说要回自己家。下车的时候都跟我说了谢谢。”',
+    '那天夜里你的手机亮了最后一次。未知号码：“谢谢你。我们可以回家了。替我们跟念念说，第三排不冷了。”你回拨过去，听筒里说：您拨打的号码是空号。那是宋芷失踪前用的号码。',
+    '三个月后，阿桃发来一张照片：千城植物园的鸢尾花区，一对母女蹲在花前。女儿头上别着一枚旧发卡。照片角落的花丛里，好像还站着五个模糊的人影，正朝她们挥手。',
+  ], hint: SECRETS.filter(has).length<3 ? `你找到了 ${SECRETS.filter(has).length}/3 条隐藏线索。还有没看到的故事。` : '你找到了全部隐藏线索。谢谢你把她们都带回家。'}),
 };
 function showEnding(kind){
   const e = ENDINGS[kind]();
+  phoneQ.length = 0; document.querySelectorAll('.toast').forEach(t=>t.remove());
   if(kind!=='bad'){ S.flags.end = kind; save(); renderStage(); }
   ov.innerHTML = `<div class="ending" role="dialog" aria-label="结局">
     <div class="tag ${e.cls}">${e.tag}</div>
@@ -866,6 +1022,7 @@ function showEnding(kind){
 }
 function reset(){
   S = fresh(); save();
+  phoneQ.length = 0; document.querySelectorAll('.toast').forEach(t=>t.remove());
   hist = []; hi = -1; renderNotes(); renderBookmarks(); go('xundu.com'); showIntro();
   $('#hint').textContent = '看不懂网页的时候，试试全选文字（Ctrl+A），或者点地址栏右边的 </> 查看源代码。';
 }
