@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="朋友失踪三天，只留下一个诡异的广告链接。在一台模拟电脑里搜索、翻博客、看源代码，把她找回来。三章灵异网页解谜游戏。"><meta property="og:title" content="静园苗圃"><meta property="og:description" content="种下思念，永不凋零。一个三章的灵异网页解谜游戏。"><meta name="theme-color" content="#1b1d1c">
 <title>静园苗圃</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -47,11 +47,25 @@ button{cursor:pointer}
 .bm:hover{background:var(--shell-2);color:var(--ink)}
 
 /* 侧栏 */
-.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0}
+.side .panel.notes-panel{flex:1;min-height:0;display:flex;flex-direction:column}
+.fab{display:none}
+@media (max-width:900px){
+  .side{position:fixed;left:0;right:0;bottom:0;z-index:45;max-height:78vh;overflow:auto;background:var(--shell);border-top:1px solid var(--shell-line);border-radius:14px 14px 0 0;
+    padding:14px max(16px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -10px 40px #000a;transform:translateY(105%);transition:transform .25s}
+  .side.open{transform:none}
+  .side .panel.notes-panel{flex:none}
+  .notes{max-height:38vh!important}
+  .fab{display:flex;align-items:center;gap:6px;position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:46;background:var(--shell-2);color:var(--ink);border:1px solid var(--moss);border-radius:999px;padding:10px 16px;font-size:13px;box-shadow:0 6px 20px #0008}
+  .fab b{color:var(--moss)}
+  .fab.ping{animation:ping 1s 2}
+}
+@keyframes ping{50%{transform:scale(1.12);border-color:var(--iris)}}
 .panel{border:1px solid var(--shell-line);border-radius:10px;background:var(--shell-2);padding:14px}
 .panel h2{font-family:var(--f-display);font-size:15px;margin:0 0 10px;letter-spacing:.04em;display:flex;justify-content:space-between;align-items:baseline}
 .panel h2 small{font-family:var(--f-mono);font-size:11px;color:var(--ink-dim);font-weight:400}
-.notes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}
+.notes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;flex:1;min-height:120px;overflow:auto}
+.notes .chap{list-style:none;font-family:var(--f-display);font-size:12px;letter-spacing:.2em;color:var(--ink-dim);border:none;padding:6px 0 0}
 .notes li{font-size:12.5px;line-height:1.55;padding-left:12px;border-left:2px solid var(--moss);color:var(--ink)}
 .notes li.secret{border-left-color:var(--iris)}
 .notes li.new{animation:flash 1.2s}
@@ -72,7 +86,7 @@ button{cursor:pointer}
 .overlay{position:fixed;inset:0;background:#0d0e0dee;display:flex;align-items:center;justify-content:center;z-index:50;
   padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .phone{width:100%;max-width:380px;background:#f1f1ee;color:#222;border-radius:22px;padding:18px 14px;box-shadow:0 20px 60px #000a;max-height:100%;overflow:auto}
-.phone header{text-align:center;font-weight:700;font-size:15px;padding-bottom:10px;border-bottom:1px solid #ddd;margin-bottom:12px}
+.phone header{position:sticky;top:-18px;background:#f1f1ee;z-index:1;padding-top:6px;text-align:center;font-weight:700;font-size:15px;padding-bottom:10px;border-bottom:1px solid #ddd;margin-bottom:12px}
 .phone header small{display:block;font-weight:400;color:#888;font-size:11px}
 .msg{max-width:82%;background:#fff;padding:9px 12px;border-radius:12px;margin:0 0 8px;line-height:1.55;font-size:13.5px;opacity:0;transform:translateY(6px);animation:in .35s forwards}
 .msg.me{background:#a5d68b;margin-left:auto}
@@ -138,6 +152,7 @@ button{cursor:pointer}
 .jy-ghost::selection{background:#b8433a;color:#fff}
 .jy-foot{background:#2a3825;color:#a9b89d;font-size:12px;padding:18px 22px;text-align:center;line-height:1.9}
 .jy-btn{background:#b8433a;color:#fff;border:none;border-radius:999px;padding:10px 26px;font-size:15px;margin-top:16px}
+@media (max-width:560px){.jy-pop{position:static!important;transform:rotate(-2deg)!important;display:inline-block;margin-bottom:14px}}
 .jy-pop{position:absolute;right:14px;top:14px;background:#fffbe9;border:2px dashed #b8433a;padding:8px 12px;font-size:12px;color:#b8433a;transform:rotate(3deg);max-width:170px;text-align:left}
 .jy-login{background:#fff;border-radius:12px;max-width:360px;margin:30px auto;padding:22px;border:1px solid #d2dcc4}
 .jy-login label{display:block;font-size:13px;margin:10px 0 4px;color:#4a5c40}
@@ -165,8 +180,8 @@ button{cursor:pointer}
   linear-gradient(180deg,#dfe9d4,#b6cc9f)}
 .diary-lock{max-width:380px;margin:40px auto;background:#fff;border-radius:12px;padding:24px;border:1px solid #f0dbe3;text-align:center}
 .diary-lock .q{background:#fbf4f6;border-radius:6px;padding:8px;font-size:13px;margin:12px 0;color:#7a4a63}
-.diary{max-width:640px;margin:0 auto;padding:24px;background:repeating-linear-gradient(#fff 0 27px,#eadbe2 27px 28px);font-family:var(--f-display);line-height:28px;color:#3b3138}
-.diary h4{margin:28px 0 0;font-size:14px;color:#a0607e;font-family:var(--f-mono)}
+.diary{max-width:640px;margin:0 auto;padding:28px 24px;background:repeating-linear-gradient(#fff 0 27px,#eadbe2 27px 28px);font-family:var(--f-display);line-height:28px;color:#3b3138}
+.diary h4{margin:28px 0 0;line-height:28px;font-size:14px;color:#a0607e;font-family:var(--f-mono)}
 .diary p{margin:0}
 .diary .shake{color:#b8433a}
 
@@ -269,7 +284,8 @@ button{cursor:pointer}
 .sp .card .st{font-family:var(--f-mono);font-size:11px;letter-spacing:.15em;color:#8a6a64}
 .sp .card.done .st{color:#b9a3e6}
 .sp a{color:#b9a3e6}
-.live{background:#15161c;color:#d8d8e2;min-height:100%}
+.live{background:#15161c;color:#d8d8e2;min-height:100%;display:flex;flex-direction:column}
+.live .live-grid{flex:1}
 .live-top{display:flex;gap:14px;align-items:center;padding:14px 18px;border-bottom:1px solid #2a2b36;flex-wrap:wrap}
 .live-av{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#e6c9b0 0 30%,transparent 31%),#3a3c52;flex:none}
 .live-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;min-height:420px}
@@ -354,8 +370,8 @@ button{cursor:pointer}
     <div class="viewport" id="vp"></div>
   </section>
 
-  <aside class="side">
-    <div class="panel">
+  <aside class="side" id="side">
+    <div class="panel notes-panel">
       <h2>调查笔记 <small id="noteCount">0 条</small></h2>
       <ul class="notes" id="notes"></ul>
     </div>
@@ -368,12 +384,13 @@ button{cursor:pointer}
         <button class="btn" id="bChat">重看阿桃的消息</button>
         <button class="btn" id="bMusic" aria-pressed="true">♪ 音乐：开</button>
       </div>
-      <p class="hintbox" id="hint">看不懂网页的时候，试试全选文字（Ctrl+A），或者点地址栏右边的 &lt;/&gt; 查看源代码。</p>
+      <p class="hintbox" id="hint">看不懂网页的时候，试试全选文字（电脑按 Ctrl+A，手机长按文字），或者点地址栏右边的 &lt;/&gt; 查看源代码。</p>
       <div class="btnrow"><button class="btn" id="bReset">重新开始</button></div>
     </div>
   </aside>
 </div>
 
+<button class="fab" id="fab" aria-controls="side" aria-expanded="false">笔记 · 提示 <b id="fabCount">0</b></button>
 <div class="overlay" id="overlay" hidden></div>
 
 <script>
@@ -435,7 +452,7 @@ const SND = (() => {
   }
   function seq(step, fn){
     let i=0, next=ctx.currentTime+.15;
-    const id = setInterval(()=>{ while(next < ctx.currentTime+.3){ fn(i++, next); next += step; } }, 60);
+    const id = setInterval(()=>{ if(next < ctx.currentTime) next = ctx.currentTime + .05; while(next < ctx.currentTime+.3){ fn(i++, next); next += step; } }, 60);
     return () => clearInterval(id);
   }
   function lfo(param, rate, depth){
@@ -525,6 +542,7 @@ const SND = (() => {
     setTimeout(()=>{ if(cur) cur.out.gain.setTargetAtTime(1, ctx.currentTime, .6); }, dur*1000);
     return dur;
   }
+  document.addEventListener('visibilitychange', () => { if(!ctx) return; document.hidden ? ctx.suspend() : ctx.resume(); });
   return {init, play, toggle, sfx, song, get on(){ return enabled; }};
 })();
 
@@ -583,11 +601,18 @@ function addNote(id){
 }
 function renderNotes(freshId){
   const ul = $('#notes');
+  const CH2 = ['ch1end','sanpai','he1','he2','heDone','xu1','xu2','xuDone','su1','su2','su3','suDone','tang1','tangDone','song1'];
+  const CH3 = ['ch3','mail1','draft'];
+  const chOf = id => CH3.includes(id) ? 2 : CH2.includes(id) ? 1 : 0;
+  const NAMES = ['第一章 · 静园','第二章 · 第三排','第三章 · 三点十二分'];
+  const groups = [[],[],[]]; S.notes.forEach(id=>groups[chOf(id)].push(id));
+  const multi = groups[1].length || groups[2].length;
   ul.innerHTML = S.notes.length
-    ? S.notes.map(id=>`<li class="${id===freshId?'new ':''}${['letter','photo','chenmo'].includes(id)?'secret':''}${id.startsWith('~')?'ghostnote':''}">${esc(NOTES[id])}</li>`).join('')
+    ? groups.map((g,c)=> !g.length ? '' : (multi ? `<li class="chap">${NAMES[c]}</li>` : '') + g.map(id=>`<li class="${id===freshId?'new ':''}${['letter','photo','chenmo'].includes(id)?'secret':''}${id.startsWith('~')?'ghostnote':''}">${esc(NOTES[id])}</li>`).join('')).join('')
     : '<li class="empty">还没有线索。先打开小满留下的链接看看。</li>';
   $('#noteCount').textContent = S.notes.length + ' 条';
-  if(freshId) ul.scrollTop = ul.scrollHeight;
+  const fc = $('#fabCount'); if(fc){ fc.textContent = S.notes.length; if(freshId){ const f=$('#fab'); f.classList.remove('ping'); void f.offsetWidth; f.classList.add('ping'); } }
+  if(freshId){ const li = ul.querySelector('li.new'); if(li) li.scrollIntoView({block:'nearest'}); }
   renderStage();
 }
 
@@ -614,7 +639,7 @@ const GHOST_HINTS = {
 };
 const HINTS = [
   ['在地址栏输入 jingyuan-miaopu.com 并回车。','也可以在寻度里搜索“静园苗圃”。'],
-  ['广告页上有一行看不见的字。试着全选页面文字（Ctrl+A）。','阿桃还提到了小满的博客：blog.xiaoman.me。'],
+  ['广告页上有一行看不见的字。试着全选页面文字（Ctrl+A），或者点 </> 看源代码。','阿桃还提到了小满的博客：blog.xiaoman.me。'],
   ['日记上了锁。翻翻小满以前的文章，找“最喜欢的花”和“生日”。','鸢尾的拼音是 yuanwei，生日在右边的资料卡里。','博客里还提到一个网盘，提取码是外婆家的门牌号，藏在某张照片的说明里。这条线是可选的，但很重要。'],
   ['日记里出现了“周晴”。去寻度搜这个名字。','论坛里有一条被删掉的回复。被删的内容有时还留在源代码里（点 </>）。','回广告页看看它的源代码。','园长的女儿叫什么？搜一下“沈静”。'],
   ['你需要园长女儿的名字，旧新闻里有。','访问 jingyuan-miaopu.com/gardener，口令是她的中文名字。'],
@@ -1298,7 +1323,7 @@ PAGES['space.qiancheng.net/songzhi'] = () => {
   return { title:'芷', haunt:'轮到我了', on(){
       if(!four) return;
       if(!S.flags.ch3){ S.flags.ch3 = true; S.flags.g_song = true; save(); addNote('ch3'); renderBookmarks(); renderStage(); }
-      phone('ch3open','宋芷',['你看完了。','我没有妈妈要道歉，没有弟弟要哄，没有歌要唱完，也没有猫要等。','我只有一件事。','陈默没有被抓到。他的车停在千城站，票没用，人不见了。','我要他亲口说出来。说给沈阿姨听，说给念念听，说给第三排的五个人听。','他的邮箱，密码是“那个时刻”。你知道是哪个时刻。'], true);
+      phone('ch3open','宋芷',['你看完了。','我没有妈妈要道歉，没有弟弟要哄，没有歌要唱完，也没有猫要等。','我只有一件事。','陈默没有被抓到。他的车停在千城站，票没用，人不见了。','我要他亲口说出来。说给沈阿姨听，说给念念听，说给第三排的五个人听。','他的邮箱，密码是“那个时刻”。你知道是哪个时刻。'], true, showCh3Card);
     }, html:`
 <div class="pg soc">
   <div class="soc-head dim"><h1>芷</h1><p>宋芷 · 19 岁 · 访客 41（其中 38 次来自同一个人）</p></div>
@@ -1398,6 +1423,7 @@ function go(url, push=true){
   if(!page){ u = 'xundu.com/s?q=' + url.trim(); page = resolve(u); }
   if(push){ hist = hist.slice(0,hi+1); hist.push(u); hi = hist.length-1; }
   cur = {u, page}; srcMode = false;
+  if(S.last !== u){ S.last = u; save(); }
   SND.play(themeFor(u));
   draw();
 }
@@ -1442,6 +1468,10 @@ function draw(){
 }
 const refresh = () => go(cur.u, false);
 
+{ const addr = $('#addr'); let fresh = false;
+  addr.addEventListener('focus', () => { fresh = true; addr.select(); });
+  addr.addEventListener('mouseup', e => { if(fresh){ e.preventDefault(); addr.select(); fresh = false; } });
+  addr.addEventListener('blur', () => { fresh = false; }); }
 $('#addrForm').onsubmit = e => { e.preventDefault(); const v = $('#addr').value; if(canon(v)) go(v); };
 $('#bBack').onclick = () => { if(hi>0){ hi--; go(hist[hi], false); } };
 $('#bFwd').onclick = () => { if(hi<hist.length-1){ hi++; go(hist[hi], false); } };
@@ -1699,6 +1729,15 @@ function showCh1End(){
     '你的手机亮了。未知号码：<b>“No.09，你愿意再帮我们一次吗？”</b>',
   ], buttons:[['第二章 · 第三排', startCh2]]});
 }
+function showCh3Card(){
+  SND.play('mail');
+  overlayStory({tag:'第二章 · 第三排 · 完', title:'第三章 · 三点十二分', hl:3, body:[
+    '何苑的妈妈在第三排放了一盒韭菜盒子。许冬关掉直播睡着了。林可唱完了那首歌。一只叫等等的三花猫，还坐在窗台上。',
+    '四个女孩走了。走之前，她们都回头看了一眼第三排，又看了一眼宋芷。',
+    '宋芷没有走。她说她没有家人可以告别，她只要一句真话。',
+    '陈默还在千城。他的邮箱里，藏着他这十七年没说出口的话。',
+  ], buttons:[['打开陈默的邮箱', ()=>{ ov.hidden = true; go('mail.qiancheng.net'); }]]});
+}
 function startCh2(){
   S.flags.ch2 = true; save(); addNote('ch1end'); renderBookmarks(); renderStage();
   ov.hidden = true; go('sanpai.net');
@@ -1757,15 +1796,18 @@ function reset(){
   S = fresh(); save();
   phoneQ.length = 0; document.querySelectorAll('.toast').forEach(t=>t.remove());
   hist = []; hi = -1; renderNotes(); renderBookmarks(); go('xundu.com'); showIntro();
-  $('#hint').textContent = '看不懂网页的时候，试试全选文字（Ctrl+A），或者点地址栏右边的 </> 查看源代码。';
+  $('#hint').textContent = '看不懂网页的时候，试试全选文字（电脑按 Ctrl+A，手机长按文字），或者点地址栏右边的 </> 查看源代码。';
 }
 $('#bChat').onclick = showIntro;
 $('#bReset').onclick = reset;
 
 /* ---------- 启动 ---------- */
 renderNotes(); renderBookmarks();
-go('xundu.com');
+go(S.seenIntro && S.last ? S.last : 'xundu.com');
 if(!S.seenIntro) showIntro();
+const side = $('#side'), fab = $('#fab');
+fab.onclick = () => { const o = side.classList.toggle('open'); fab.setAttribute('aria-expanded', o); fab.firstChild.textContent = o ? '收起 ' : '笔记 · 提示 '; };
+vp.addEventListener('click', () => { if(side.classList.contains('open')) fab.click(); });
 })();
 </script>
 
