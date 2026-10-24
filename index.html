@@ -349,11 +349,23 @@ button{cursor:pointer}
 .gd-ghost{color:#0f1210}
 .gd-ghost::selection{background:#6b2a24;color:#ffd9d3}
 .wet{color:#4a6a8a;font-style:italic}
-.flicker{animation:fk 3.2s infinite}
-@keyframes fk{0%,92%,100%{opacity:1}93%{opacity:.2}95%{opacity:1}96%{opacity:.4}}
+.flicker{animation:fk 9s ease-in-out infinite}
+@keyframes fk{0%,65%,100%{opacity:1}82%{opacity:.72}}
 
-.glitch{animation:gl .25s steps(2) 3}
-@keyframes gl{0%{filter:none;transform:none}50%{filter:invert(1) hue-rotate(90deg);transform:translateX(3px)}100%{filter:none}}
+.glitch{animation:gl 1.2s ease-in-out}
+@keyframes gl{0%,100%{filter:none}45%{filter:brightness(.86) saturate(.75)}}
+.quiet-presence{margin-top:20px;font-size:11.5px;color:#3d5436;line-height:1.7}
+.quiet-presence small,.quiet-receipt small{display:block;font-size:11px;overflow-wrap:anywhere}
+.glass-traces{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 4s ease}
+.glass-traces.revealed{opacity:.24}
+.glass-traces i{position:absolute;width:38px;height:57px;transform:rotate(-16deg);background:radial-gradient(ellipse 13px 17px at 20px 36px,#385744 95%,transparent),radial-gradient(ellipse 3px 12px at 9px 19px,#385744 95%,transparent),radial-gradient(ellipse 3px 16px at 17px 16px,#385744 95%,transparent),radial-gradient(ellipse 3px 15px at 25px 18px,#385744 95%,transparent),radial-gradient(ellipse 3px 11px at 32px 23px,#385744 95%,transparent),radial-gradient(ellipse 4px 10px at 4px 35px,#385744 95%,transparent);filter:blur(1px)}
+.glass-traces i:nth-child(1){left:4%;top:53%}.glass-traces i:nth-child(2){left:15%;top:7%;transform:rotate(12deg)}
+.glass-traces i:nth-child(3){right:4%;top:26%;transform:rotate(-8deg)}.glass-traces i:nth-child(4){right:3%;top:60%;transform:rotate(19deg)}.glass-traces i:nth-child(5){left:10%;bottom:3%;transform:rotate(5deg)}
+.quiet-receipt{margin-top:22px;padding:10px 12px;border-left:2px solid #a796a5;background:#f4f2f4;color:#746474;font-size:12px;line-height:1.8}
+.quiet-reply .body{color:#665967}.quiet-reply .who{color:#766a7d}
+@media (max-width:900px){.quiet-receipt,.quiet-reply{margin-bottom:56px}}
+.quiet-emerge{animation:quiet-emerge 2.5s ease-out}
+@keyframes quiet-emerge{from{opacity:.4}to{opacity:1}}
 </style>
 
 <div class="app">
@@ -528,7 +540,7 @@ const SND = (() => {
   function sfx(name){
     if(!ctx || !enabled) return; const t = ctx.currentTime+.02;
     if(name==='buzz'){ [0,.22].forEach(d=>{ note(master,140,t+d,.16,'square',.06,.005); }); }
-    if(name==='glitch'){ burst(master,t,1600,.18,.12); note(master,60,t,.2,'sawtooth',.05); }
+    if(name==='glitch'){ burst(master,t,1600,.18,.035); note(master,60,t,.2,'sawtooth',.015); }
     if(name==='unlock'){ piano(master,mtof(72),t,.12); piano(master,mtof(79),t+.15,.12); }
     if(name==='door'){ note(master,40,t,1.8,'sine',.4,.02); burst(master,t,300,1.4,.15,'lowpass'); }
     if(name==='tick'){ note(master,1320,t,.08,'sine',.05); note(master,1760,t+.06,.1,'sine',.04); }
@@ -759,6 +771,7 @@ PAGES['jingyuan-miaopu.com'] = () => {
     <p class="${seen?'flicker':''}">${seen ? '种下她们，永不离开。' : '种下思念，永不凋零。'}</p>
     <div class="flower">${FLOWER_SVG}</div>
     <button class="jy-btn" data-href="jingyuan-miaopu.com/member">会员入园</button>
+    ${seen&&!S.flags.ch2&&!S.flags.end ? '<div class="glass-traces" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div class="quiet-presence" data-atmosphere="glass" aria-live="polite"><span>在线访客：1</span><small>访客统计 · 连接正常</small></div>' : ''}
   </div>
   <div class="jy-sec">
     <h2>我们相信，每一份思念都应该有根</h2>
@@ -1008,6 +1021,7 @@ PAGES['bbs.qiancheng.net/t/4471'] = () => {
       二十号天亮前，她就要被移栽了。<br>不要走正门，走后台。口令是那个孩子的名字。<br>我们会给你开门的。
       <div class="meta">2026-10-19 02:47 · 来自 千城大道 404 号</div></div></div>
     <div class="floor"><div class="who"><b>千城老司机</b>9 楼</div><div class="body">楼上什么情况？？这个号注册两年了，就发了这一条。还有这 IP 地址……<br>相关帖子：<a data-href="bbs.qiancheng.net/t/5203">【灵异】千城大道 404 号，半夜有女孩在唱歌</a><div class="meta">2026-10-19 07:15</div></div></div>
+    <div data-atmosphere="forum" aria-live="polite" hidden></div>
   </div>
 </div>`, on(){ addNote('no6'); } };
 };
@@ -1388,7 +1402,7 @@ PAGES['mail.qiancheng.net/drafts'] = () => S.flags.mailIn ? mailShell('草稿箱
 PAGES['mail.qiancheng.net/drafts/1'] = () => {
   if(!S.flags.mailIn) return PAGES['mail.qiancheng.net']();
   S.flags.draft = true; save(); addNote('draft');
-  return mailShell('沈姐', `<div class="mread"><h2>沈姐</h2><div class="h">草稿 · 未发送 · 最后修改 2026-10-21 03:01</div>${DRAFT}</div>`);
+  return mailShell('沈姐', `<div class="mread"><h2>沈姐</h2><div class="h">草稿 · 未发送 · 最后修改 2026-10-21 03:01</div>${DRAFT}${S.flags.ch3&&!S.flags.end ? '<div class="quiet-receipt" data-atmosphere="receipt" aria-live="polite"><span>发送记录：0 封 · 已读回执：0</span><small>草稿尚未发出。</small></div>' : ''}</div>`);
 };
 PAGES['mail.qiancheng.net/compose'] = () => {
   if(!S.flags.mailIn) return PAGES['mail.qiancheng.net']();
@@ -1408,6 +1422,35 @@ PAGES['mail.qiancheng.net/compose'] = () => {
 /* ---------- 浏览器 ---------- */
 let hist = [], hi = -1, srcMode = false, cur = null;
 const vp = $('#vp');
+// 氛围只在当前访问中出现，不写入存档，也不参与线索和答案判断。
+const atmosphereSeen = new Set();
+let atmosphereTimer;
+function clearAtmosphere(){ clearTimeout(atmosphereTimer); }
+function renderAtmosphere(){
+  clearAtmosphere();
+  if(srcMode || S.flags.end || !ov.hidden) return;
+  const {page} = cur;
+  const el = vp.querySelector('[data-atmosphere]');
+  if(!el) return;
+  const kind = el.dataset.atmosphere;
+  if(kind==='forum' && (!has('deleted') || S.flags.ch2)) return;
+  const reveal = () => {
+    if(cur.page!==page || srcMode || S.flags.end || !ov.hidden) return;
+    if(kind==='glass'){
+      vp.querySelector('.glass-traces').classList.add('revealed');
+      el.innerHTML = '<span>在线访客：6</span><small>其余五条连接，没有离开记录。</small>';
+    } else if(kind==='forum'){
+      el.innerHTML = '<div class="floor quiet-reply"><div class="who"><b>账号已注销</b>当前在线</div><div class="body">你把删掉的字找回来了。<br>我们一直在这一页，没能退出。<div class="meta">发送时间：--:-- · 此账号已停用</div></div></div>';
+      el.hidden = false;
+    } else if(kind==='receipt'){
+      el.innerHTML = '<span>发送记录：0 封 · 已读回执：5</span><small>回执位置：第三排 · 03:12（服务器时间异常）</small>';
+    }
+    if(!atmosphereSeen.has(kind)) el.classList.add('quiet-emerge');
+    atmosphereSeen.add(kind);
+  };
+  if(atmosphereSeen.has(kind)) reveal();
+  else atmosphereTimer = setTimeout(reveal, 7000);
+}
 const canon = u => String(u||'').trim().replace(/^view-source:/i,'').replace(/^https?:\/\//i,'').replace(/^www\./i,'').replace(/\/+$/,'');
 function safeDecode(s){ try{ return decodeURIComponent(s); }catch(e){ return s; } }
 
@@ -1466,6 +1509,7 @@ function draw(){
   vp.scrollTop = 0;
   $('#bBack').disabled = hi<=0; $('#bFwd').disabled = hi>=hist.length-1;
   $('#bSrc').style.color = srcMode ? 'var(--moss)' : '';
+  renderAtmosphere();
 }
 const refresh = () => go(cur.u, false);
 
@@ -1699,6 +1743,7 @@ document.addEventListener('pointerdown', () => SND.init(), {once:false, passive:
 /* ---------- 开场 ---------- */
 const ov = $('#overlay');
 function showIntro(){
+  clearAtmosphere();
   const msgs = [
     ['sys','10 月 19 日 23:47'],
     ['阿桃','你在吗'],
@@ -1732,7 +1777,7 @@ function showIntro(){
   if(replay) chat.skip();
   ph.addEventListener('click', e => { if(!e.target.closest('#goStart')) chat.skip(); });
   $('#goStart').onclick = () => {
-    if(replay){ ov.hidden = true; return; }
+    if(replay){ ov.hidden = true; renderAtmosphere(); return; }
     ov.hidden = true; S.seenIntro = true; save(); addNote('start'); renderBookmarks();
     $('#addr').focus();
   };
@@ -1740,6 +1785,7 @@ function showIntro(){
 
 /* ---------- 章节与结局 ---------- */
 function overlayStory(o){
+  clearAtmosphere();
   clearPhones();
   ov.innerHTML = `<div class="ending" role="dialog" aria-label="${o.title}">
     <div class="tag ${o.cls||''}">${o.tag}</div>
@@ -1838,6 +1884,7 @@ function showEnding(kind){
 }
 function reset(){
   if(!confirm('重新开始会清空当前调查进度和全部笔记。确定从头开始吗？')) return;
+  clearAtmosphere(); atmosphereSeen.clear();
   clearPhones();
   S = fresh(); save();
   hist = []; hi = -1; renderNotes(); renderBookmarks(); go('xundu.com'); showIntro();
