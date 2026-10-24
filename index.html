@@ -218,6 +218,10 @@ button{cursor:pointer}
 .floor .body{padding:12px 16px;min-width:0}
 .floor .meta{font-size:11.5px;color:#999;margin-top:8px}
 .floor .del{color:#aaa;font-style:italic}
+.bbs-update{background:#f6faf7;border:1px solid #c5d5ca;padding:16px;color:#354b3e}
+.bbs-update h2{font-size:16px;margin:0 0 4px}.bbs-update time{font-size:11.5px;color:#6d7d73}
+.bbs-update p{margin:10px 0;line-height:1.9}.bbs-update blockquote{margin:14px 0 0;padding:2px 0 2px 14px;border-left:2px solid #91aa98}
+.bbs-archive{padding:12px 16px;background:#e6ebf2;color:#667489;font-size:12px;border:1px solid #cdd5e1}
 
 /* 千城新闻 */
 .news{background:#fff;color:#1d1d1d}
@@ -711,12 +715,13 @@ const R_MISSING = {t:'千城市公安局 · 未结失踪人口公告（2014—20
 
 function searchResults(q){
   const k = norm(q), R = [];
+  const bbs = S.flags.ch2 ? {...R_BBS,t:'【已找到】周晴回来了，谢谢还在寻找她的人 — 千城论坛',d:S.flags.end==='true' ? '周晴已经获救。楼主留下了报平安和后来的近况，原寻人帖保留。' : '楼主更新了医院的消息，也记下了她在温室里等天亮的经历。原寻人帖保留。'} : R_BBS;
   const hit = (...w) => w.some(x=>k.includes(x));
-  if(hit('静园','苗圃','广告','jingyuan','花园','秘密花园','领养')){ R.push(R_AD, R_BBS); }
+  if(hit('静园','苗圃','广告','jingyuan','花园','秘密花园','领养')){ R.push(R_AD, bbs); }
   if(hit('小满','林小满','xiaoman','阿桃')) R.push(R_BLOG);
-  if(hit('周晴','晴天不下雨')) R.push(R_BBS);
+  if(hit('周晴','晴天不下雨')) R.push(bbs);
   if(hit('沈静','沈念','念念','女童','走失','植物园','沈阿姨','园长')) R.push(R_NEWS);
-  if(hit('失踪','失联')) R.push(R_BBS, R_NEWS);
+  if(hit('失踪','失联')) R.push(bbs, R_NEWS);
   if(hit('陈默','陈叔叔','记者','园丁','千城晚报','沉默')) R.push(R_CM, R_CM2);
   if(hit('网盘','pan')) R.push({t:'千城网盘 — 安全存储你的回忆',u:'pan.qiancheng.net',d:'分享链接需要提取码。'});
   if(hit('槐树巷')) R.push({t:'槐树巷 — 千城地名',u:'xundu.com/s?q=槐树巷',d:'千城老城区小巷，多为老式平房，2025 年列入拆迁计划。'});
@@ -726,6 +731,7 @@ function searchResults(q){
   if(hit('何苑','许安安','苏禾','唐语','宋芷','失踪人口','寻人','no.0','五个')) R.push(R_MISSING);
   if(hit('失踪','失联')) R.push(R_MISSING);
   if(S.flags.ch2){
+    if(hit('报平安','获救','近况','温室')) R.push(bbs);
     if(hit('何苑','苑苑')) R.push({t:'苑苑的小窝 — 千城空间',u:'qzone.qiancheng.net/heyuan',d:'最后更新：2014-05-17。“明天我偷偷去城郊领一盆花……”'});
     if(hit('何记','早点','韭菜盒子','梧桐路','何姐','早餐')) R.push({t:'何记早点 · 梧桐路老店 — 千城美食',u:'hejizaodian.qiancheng.net',d:'招牌韭菜盒子，开了二十年。每年 5 月 20 日休息一天。'});
     if(hit('许安安','安安')) R.push({t:'安安不加班 的微博 — 千城微博',u:'weibo.qiancheng.net/anan',d:'千城一院护士。最后一条：“这里好漂亮……就是有点冷。”'});
@@ -1000,11 +1006,33 @@ PAGES['pan.qiancheng.net/s/xiaoman/photo'] = () => {
 
 PAGES['bbs.qiancheng.net/t/4471'] = () => {
   addNote('bbs');
-  return { title:'【求助】我女朋友去了城郊一个苗圃后就联系不上了 — 千城论坛', html:`
+  const rescued = !!S.flags.ch2;
+  const title = rescued ? '【已找到】周晴回来了，谢谢还在寻找她的人' : '【求助】我女朋友去了城郊一个苗圃后就联系不上了';
+  return { title:title+' — 千城论坛', html:`
 <div class="pg bbs">
   <div class="bbs-top">千城论坛 <small>本地生活 › 求助</small></div>
   <div class="bbs-thread">
-    <div class="bbs-title">【求助】我女朋友去了城郊一个苗圃后就联系不上了</div>
+    <div class="bbs-title">${title}</div>
+    ${rescued ? `
+    ${S.flags.end==='true' ? `<section class="bbs-update" data-story="later" aria-label="周晴后来的近况">
+      <h2>后来的一次更新</h2><time>2026-10-28 09:10 · 晴天不下雨</time>
+      <p>昨天陪她在医院楼下坐了一会儿。她选了能看见出口的位置，喝了半杯热豆浆。</p>
+      <p>回来时路过花店，她没有低头。她说，以后或许还想看看花。我们不着急。</p>
+      <p>她让我转告那个一直没留下名字的人：谢谢你。往后不用再守着这条帖子等消息了，也好好睡一觉吧。</p>
+    </section>` : ''}
+    <section class="bbs-update" data-story="rescued" aria-label="周晴获救后的报平安">
+      <h2>楼主更新：她回来了</h2><time>2026-10-20 06:48 · 晴天不下雨</time>
+      <p>找到她了。凌晨四点，警察把她从温室 A 带了出来。我现在在医院，打字的手还在抖。快一年了，这条帖子终于可以改标题了。</p>
+      <p>谢谢所有还在问的人。请别去苗圃围观，也别再转发她的照片。她现在只想安静地睡一觉。</p>
+      <p>她醒了一小会儿，握着我的手，让我替她把几句话留下来：</p>
+      <blockquote>
+        <p>“别把她们写成害人的东西。门一直从外面锁着，钥匙在那个男人手里。</p>
+        <p>“停电的时候，我听见玻璃被轻轻敲了五下。手电筒没电了，可我还是看见了手印，一枚叠着一枚，印在里面。</p>
+        <p>“我睡着以后，身上总会多一条花房里的旧毯子。她们的手很凉，毯子也凉，但她们一直陪我等天亮。</p>
+        <p>“请把她们的名字也留下来。别只写‘五名失踪者’。”</p>
+      </blockquote>
+    </section>
+    <div class="bbs-archive">以下是原寻人帖，保留当时的留言。</div>` : ''}
     <div class="floor"><div class="who"><b>晴天不下雨</b>楼主</div><div class="body">
       她叫周晴，24 岁。11 月 3 日说收到一个广告，可以免费领养一盆花，就去了城郊一个叫“静园”的苗圃。之后电话就打不通了。报了警，警察去看过，说那里只有一个种花的阿姨和一个帮工，没发现异常。有谁知道那个苗圃的情况吗？
       <div class="meta">2025-11-09 22:14</div></div></div>
@@ -1624,7 +1652,7 @@ function showPhone(){
 function renderBookmarks(){
   const list = [['寻度','xundu.com']];
   if(has('start')) list.push(['小满留下的链接','jingyuan-miaopu.com'],['小满的博客','blog.xiaoman.me']);
-  if(S.flags.ch2) list.push(['第三排','sanpai.net']);
+  if(S.flags.ch2) list.push(['第三排','sanpai.net'],['周晴的近况','bbs.qiancheng.net/t/4471']);
   if(S.flags.ch3) list.push(['陈默的邮箱','mail.qiancheng.net']);
   $('#bookmarks').innerHTML = list.map(([n,u])=>`<button class="bm" data-href="${u}">${n}</button>`).join('');
 }
