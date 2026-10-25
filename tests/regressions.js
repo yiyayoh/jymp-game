@@ -137,6 +137,24 @@ const KEY = 'jingyuan-save-v2';
     await liveReset.close();
     console.log('PASS: 直播间回复期间重开不会把旧心愿写入新存档');
 
+    const liveEnd = await game('live.qiancheng.net/xudong',{ch2:true,ph_bye_xu:true});
+    await submit(liveEnd,'#dm-in','冬瓜，去睡觉');
+    await liveEnd.waitForFunction(()=>document.querySelector('.live-top span').textContent.includes('已下播'),null,{timeout:15000});
+    assert.equal((await state(liveEnd)).flags.g_xu,true);
+    assert.match(await liveEnd.locator('.live-screen').innerText(),/主播已下播/);
+    assert.equal(await liveEnd.locator('form[data-form="danmu"]').isHidden(),true,'下播后不再显示发送表单');
+    assert.match(await liveEnd.locator('#chat').innerText(),/只有我姐这么叫我/,'下播时保留完整的告别弹幕');
+    assert.match(await liveEnd.locator('#chat').innerText(),/大家晚安。我要睡觉了/);
+    await liveEnd.click('#bSrc');
+    assert.equal(await liveEnd.locator('.srcview').count(),1);
+    await liveEnd.click('#bSrc');
+    assert.match(await liveEnd.locator('.live-top').innerText(),/已下播/,'看完源代码返回正文仍保持下播');
+    assert.equal(await liveEnd.locator('form[data-form="danmu"]').isHidden(),true);
+    await liveEnd.reload({waitUntil:'domcontentloaded'});
+    assert.match(await liveEnd.locator('.live-top').innerText(),/已下播/);
+    await liveEnd.close();
+    console.log('PASS: 直播告别后立即同步下播状态并隐藏输入，完整对话保留，刷新后状态一致');
+
     const select = (p,selector) => p.evaluate(s=>window.getSelection().selectAllChildren(document.querySelector(s)),selector);
     const names = await game('news.qiancheng.net/missing',{gardener:true,ph_gd1:true},['start','blog']);
     await select(names,'#vp'); await names.waitForTimeout(100);

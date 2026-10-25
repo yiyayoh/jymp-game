@@ -1284,7 +1284,7 @@ PAGES['weibo.qiancheng.net/anan'] = () => { addNote('xu1'); return { title:'安�
   </div>
 </div>`}; };
 
-PAGES['live.qiancheng.net/xudong'] = () => { addNote('xu2'); const d = S.flags.g_xu; return { title:'冬子不熬夜 的直播间', on(){ if(!d) liveTicker(); }, html:`
+PAGES['live.qiancheng.net/xudong'] = () => { addNote('xu2'); const d = S.flags.g_xu; return { title:'冬子不熬夜 的直播间', on(){ if(S.flags.g_xu) finishLiveView(); else liveTicker(); }, html:`
 <div class="pg live">
   <div class="live-top"><div class="live-av"></div><div><b>冬子不熬夜</b><br><span style="font-size:12px;color:#888">${d?'已下播 · 最后一条动态：“我去看我姐了。”':'直播中 · 03:12 · 在线 1'}</span></div></div>
   <div class="live-grid">
@@ -1310,6 +1310,17 @@ function liveTicker(){
     const el = document.createElement('div'); el.className = 'dm' + (n==='冬子'?' host':''); el.innerHTML = `<b>${n}</b>：${m}`;
     chat.insertBefore(el, form);
   }, 4200);
+}
+function finishLiveView(){
+  const page = vp.querySelector('.live');
+  if(!page) return;
+  page.querySelector('.live-top span').textContent = '已下播 · 最后一条动态：“我去看我姐了。”';
+  page.querySelector('.live-screen').innerHTML = '<div style="font-size:15px;color:#ccc">主播已下播</div><div>“姐，我睡了。晚安。”</div>';
+  const form = page.querySelector('form[data-form="danmu"]');
+  if(form){
+    if(!page.querySelector('.dm.me')) form.insertAdjacentHTML('beforebegin', `<div class="dm me"><b>你</b>：${esc(S.flags.xuMsg||'冬瓜')}</div><div class="dm host"><b>冬子</b>：……</div><div class="dm host"><b>冬子</b>：今天下播了。大家晚安。</div>`);
+    form.hidden = true;
+  }
 }
 
 /* ---- 苏禾 ---- */
@@ -1789,7 +1800,7 @@ vp.addEventListener('submit', e => {
     S.flags.xuMsg = m; save();
     clearInterval(liveTicker.t); form.querySelector('button').disabled = true;
     const seqL = [['host','冬子','……'],['host','冬子','谁叫的冬瓜？'],['','老粉','？？？'],['host','冬子','只有我姐这么叫我。别人叫我会翻脸的。'],['host','冬子','（他把脸埋进手里，很久没有抬头）'],['host','冬子','……我知道了。'],['host','冬子','今天下播了。我去千城大道 404 号。给她带一盒饺子，包得像包子的那种。'],['host','冬子','大家晚安。我要睡觉了。']];
-    seqL.forEach((x,i)=>setTimeout(()=>{ if(S!==gameState) return; add(x[0],x[1],x[2]); if(i===seqL.length-1) ghostDone('xu','许安安',['他关掉直播了。','他睡着了。十年了，第一次在天黑的时候睡着。','冬瓜，姐不怪你。那天不怪你，哪天都不怪你。','谢谢你帮我叫他。我可以回家了。']); }, 1300*(i+1)));
+    seqL.forEach((x,i)=>setTimeout(()=>{ if(S!==gameState) return; add(x[0],x[1],x[2]); if(i===seqL.length-1){ ghostDone('xu','许安安',['他关掉直播了。','他睡着了。十年了，第一次在天黑的时候睡着。','冬瓜，姐不怪你。那天不怪你，哪天都不怪你。','谢谢你帮我叫他。我可以回家了。']); finishLiveView(); } }, 1300*(i+1)));
     return;
   }
   if(kind==='suhe'){
