@@ -354,6 +354,17 @@ button{cursor:pointer}
 .toast.unknown{background:#170f0f;color:#e8d6d3;border:1px solid #4a2420}
 .toast.unknown header small,.toast.unknown .x{color:#9a6a64}
 .toast.unknown .msg{background:#2a1a19;color:#e8d6d3}
+.history{width:100%;max-width:620px;max-height:100%;overflow:auto;overscroll-behavior:contain;background:var(--shell);border:1px solid var(--shell-line);border-radius:14px;padding:18px}
+.history>header{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;background:var(--shell);padding:0 0 12px;border-bottom:1px solid var(--shell-line);z-index:1}
+.history h2{font-family:var(--f-display);font-size:18px;margin:0}.history>header .btn{min-height:40px;flex-shrink:0}
+.history-tip,.history-empty{color:var(--ink-dim);font-size:12.5px;line-height:1.8}.history-empty{padding:16px 0}
+.history details{border:1px solid var(--shell-line);border-radius:8px;margin-top:10px;overflow:hidden}
+.history summary{display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;padding:12px;min-height:54px}
+.history summary::-webkit-details-marker{display:none}.history summary::before{content:'▸';color:var(--moss)}.history details[open] summary::before{content:'▾'}
+.history-meta{flex:1;min-width:0}.history-meta b{font-size:13px}.history-preview{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-dim);font-size:11.5px;margin-top:3px}
+.history summary small{color:var(--ink-dim);font-size:11px;flex-shrink:0}.history-chat{background:#e9ece7;color:#222;padding:12px}
+.history .msg{opacity:1;transform:none;animation:none;max-width:96%;overflow-wrap:anywhere;white-space:pre-wrap}.history .msg:last-child{margin-bottom:0}
+.history-chat.unknown{background:#170f0f;color:#e8d6d3}.history-chat.unknown .msg{background:#2a1a19;color:#e8d6d3}
 .gd-ghost{color:#0f1210}
 .gd-ghost::selection{background:#6b2a24;color:#ffd9d3}
 .wet{color:#4a6a8a;font-style:italic}
@@ -402,6 +413,7 @@ button{cursor:pointer}
       <div class="btnrow" style="margin-top:14px">
         <button class="btn" id="bHint">给我一点提示</button>
         <button class="btn" id="bChat">重看阿桃的消息</button>
+        <button class="btn" id="bHistory">消息记录</button>
         <button class="btn" id="bMusic" aria-pressed="true">♪ 音乐：开</button>
       </div>
       <p class="hintbox" id="hint">看不懂网页的时候，试试全选文字（电脑按 Ctrl+A，手机长按文字），或者点地址栏右边的 &lt;/&gt; 查看源代码。</p>
@@ -423,10 +435,12 @@ const digits = s => norm(s).replace(/\D/g,'');
 
 /* ---------- 存档 ---------- */
 const KEY = 'jingyuan-save-v2';
-const fresh = () => ({notes:[], flags:{}, seenIntro:false, doorFails:0, pendingPhones:[]});
+const fresh = () => ({notes:[], flags:{}, seenIntro:false, doorFails:0, pendingPhones:[], phoneHistory:[]});
 let S = fresh();
 try{ const r = localStorage.getItem(KEY); if(r) S = Object.assign(fresh(), JSON.parse(r)); }catch(e){}
 if(!Array.isArray(S.pendingPhones)) S.pendingPhones = [];
+if(!Array.isArray(S.phoneHistory)) S.phoneHistory = [];
+S.phoneHistory = S.phoneHistory.filter(p=>p && typeof p.id==='string' && typeof p.who==='string' && Array.isArray(p.msgs) && p.msgs.every(m=>typeof m==='string'));
 const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
 // 兼容旧版过早记为完成的宋芷进度；保留章节、线索及其余存档。
 if(S.flags.ch3 && !S.flags.end && S.flags.g_song){ S.flags.g_song = false; save(); }
@@ -1664,6 +1678,11 @@ function phone(id, who, msgs, unknown=false){
   phoneQ.push({id, who, msgs, unknown}); savePhones();
   if(phoneQ.length===1) schedulePhone(3500 + Math.random()*2500);
 }
+function rememberPhone(p){
+  if(S.phoneHistory.some(old=>old.id===p.id)) return;
+  S.phoneHistory.push({id:p.id,who:p.who,msgs:p.msgs.slice(),unknown:!!p.unknown});
+  save();
+}
 /* 像真人一样一条一条打字：先显示“正在输入”，按字数停一会儿再出消息。点一下可快进。 */
 function typeChat(box, before, items, opts={}){
   let i = 0, timer = null, done = false;
@@ -1703,6 +1722,7 @@ function showPhone(){
   const idle = p.unknown ? '号码不存在' : '刚刚';
   el.innerHTML = `<header><span>${esc(p.who)}<small>${idle}</small></span><button class="x" aria-label="关闭">×</button></header><div class="tip">点一下对话框可以快进</div>`;
   document.body.appendChild(el);
+  rememberPhone(p);
   SND.sfx('buzz');
   if(p.unknown) glitch();
   const status = el.querySelector('header small'), tip = el.querySelector('.tip');
@@ -1843,6 +1863,33 @@ document.addEventListener('pointerdown', () => SND.init(), {once:false, passive:
 
 /* ---------- 开场 ---------- */
 const ov = $('#overlay');
+function showHistory(){
+  if(!ov.hidden) return;
+  clearAtmosphere();
+  const records = S.phoneHistory.slice().reverse();
+  ov.innerHTML = `<div class="history" role="dialog" aria-modal="true" aria-labelledby="historyTitle">
+    <header><h2 id="historyTitle">消息记录</h2><button class="btn" id="historyClose">回到调查</button></header>
+    <p class="history-tip">这里只保留已经送达的后续消息。点开一组，可以重新读到原话。</p>
+    ${records.length ? records.map((p,i)=>`<details data-phone-record ${i===0?'open':''}>
+      <summary><span class="history-meta"><b>${esc(p.who)}</b><span class="history-preview">${esc(p.msgs[0]||'')}</span></span><small>${p.msgs.length} 条</small></summary>
+      <div class="history-chat${p.unknown?' unknown':''}">${p.msgs.map(m=>`<div class="msg">${esc(m)}</div>`).join('')}</div>
+    </details>`).join('') : '<p class="history-empty">目前还没有可回看的后续消息。之后收到的消息会自动保留。<br>开场对话仍可用“重看阿桃的消息”回看。</p>'}
+  </div>`;
+  ov.hidden = false; ov.scrollTop = 0;
+  const dialog = ov.querySelector('.history');
+  const close = () => { ov.hidden = true; ov.innerHTML = ''; renderAtmosphere(); $('#bHistory').focus({preventScroll:true}); };
+  $('#historyClose').onclick = close;
+  dialog.addEventListener('keydown', e => {
+    if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); close(); return; }
+    if(e.key==='Tab'){
+      const controls = Array.from(dialog.querySelectorAll('button,summary')).filter(el=>el.getClientRects().length);
+      const first = controls[0], last = controls[controls.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  });
+  $('#historyClose').focus({preventScroll:true});
+}
 function showIntro(){
   clearAtmosphere();
   const msgs = [
@@ -1984,7 +2031,7 @@ function showEnding(kind){
   overlayStory({tag:e.tag, cls:e.cls, title:e.title, body:e.body, hint:e.hint, buttons:btns});
 }
 function reset(){
-  if(!confirm('重新开始会清空当前调查进度和全部笔记。确定从头开始吗？')) return;
+  if(!confirm('重新开始会清空当前调查进度、笔记和消息记录。确定从头开始吗？')) return;
   clearAtmosphere(); atmosphereSeen.clear();
   clearPhones();
   S = fresh(); save();
@@ -1992,6 +2039,7 @@ function reset(){
   $('#hint').textContent = '看不懂网页的时候，试试全选文字（电脑按 Ctrl+A，手机长按文字），或者点地址栏右边的 </> 查看源代码。';
 }
 $('#bChat').onclick = showIntro;
+$('#bHistory').onclick = showHistory;
 $('#bReset').onclick = reset;
 
 /* ---------- 启动 ---------- */

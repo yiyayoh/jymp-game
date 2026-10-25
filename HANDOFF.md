@@ -33,6 +33,7 @@ tests/playthrough.js  端到端通关测试（Playwright）
 tests/regressions.js  容错、刷新恢复、重开保护、结局与旧存档回归检查
 tests/atmosphere.js   灵异效果的触发、页面切换、重开隔离和手机排版检查
 tests/notes-navigation.js  笔记回看、源代码定位、旧存档和手机抽屉检查
+tests/chat-history.js  消息记录送达范围、刷新去重、回看无剧情副作用及手机排版
 ```
 
 刻意保持单文件：用户会直接把 `index.html` 下载下来双击玩，也会发给朋友。**不要引入构建工具、框架或外部音频/图片文件**。图片全部用 CSS 渐变或内联 SVG 画，音乐全部用 Web Audio 实时合成。
@@ -69,7 +70,8 @@ S = {
   seenIntro: false, // 是否看过开场
   doorFails: 0,     // 温室门禁错误次数（3 次触发坏结局）
   last: 'xundu.com', // 上次停留的页面，刷新后回到这里
-  pendingPhones: [] // 未读手机消息：{id, who, msgs, unknown}，不保存函数
+  pendingPhones: [], // 未读手机消息：{id, who, msgs, unknown}，不保存函数
+  phoneHistory: []  // 已实际送达的后续消息原文：同上；按首次送达顺序记录
 }
 ```
 
@@ -78,6 +80,8 @@ S = {
 **如果改了存档结构**（比如重命名 flag），要么写兼容代码，要么把 `KEY` 改成 `v3`，否则老玩家的存档会出问题。
 
 2026-10-23 修复沿用 v2：`pendingPhones` 缺失时默认空数组，旧的 `ph_*` 保留为已读；不删除旧章节或笔记。旧版在进入第三章就设为真的 `g_song`，仅在尚未结局时修正为未完成。新增的 `sentDraft` / `sentLetter` 只记录本次发送附件；旧存档没有这两项时按已有信件回退显示。旧版更新前已丢失、未保存内容的消息无法从空队列还原。
+
+消息记录也沿用 v2：只新增可缺省的 `phoneHistory` 数组，加载旧存档时补空数组，原有 flag、笔记和未读队列不变。旧版本已经关闭、没有保存原文的消息无法补回，不根据旧 `ph_*` 标记编造记录；之后真正送达的消息会自动保存。重新开始会连同记录清空。
 
 ### 3.2 页面系统 `PAGES`
 
@@ -129,6 +133,7 @@ phone(id, 发送人, ['消息1','消息2'], 是否灵异号码)
 - `typeChat()` 负责逐条“打字”：先显示正在输入，等待时间约为 1 秒 + 每字 70 毫秒（灵异号码每字 95 毫秒），上限 4.6 秒。点对话框会快进。开场的阿桃聊天也用它。
 - 灵异号码（第 4 个参数为 `true`）用深红配色，会伴随页面闪烁和音效。
 - 每条消息不超过 40 字；较长的消息在句子边界拆成多条。
+- “消息记录”由 `showHistory()` 展示；`rememberPhone()` 只在 `showPhone()` 真正把消息放到屏幕上时保存，单纯排队、被章节过场清走的未送达消息不会归档。按消息 id 去重，刷新重现未读消息不会重复记录。回看只显示转义后的原话，不调用 `phone()`、`PHONE_AFTER` 或 `clearPhones()`，不改已读标记和剧情进度，也不重播灵异闪动或音效。开场仍用原来的“重看阿桃的消息”入口。
 
 ### 3.6 声音 `SND`
 
@@ -258,6 +263,7 @@ node tests/playthrough.js
 node tests/regressions.js
 node tests/atmosphere.js
 node tests/notes-navigation.js
+node tests/chat-history.js
 ```
 
 脚本会从开场一路玩到真结局，中途故意测一次普通结局，最后在手机宽度下检查几个页面有没有横向溢出。预期输出类似：

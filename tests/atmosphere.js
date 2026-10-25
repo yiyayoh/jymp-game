@@ -12,7 +12,9 @@ const KEY = 'jingyuan-save-v2';
   const game = async (last, flags = {}, notes = ['start'], width = 390) => {
     const p = await browser.newPage({viewport:{width,height:844}});
     p.on('pageerror', e => errors.push(e.message));
-    await p.clock.install();
+    // 加载前暂停虚拟时钟，避免并行运行的真实耗时越过 7 秒边界。
+    await p.clock.install({time:new Date('2026-10-19T23:46:00Z')});
+    await p.clock.pauseAt(new Date('2026-10-19T23:47:00Z'));
     await p.addInitScript(({key,save}) => localStorage.setItem(key,JSON.stringify(save)), {
       key:KEY, save:{notes,flags:{ph_jy1:true,...flags},seenIntro:true,doorFails:0,last}
     });
