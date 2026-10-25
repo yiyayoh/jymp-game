@@ -32,6 +32,7 @@ HANDOFF.md            本文档
 tests/playthrough.js  端到端通关测试（Playwright）
 tests/regressions.js  容错、刷新恢复、重开保护、结局与旧存档回归检查
 tests/atmosphere.js   灵异效果的触发、页面切换、重开隔离和手机排版检查
+tests/notes-navigation.js  笔记回看、源代码定位、旧存档和手机抽屉检查
 ```
 
 刻意保持单文件：用户会直接把 `index.html` 下载下来双击玩，也会发给朋友。**不要引入构建工具、框架或外部音频/图片文件**。图片全部用 CSS 渐变或内联 SVG 画，音乐全部用 Web Audio 实时合成。
@@ -109,6 +110,7 @@ PAGES['blog.xiaoman.me'] = () => {
 ### 3.4 线索与提示
 
 - `NOTES`：`id → 文本`。`addNote(id)` 只会添加一次，并刷新侧栏。
+  - `NOTE_SOURCES` 给有相关网页的笔记提供“回看”按钮，结构为 `[网址, 按钮说明, 可选的源代码注释关键词]`，只随已获得的笔记显示；聊天原文、鬼魂笔记和章节摘要不伪造网页出处。回看源代码直接切换显示模式并定位已有注释，不重新触发“发现线索”；普通网页仍走原有导航、登录与解锁判断。手机回看后收起笔记抽屉，焦点移到网页；源代码底部留白防止按钮遮字。新增网页线索时记得同步考虑这里的映射。它不改变存档结构、答案或调查目标。
   - id 以 `~` 开头的是“这一条不是你写的”鬼魂笔记，显示为红色斜体。
   - `renderNotes()` 里的 `CH2` / `CH3` 数组决定笔记归到第几章。**新增第二、三章的线索 id，必须加进这两个数组**，否则会被归到第一章。
 - `SECRETS`：隐藏线索计数（目前是 `member`、`names`、`photo`），显示在侧栏“隐藏线索 x/3”。
@@ -253,6 +255,7 @@ npm i -D playwright && npx playwright install chromium   # 环境里已有就跳
 node tests/playthrough.js
 node tests/regressions.js
 node tests/atmosphere.js
+node tests/notes-navigation.js
 ```
 
 脚本会从开场一路玩到真结局，中途故意测一次普通结局，最后在手机宽度下检查几个页面有没有横向溢出。预期输出类似：

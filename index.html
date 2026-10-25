@@ -69,6 +69,10 @@ button{cursor:pointer}
 .notes li{font-size:12.5px;line-height:1.55;padding-left:12px;border-left:2px solid var(--moss);color:var(--ink)}
 .notes li.secret{border-left-color:var(--iris)}
 .notes li.new{animation:flash 1.2s}
+.note-source{display:block;max-width:100%;margin-top:6px;padding:5px 9px;min-height:32px;border:1px solid #45523e;border-radius:5px;background:#20261f;color:#bdd0ab;text-align:left;font-size:11.5px;line-height:1.5;overflow-wrap:anywhere}
+.note-source:hover{background:#2b3428;border-color:var(--moss)}
+@media (max-width:900px){.note-source{min-height:40px}.srcview{padding-bottom:76px!important}}
+.srcview .note-target{outline:1px solid var(--iris);outline-offset:2px}
 @keyframes flash{from{background:#7d9b6a44}to{background:transparent}}
 .notes .empty{border:none;color:var(--ink-dim);padding:0}
 .hintbox{font-size:12.5px;line-height:1.6;color:var(--ink-dim);min-height:2em}
@@ -383,7 +387,7 @@ button{cursor:pointer}
       <button class="tb" id="bSrc" title="查看网页源代码">&lt;/&gt;</button>
     </div>
     <div class="bookmarks" id="bookmarks"></div>
-    <div class="viewport" id="vp"></div>
+    <div class="viewport" id="vp" role="region" aria-label="网页内容" tabindex="-1"></div>
   </section>
 
   <aside class="side" id="side">
@@ -611,6 +615,50 @@ const NOTES = {
   mail1:   '陈默的邮箱：植物园批准他凌晨 3:00 到 4:00 进入鸢尾区。沈静给他写了信。',
   draft:   '陈默的草稿箱：一封写给沈姐、从来没发出去的信。',
 };
+// 只给已经收集到的网页线索提供回看；不新增存档字段或提前列出未发现的页面。
+const NOTE_SOURCES = {
+  blog:['blog.xiaoman.me','小满的博客'],
+  iris:['blog.xiaoman.me','外婆家的花'],
+  pan:['blog.xiaoman.me','网盘线索的出处'],
+  diaryq:['blog.xiaoman.me/diary','加密日记'],
+  diary:['blog.xiaoman.me/diary','小满的日记'],
+  overheard:['blog.xiaoman.me/diary','日记里的电话'],
+  bbs:['bbs.qiancheng.net/t/4471','周晴的寻人帖'],
+  deleted:['bbs.qiancheng.net/t/4471','被删回复的源代码','原回复：'],
+  ghost:['jingyuan-miaopu.com','苗圃广告'],
+  srcjy:['jingyuan-miaopu.com','广告的源代码','TODO 上线前删掉'],
+  news09:['news.qiancheng.net/2009/0921','2009 年旧新闻'],
+  member:['jingyuan-miaopu.com/member/welcome','会员欢迎页'],
+  gardener:['jingyuan-miaopu.com/gardener','园丁后台'],
+  doorq:['jingyuan-miaopu.com/gardener','温室门禁'],
+  letter:['pan.qiancheng.net/s/xiaoman/letter','外婆的信'],
+  photo:['pan.qiancheng.net/s/xiaoman/photo','小时候的照片'],
+  chenmo:['chenmo.blog','陈默的博客'],
+  spirit:['bbs.qiancheng.net/t/5203','夜班司机的帖子'],
+  missing:['news.qiancheng.net/missing','失踪人口公告'],
+  no6:['bbs.qiancheng.net/t/4471','No.06 的回复'],
+  names:['jingyuan-miaopu.com/gardener','名牌的源代码','何苑 许安安 苏禾 唐语 宋芷'],
+  sanpai:['sanpai.net','第三排'],
+  he1:['qzone.qiancheng.net/heyuan','何苑的空间'],
+  he2:['hejizaodian.qiancheng.net','何记早点'],
+  heDone:['hejizaodian.qiancheng.net','何姐的后续留言'],
+  xu1:['weibo.qiancheng.net/anan','许安安的微博'],
+  xu2:['live.qiancheng.net/xudong','许冬的直播间'],
+  xuDone:['live.qiancheng.net/xudong','直播间的后续'],
+  su1:['music.qiancheng.net/suhe','苏禾的音乐主页'],
+  su2:['qcyy.edu.cn/news/2017','音乐学院获奖名单'],
+  su3:['music.qiancheng.net/suhe','《未完成》的歌词'],
+  suDone:['bar.qiancheng.net','酒馆的后续'],
+  tang1:['xiaozu.qiancheng.net/tangyu','唐语的日记'],
+  tangDone:['chongwu.qiancheng.net/c/4','等等的领养档案'],
+  song1:['space.qiancheng.net/songzhi','宋芷的空间'],
+  mail1:['mail.qiancheng.net','陈默的收件箱'],
+  draft:['mail.qiancheng.net/drafts/1','给沈姐的草稿'],
+};
+function noteSourceButton(id){
+  if(!Object.hasOwn(NOTE_SOURCES,id)) return '';
+  return `<button class="note-source" type="button" data-note-source="${id}">回看：${esc(NOTE_SOURCES[id][1])} →</button>`;
+}
 const SECRETS = ['member','names','photo'];
 const GHOSTS = ['he','xu','su','tang'];
 const ghostCount = () => GHOSTS.filter(g=>S.flags['g_'+g]).length + (S.flags.g_song?1:0);
@@ -627,7 +675,7 @@ function renderNotes(freshId){
   const groups = [[],[],[]]; S.notes.forEach(id=>groups[chOf(id)].push(id));
   const multi = groups[1].length || groups[2].length;
   ul.innerHTML = S.notes.length
-    ? groups.map((g,c)=> !g.length ? '' : (multi ? `<li class="chap">${NAMES[c]}</li>` : '') + g.map(id=>`<li class="${id===freshId?'new ':''}${['letter','photo','chenmo'].includes(id)?'secret':''}${id.startsWith('~')?'ghostnote':''}">${esc(NOTES[id])}</li>`).join('')).join('')
+    ? groups.map((g,c)=> !g.length ? '' : (multi ? `<li class="chap">${NAMES[c]}</li>` : '') + g.map(id=>`<li class="${id===freshId?'new ':''}${['letter','photo','chenmo'].includes(id)?'secret':''}${id.startsWith('~')?'ghostnote':''}">${esc(NOTES[id])}${noteSourceButton(id)}</li>`).join('')).join('')
     : '<li class="empty">还没有线索。先打开小满留下的链接看看。</li>';
   $('#noteCount').textContent = S.notes.length + ' 条';
   const fc = $('#fabCount'); if(fc){ fc.textContent = S.notes.length; if(freshId){ const f=$('#fab'); f.classList.remove('ping'); void f.offsetWidth; f.classList.add('ping'); } }
@@ -1557,6 +1605,20 @@ $('#bSrc').onclick = () => {
     if(cur.u==='jingyuan-miaopu.com/gardener' && S.flags.gardener) addNote('names');
   }
 };
+$('#notes').addEventListener('click', e => {
+  const button = e.target.closest('[data-note-source]');
+  if(!button) return;
+  const id = button.dataset.noteSource;
+  if(!S.notes.includes(id) || !Object.hasOwn(NOTE_SOURCES,id)) return;
+  const [url,,comment] = NOTE_SOURCES[id];
+  go(url);
+  if(comment){ srcMode = true; draw(); }
+  if(side.classList.contains('open')) fab.click();
+  vp.focus({preventScroll:true});
+  const target = comment && Array.from(vp.querySelectorAll('.srcview .c')).find(el=>el.textContent.includes(comment));
+  if(target){ target.classList.add('note-target'); target.scrollIntoView({block:'center'}); }
+  else $('.browser').scrollIntoView({block:'start'});
+});
 
 /* 手机消息：未读队列随存档保存，关闭后才记为已读；旧存档的 ph_* 继续生效。 */
 const PHONE_AFTER = {
