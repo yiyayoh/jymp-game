@@ -438,9 +438,6 @@ const KEY = 'jingyuan-save-v2';
 const fresh = () => ({notes:[], flags:{}, seenIntro:false, doorFails:0, pendingPhones:[], phoneHistory:[]});
 let S = fresh();
 try{ const r = localStorage.getItem(KEY); if(r) S = Object.assign(fresh(), JSON.parse(r)); }catch(e){}
-if(!Array.isArray(S.pendingPhones)) S.pendingPhones = [];
-if(!Array.isArray(S.phoneHistory)) S.phoneHistory = [];
-S.phoneHistory = S.phoneHistory.filter(p=>p && typeof p.id==='string' && typeof p.who==='string' && Array.isArray(p.msgs) && p.msgs.every(m=>typeof m==='string'));
 const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
 // 兼容旧版过早记为完成的宋芷进度；保留章节、线索及其余存档。
 if(S.flags.ch3 && !S.flags.end && S.flags.g_song){ S.flags.g_song = false; save(); }
@@ -1530,13 +1527,11 @@ function clearAtmosphere(){ clearTimeout(atmosphereTimer); }
 function renderAtmosphere(){
   clearAtmosphere();
   if(srcMode || S.flags.end || !ov.hidden) return;
-  const {page} = cur;
   const el = vp.querySelector('[data-atmosphere]');
   if(!el) return;
   const kind = el.dataset.atmosphere;
   if(kind==='forum' && (!has('deleted') || S.flags.ch2)) return;
   const reveal = () => {
-    if(cur.page!==page || srcMode || S.flags.end || !ov.hidden) return;
     if(kind==='glass'){
       vp.querySelector('.glass-traces').classList.add('revealed');
       el.innerHTML = '<span>在线访客：6</span><small>其余五条连接，没有离开记录。</small>';
@@ -1633,9 +1628,7 @@ $('#bSrc').onclick = () => {
 $('#notes').addEventListener('click', e => {
   const button = e.target.closest('[data-note-source]');
   if(!button) return;
-  const id = button.dataset.noteSource;
-  if(!S.notes.includes(id) || !Object.hasOwn(NOTE_SOURCES,id)) return;
-  const [url,,comment] = NOTE_SOURCES[id];
+  const [url,,comment] = NOTE_SOURCES[button.dataset.noteSource];
   go(url);
   if(comment){ srcMode = true; draw(); }
   if(side.classList.contains('open')) fab.click();
@@ -1654,10 +1647,10 @@ const PHONE_AFTER = {
   },
   ch3open: showCh3Card,
 };
-const phoneQ = S.flags.end ? [] : S.pendingPhones.filter(p=>p && typeof p.id==='string' && Array.isArray(p.msgs) && !S.flags['ph_'+p.id]);
+const phoneQ = S.flags.end ? [] : S.pendingPhones.filter(p=>!S.flags['ph_'+p.id]);
 let phoneTimer = null, phoneChat = null;
 function savePhones(){
-  S.pendingPhones = phoneQ.map(({id,who,msgs,unknown})=>({id,who,msgs,unknown}));
+  S.pendingPhones = phoneQ;
   save();
 }
 function schedulePhone(delay){
@@ -1680,7 +1673,7 @@ function phone(id, who, msgs, unknown=false){
 }
 function rememberPhone(p){
   if(S.phoneHistory.some(old=>old.id===p.id)) return;
-  S.phoneHistory.push({id:p.id,who:p.who,msgs:p.msgs.slice(),unknown:!!p.unknown});
+  S.phoneHistory.push(p);
   save();
 }
 /* 像真人一样一条一条打字：先显示“正在输入”，按字数停一会儿再出消息。点一下可快进。 */
@@ -1871,7 +1864,7 @@ function showHistory(){
     <header><h2 id="historyTitle">消息记录</h2><button class="btn" id="historyClose">回到调查</button></header>
     <p class="history-tip">这里只保留已经送达的后续消息。点开一组，可以重新读到原话。</p>
     ${records.length ? records.map((p,i)=>`<details data-phone-record ${i===0?'open':''}>
-      <summary><span class="history-meta"><b>${esc(p.who)}</b><span class="history-preview">${esc(p.msgs[0]||'')}</span></span><small>${p.msgs.length} 条</small></summary>
+      <summary><span class="history-meta"><b>${esc(p.who)}</b><span class="history-preview">${esc(p.msgs[0])}</span></span><small>${p.msgs.length} 条</small></summary>
       <div class="history-chat${p.unknown?' unknown':''}">${p.msgs.map(m=>`<div class="msg">${esc(m)}</div>`).join('')}</div>
     </details>`).join('') : '<p class="history-empty">目前还没有可回看的后续消息。之后收到的消息会自动保留。<br>开场对话仍可用“重看阿桃的消息”回看。</p>'}
   </div>`;
@@ -1882,7 +1875,7 @@ function showHistory(){
   dialog.addEventListener('keydown', e => {
     if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); close(); return; }
     if(e.key==='Tab'){
-      const controls = Array.from(dialog.querySelectorAll('button,summary')).filter(el=>el.getClientRects().length);
+      const controls = dialog.querySelectorAll('button,summary');
       const first = controls[0], last = controls[controls.length-1];
       if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
       else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
