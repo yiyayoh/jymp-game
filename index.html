@@ -90,8 +90,9 @@ button{cursor:pointer}
 .overlay{position:fixed;inset:0;background:#0d0e0dee;display:flex;align-items:center;justify-content:center;z-index:50;
   padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .phone{width:100%;max-width:380px;background:#f1f1ee;color:#222;border-radius:22px;padding:18px 14px;box-shadow:0 20px 60px #000a;max-height:100%;overflow:auto}
-.phone header{position:sticky;top:-18px;background:#f1f1ee;z-index:1;padding-top:6px;text-align:center;font-weight:700;font-size:15px;padding-bottom:10px;border-bottom:1px solid #ddd;margin-bottom:12px}
+.phone header{position:sticky;top:0;background:#f1f1ee;z-index:1;padding-top:6px;text-align:center;font-weight:700;font-size:15px;padding-bottom:10px;border-bottom:1px solid #ddd;margin-bottom:12px}
 .phone header small{display:block;font-weight:400;color:#888;font-size:11px}
+.intro-skip{position:absolute;right:0;top:6px;min-height:36px;padding:0 10px;border:1px solid #b8c0b4;border-radius:8px;background:#fff;color:#293626;font-size:12px}
 .msg{max-width:82%;background:#fff;padding:9px 12px;border-radius:12px;margin:0 0 8px;line-height:1.55;font-size:13.5px;opacity:0;transform:translateY(6px);animation:in .35s forwards}
 .msg.me{background:#a5d68b;margin-left:auto}
 .msg.sys{background:none;color:#999;font-size:11.5px;text-align:center;max-width:100%}
@@ -341,15 +342,15 @@ button{cursor:pointer}
 .msg.typing i:nth-child(2){animation-delay:.2s}.msg.typing i:nth-child(3){animation-delay:.4s}
 .msg.typing.dark{background:#2a1a19}.msg.typing.dark i{background:#9a6a64}
 @keyframes dot{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-3px)}}
-.phone .tip,.toast .tip{font-size:11px;color:#999;text-align:center;padding:4px 0 6px;min-height:1em}
+.toast .tip{font-size:11px;color:#999;text-align:center;padding:4px 0 6px;min-height:1em}
 .toast.unknown .tip{color:#6a4a44}
 
 /* 灵异 */
 .notes li.ghostnote{border-left-color:var(--blood);color:#d9a097;font-style:italic;font-family:var(--f-display)}
 .toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));width:min(350px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#f1f1ee;color:#222;border-radius:16px;padding:12px 12px 6px;box-shadow:0 12px 40px #000c;z-index:40;animation:in .3s forwards}
-.toast header{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;font-size:13px;margin-bottom:8px}
+.toast header{position:sticky;top:-12px;z-index:1;background:inherit;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:13px;margin-top:-12px;padding-top:12px;margin-bottom:8px}
 .toast header small{font-weight:400;color:#888;font-size:11px;margin-left:6px}
-.toast .x{background:none;border:none;font-size:18px;line-height:1;color:#888;padding:0 4px}
+.toast .x{background:none;border:none;font-size:20px;line-height:1;color:#666;min-width:44px;min-height:44px;padding:0}
 .toast .msg{max-width:92%}
 .toast.unknown{background:#170f0f;color:#e8d6d3;border:1px solid #4a2420}
 .toast.unknown header small,.toast.unknown .x{color:#9a6a64}
@@ -498,7 +499,7 @@ const SND = (() => {
   const TH = {
     room(o,w,k){ k(noise(o,'lowpass',380,.7,.05)); k(drone(o,50,'sine',.03,200));
       k(seq(6,(i,t)=>{ if(Math.random()<.4) note(w,mtof(R([84,87,91])),t,3,'sine',.012,1); })); },
-    ad(o,w,k){ const creep = S.flags.diary;
+    ad(o,w,k){ const creep = S.flags.diary && S.flags.end!=='true';
       const M=[72,76,79,76,77,81,79,null,76,79,84,83,81,77,79,null];
       k(seq(.3,(i,t)=>{ let m=M[i%16]; if(m==null) return; if(creep && i%8===5) m+=6;
         let f=mtof(m); if(creep) f*=Math.pow(2,(Math.random()*90-45)/1200);
@@ -714,6 +715,7 @@ const GHOST_HINTS = {
   xu:  ['看许安安的微博。她管弟弟叫什么？','去寻度搜“许冬”或“冬子”，找到直播间。','发一条弹幕，用只有姐姐才会叫的那个外号。'],
   su:  ['《未完成》要学号。去寻度搜“千城音乐学院”。','学号在 2017 年的获奖名单里。听完歌，看歌词最后提到了谁。','去寻度搜“林可”，在酒馆点那首歌的名字。'],
   tang:['看唐语的日记，记下年糕的样子：花色、尾巴、耳朵。','去寻度搜“流浪动物”或“领养”。','三花、断尾、左耳缺口，三个特征都要对上。'],
+  song:['四个姐姐都回家了。回到“第三排”页面，点宋芷的名字。'],
 };
 const HINTS = [
   ['在地址栏输入 jingyuan-miaopu.com 并回车。','也可以在寻度里搜索“静园苗圃”。'],
@@ -726,25 +728,27 @@ const HINTS = [
   ['陈默的邮箱在 mail.qiancheng.net，账号已经填好了。','密码是“那个时刻”：陈默在 2009 年的博客里写过他打电话的时间，四位数字。','把收件箱和草稿箱都读一遍，然后点“写信”，把能附上的东西都附上再发送。','还没看过外婆的信？它在小满博客提到的网盘里（提取码是外婆家门牌号）。'],
   ['想看另一个结局，可以点“重新开始”。真结局需要外婆的信和陈默的草稿。'],
 ];
-function hintList(){
-  const s = stage();
+function hintList(s){
   if(s!==6) return HINTS[s];
   const g = GHOSTS.find(x=>!S.flags['g_'+x]);
-  if(g) return GHOST_HINTS[g];
-  return ['四个姐姐都回家了。回到“第三排”页面，点宋芷的名字。'];
+  return GHOST_HINTS[g || 'song'];
 }
-let hintIdx = 0, lastStage = -1;
+const initialHint = $('#hint').textContent;
+let hintIdx = 0, activeHints;
 function renderStage(){
   const s = stage();
-  if(s!==lastStage){ hintIdx = 0; lastStage = s; }
+  const list = hintList(s);
+  if(list!==activeHints){
+    hintIdx = 0; activeHints = list;
+    $('#hint').textContent = s===0 ? initialHint : '卡住了吗？点「给我一点提示」查看当前目标的提示。';
+  }
   $('#stageLabel').textContent = STAGES[s] + (s===6 ? ' ' + ghostCount() + '/5' : '');
   $('#progress').innerHTML = STAGES.map((_,i)=>`<i class="${i<=s?'on':''}"></i>`).join('');
   const n = SECRETS.filter(has).length;
   $('#secretLine').innerHTML = `隐藏线索 <b>${n} / ${SECRETS.length}</b>`;
 }
 $('#bHint').onclick = () => {
-  const list = hintList();
-  if(hintIdx >= list.length) hintIdx = 0;
+  const list = activeHints;
   $('#hint').textContent = '提示 ' + (hintIdx+1) + '/' + list.length + '：' + list[hintIdx];
   hintIdx = (hintIdx+1) % list.length;
 };
@@ -763,6 +767,7 @@ PAGES['xundu.com'] = () => ({ title:'寻度一下，你就知道', html:`
 <!-- xundu 首页 v3.2 -->`});
 
 const R_AD = {ad:true,t:'静园苗圃 — 种下思念，永不凋零',u:'jingyuan-miaopu.com',d:'城郊私家苗圃，免费领养一株属于你的花。限时名额，仅剩 1 位。'};
+const R_AD_CLOSED = {...R_AD,t:'静园苗圃 — 暂停领养公告',d:'园区暂不开放，领养登记已停止。旧站资料仍可查阅。'};
 const R_BBS = {t:'【求助】我女朋友去了城郊一个苗圃后就联系不上了 — 千城论坛',u:'bbs.qiancheng.net/t/4471',d:'她叫周晴，24 岁，2025 年 11 月 3 日之后失联……'};
 const R_BLOG = {t:'小满的秘密花园 — 一个人也要好好生活',u:'blog.xiaoman.me',d:'林小满的个人博客。最近更新：我找到我的秘密花园了。'};
 const R_NEWS = {t:'五岁女童植物园走失 母亲：我会一直种花等她回家 — 千城新闻',u:'news.qiancheng.net/2009/0921',d:'2009 年 9 月 21 日下午，五岁女童沈念在千城植物园鸢尾花区走失……'};
@@ -774,9 +779,10 @@ const R_MISSING = {t:'千城市公安局 · 未结失踪人口公告（2014—20
 
 function searchResults(q){
   const k = norm(q), R = [];
+  const nurseryAd = S.flags.end==='true' ? R_AD_CLOSED : R_AD;
   const bbs = S.flags.ch2 ? {...R_BBS,t:'【已找到】周晴回来了，谢谢还在寻找她的人 — 千城论坛',d:S.flags.end==='true' ? '周晴已经获救。楼主留下了报平安和后来的近况，原寻人帖保留。' : '楼主更新了医院的消息，也记下了她在温室里等天亮的经历。原寻人帖保留。'} : R_BBS;
   const hit = (...w) => w.some(x=>k.includes(x));
-  if(hit('静园','苗圃','广告','jingyuan','花园','秘密花园','领养')){ R.push(R_AD, bbs); }
+  if(hit('静园','苗圃','广告','jingyuan','花园','秘密花园','领养')){ R.push(nurseryAd, bbs); }
   if(hit('小满','林小满','xiaoman','阿桃')) R.push(R_BLOG);
   if(hit('周晴','晴天不下雨')) R.push(bbs);
   if(hit('沈静','沈念','念念','女童','走失','植物园','沈阿姨','园长')) R.push(R_NEWS);
@@ -804,17 +810,18 @@ function searchResults(q){
     if(hit('第三排','sanpai')) R.push({t:'第三排',u:'sanpai.net',d:'（此网页没有提供描述）'});
   }
   if(S.flags.ch3 && hit('邮箱','mail','陈默','邮件')) R.unshift({t:'千城邮箱 — 登录',u:'mail.qiancheng.net',d:'千城人自己的邮箱。'});
-  if(!R.length || !R[0].ad) R.unshift(R_AD);
+  if(!R.length || !R[0].ad) R.unshift(nurseryAd);
   const seen = new Set();
   return R.filter(r=>{const key=r.u+r.t; if(seen.has(key)) return false; seen.add(key); return true;});
 }
 function searchPage(q){
   const rs = searchResults(q);
-  const creep = S.flags.gardener ? `<div class="res creep"><span class="ad">广告</span><a class="t" data-href="jingyuan-miaopu.com/member">我们看见你在找她了。</a><div class="u">jingyuan-miaopu.com</div><div class="d">No.09，欢迎预约。</div></div>` : '';
+  const count = rs.filter(r=>!r.ad).length;
+  const creep = S.flags.gardener && S.flags.end!=='true' ? `<div class="res creep"><span class="ad">广告</span><a class="t" data-href="jingyuan-miaopu.com/member">我们看见你在找她了。</a><div class="u">jingyuan-miaopu.com</div><div class="d">No.09，欢迎预约。</div></div>` : '';
   return { title: q + ' - 寻度搜索', html:`
 <div class="pg xdr">
-  <form data-form="search"><input type="text" name="q" id="q-res" value="${esc(q)}" aria-label="搜索"><button type="submit">寻一下</button></form>
-  <div style="color:#888;font-size:12.5px;margin-bottom:14px">寻度为您找到相关结果约 ${rs.length*137+12} 个</div>
+  <form data-form="search"><input type="text" name="q" id="q-res" value="${esc(q).replace(/"/g,'&quot;')}" aria-label="搜索"><button type="submit">寻一下</button></form>
+  <div class="search-summary" style="color:#666;font-size:12.5px;margin-bottom:14px">${count ? `找到 ${count} 条相关结果` : '没有找到相关结果。试试单独搜索一个人名或地点。'}</div>
   ${creep}
   ${rs.map(r=>`<div class="res">${r.ad?'<span class="ad">广告</span>':''}<a class="t" data-href="${esc(r.u)}">${esc(r.t)}</a><div class="u">${esc(r.u)}</div><div class="d">${esc(r.d)}</div></div>`).join('')}
 </div>`};
@@ -822,30 +829,32 @@ function searchPage(q){
 
 PAGES['jingyuan-miaopu.com'] = () => {
   S.flags.visitedJy = true; save(); renderStage();
-  const watched = S.flags.gardener;
-  const seen = S.flags.diary;
-  return { title:'静园苗圃 — 种下思念，永不凋零', haunt: seen ? '她们在花下面' : '', on(){
+  const closed = S.flags.end==='true';
+  const watched = S.flags.gardener && !closed;
+  const seen = S.flags.diary && !closed;
+  return { title:closed ? R_AD_CLOSED.t : R_AD.t, haunt: seen ? '她们在花下面' : '', on(){
       if(watched) setTimeout(glitch, 500);
       phone('jy1','阿桃',['我刚才也点开了那个广告。','右上角写着“仅剩 1 个名额”。','我刷新了一下，变成了“仅剩 1 个名额 · 已为你保留”。','我没在上面填过任何东西啊？','……算了，可能是我太紧张了。你继续查。']);
     }, html:`
 <div class="pg jy">
   <!-- 静园苗圃 官网 · 前台页面 · 沈姐只看这一页 -->
   <div class="jy-hero">
-    <div class="jy-pop">${watched ? '我们看见你了。<br>No.09' : seen ? '仅剩 <b>1</b> 个名额<br>已为你保留' : '限时！免费领养<br>仅剩 <b>1</b> 个名额'}</div>
+    <div class="jy-pop">${closed ? '暂停领养<br>园区暂不开放' : watched ? '我们看见你了。<br>No.09' : seen ? '仅剩 <b>1</b> 个名额<br>已为你保留' : '限时！免费领养<br>仅剩 <b>1</b> 个名额'}</div>
     <h1>静 园 苗 圃</h1>
-    <p class="${seen?'flicker':''}">${seen ? '种下她们，永不离开。' : '种下思念，永不凋零。'}</p>
+    <p class="${seen?'flicker':''}">${closed ? '感谢曾为一株花留下名字的人。' : seen ? '种下她们，永不离开。' : '种下思念，永不凋零。'}</p>
     <div class="flower">${FLOWER_SVG}</div>
-    <button class="jy-btn" data-href="jingyuan-miaopu.com/member">会员入园</button>
+    <button class="jy-btn" data-href="jingyuan-miaopu.com/member">${closed ? '回看旧会员页' : '会员入园'}</button>
     ${seen&&!S.flags.ch2&&!S.flags.end ? '<div class="glass-traces" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div class="quiet-presence" data-atmosphere="glass" aria-live="polite"><span>在线访客：1</span><small>访客统计 · 连接正常</small></div>' : ''}
   </div>
   <div class="jy-sec">
-    <h2>我们相信，每一份思念都应该有根</h2>
+    ${closed ? `<h2>暂停领养公告</h2>
+    <p>${R_AD_CLOSED.d}</p>` : `<h2>我们相信，每一份思念都应该有根</h2>
     <p>你是否也有一个，再也见不到的人？在静园，你可以领养一株花，以 TA 的名字为它挂牌。我们的园丁会日夜照料，让它扎根、生长，永远不会离开你。</p>
     <p>特别欢迎：20 至 25 岁、喜欢紫色花朵、独自生活的女性朋友。</p>
-    <p>城郊千城大道 404 号，地铁 5 号线（建设中）终点站步行 20 分钟。</p>
+    <p>城郊千城大道 404 号，地铁 5 号线（建设中）终点站步行 20 分钟。</p>`}
   </div>
   <div class="jy-sec">
-    <h2>本季可领养</h2>
+    <h2>${closed ? '旧领养名录' : '本季可领养'}</h2>
     <div class="jy-cards">
       <div class="jy-card"><b>勿忘我</b><br>花语：不要忘记我<br><span class="price">免费</span></div>
       <div class="jy-card"><b>鸢尾</b><br>花语：等待你的归来<br><span class="price">免费 · 仅剩 1 株</span></div>
@@ -1560,7 +1569,7 @@ function resolve(u){
 function go(url, push=true){
   let u = canon(url);
   let page = resolve(u);
-  if(!page){ u = 'xundu.com/s?q=' + url.trim(); page = resolve(u); }
+  if(!page){ u = 'xundu.com/s?q=' + encodeURIComponent(url.trim()); page = resolve(u); }
   if(push){ hist = hist.slice(0,hi+1); hist.push(u); hi = hist.length-1; }
   cur = {u, page}; srcMode = false;
   if(S.last !== u){ S.last = u; save(); }
@@ -1772,7 +1781,7 @@ vp.addEventListener('submit', e => {
   e.preventDefault();
   const val = (f.querySelector('input')||{}).value || '';
   const err = (id, t) => { const el = $(id); if(el) el.textContent = t; };
-  if(kind==='search'){ if(val.trim()) go('xundu.com/s?q=' + val.trim()); return; }
+  if(kind==='search'){ if(val.trim()) go('xundu.com/s?q=' + encodeURIComponent(val.trim())); return; }
   if(kind==='diary'){
     if(answer(val)==='yuanwei0613'){ S.flags.diary = true; save(); refresh(); }
     else err('#dy-err','密码不对。最爱的花的拼音 + 生日四位，比如 abc0101。');
@@ -1903,21 +1912,25 @@ function showIntro(){
     ['me','好，我现在就查。'],
   ];
   const replay = S.seenIntro;
-  ov.innerHTML = `<div class="phone" role="dialog" aria-label="阿桃的消息"><header>阿桃<small id="introStatus">在线</small></header>
-    <div class="tip" id="introTip">${replay ? '' : '点一下对话框可以快进'}</div>
+  ov.innerHTML = `<div class="phone" role="dialog" aria-label="阿桃的消息"><header>阿桃<small id="introStatus">在线</small>
+    <button class="intro-skip" id="introSkip" type="button" ${replay ? 'hidden' : ''}>直接读完</button></header>
     <button class="go" id="goStart" ${replay ? '' : 'hidden'}>${replay ? '回到电脑' : '打开电脑，开始调查'}</button></div>`;
   ov.hidden = false;
-  const ph = ov.querySelector('.phone'), tip = $('#introTip');
+  const ph = ov.querySelector('.phone'), skip = $('#introSkip'), start = $('#goStart');
   const items = msgs.map(m=>({cls: m[0]==='me'?'me':m[0]==='sys'?'sys':'', html:m[1]}));
-  const chat = typeChat(ph, tip, items, {
+  const chat = typeChat(ph, start, items, {
     scroller: ph,
     onStatus: on => { $('#introStatus').textContent = on ? '对方正在输入…' : '在线'; },
     onMsg: () => SND.sfx('tick'),
-    onDone: () => { tip.textContent = ''; $('#goStart').hidden = false; ph.scrollTop = 1e6; },
+    onDone: () => {
+      const focusStart = document.activeElement===skip;
+      skip.hidden = true; start.hidden = false; ph.scrollTop = 1e6;
+      if(focusStart) start.focus({preventScroll:true});
+    },
   });
   if(replay) chat.skip();
   ph.addEventListener('click', e => { if(!e.target.closest('#goStart')) chat.skip(); });
-  $('#goStart').onclick = () => {
+  start.onclick = () => {
     if(replay){ ov.hidden = true; renderAtmosphere(); return; }
     ov.hidden = true; S.seenIntro = true; save(); addNote('start'); renderBookmarks();
     $('#addr').focus();
@@ -2028,8 +2041,8 @@ function reset(){
   clearAtmosphere(); atmosphereSeen.clear();
   clearPhones();
   S = fresh(); save();
+  activeHints = null;
   hist = []; hi = -1; renderNotes(); renderBookmarks(); go('xundu.com'); showIntro();
-  $('#hint').textContent = '看不懂网页的时候，试试全选文字（电脑按 Ctrl+A，手机长按文字），或者点地址栏右边的 </> 查看源代码。';
 }
 $('#bChat').onclick = showIntro;
 $('#bHistory').onclick = showHistory;

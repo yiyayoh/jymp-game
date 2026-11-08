@@ -11,7 +11,7 @@ const GAME = pathToFileURL(require('path').resolve(__dirname, '../index.html')).
   const p = await b.newPage({viewport:{width:1280,height:800}});
   const errs=[]; p.on('pageerror', e=>errs.push(e.message)); p.on('console', m=>{ if(m.type()==='error') errs.push(m.text()); });
   await p.goto(GAME);
-  await p.waitForTimeout(300); await p.click('.phone header'); await p.click('#goStart');
+  await p.click('#introSkip'); await p.click('#goStart');
   const toasts=[];
   const drain = async () => { await p.waitForTimeout(6300); for(let i=0;i<4;i++){ const x = await p.$('.toast .x'); if(!x) break; toasts.push((await p.textContent('.toast header span')).trim().slice(0,6)); await x.click(); await p.waitForTimeout(2700);} };
   const nav = async u => { await p.fill('#addr', u); await p.press('#addr','Enter'); await drain(); };
